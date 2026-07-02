@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Panda 后台管理 - 平台管理 交互原型</title>
+<style>
+  :root{
+    --sidebar-bg:#0b1c2e;
+    --sidebar-bg-hover:#14293e;
+    --sidebar-active:#1677ff;
+    --border:#e5e8ec;
+    --text:#1f2733;
+    --text-sub:#6b7785;
+    --blue:#1677ff;
+    --blue-dark:#0e5fd6;
+    --green:#22a05c;
+    --red:#f5483b;
+    --bg:#f0f2f5;
+    --white:#ffffff;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);font-size:13px;}
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- layout ---------- */
+  .app{display:flex;min-height:100vh;}
+  .sidebar{width:220px;flex:0 0 220px;background:var(--sidebar-bg);color:#c6d0dc;display:flex;flex-direction:column;}
+  .sidebar .logo{display:flex;align-items:center;gap:8px;padding:16px 18px;color:#fff;font-weight:600;font-size:16px;border-bottom:1px solid #16283c;}
+  .sidebar .logo .mark{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#1677ff,#00c4ff);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;}
+  .nav{flex:1;overflow-y:auto;padding:6px 0;}
+  .nav-item{padding:11px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:#a9b6c4;}
+  .nav-item:hover{background:var(--sidebar-bg-hover);color:#fff;}
+  .nav-item .chev{margin-left:auto;font-size:10px;opacity:.6;transition:transform .15s;}
+  .nav-item.open .chev{transform:rotate(90deg);}
+  .nav-group{display:none;background:#08141f;}
+  .nav-group.open{display:block;}
+  .nav-sub{padding:10px 18px 10px 46px;font-size:12.5px;color:#8fa0b3;cursor:pointer;}
+  .nav-sub:hover{color:#fff;}
+  .nav-sub.active{color:#fff;background:var(--sidebar-active);}
+  .nav-item.top-active{color:#fff;}
+  .nav-item .dot{width:6px;height:6px;border-radius:50%;background:var(--red);margin-left:auto;}
+  .sidebar-foot{padding:10px 18px;font-size:11px;color:#5c6b7c;border-top:1px solid #16283c;}
+
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{height:52px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:10px;}
+  .topbar .burger{font-size:16px;color:#5c6b7c;cursor:pointer;}
+  .breadcrumb{font-size:13px;color:#333;}
+  .breadcrumb b{font-weight:600;}
+  .breadcrumb .sep{color:#c0c6cc;margin:0 4px;}
+  .topbar .spacer{flex:1;}
+  .topbar .item{display:flex;align-items:center;gap:6px;color:#5c6b7c;font-size:12px;}
+  .flag{width:20px;height:14px;border-radius:2px;background:linear-gradient(#009c3b 0 34%, #ffdf00 34% 66%, #009c3b 66% 100%);display:inline-block;}
+  .avatar{width:26px;height:26px;border-radius:50%;background:#ffb84d;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px;}
+
+  .content{padding:16px;flex:1;overflow:auto;}
+  .tabs{display:flex;gap:2px;margin-bottom:12px;}
+  .tab{padding:8px 16px;background:#fff;border:1px solid var(--border);border-bottom:none;border-radius:4px 4px 0 0;color:#5c6b7c;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;}
+  .tab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+  .tab .x{opacity:.8;font-size:11px;}
+
+  .panel{background:#fff;border-radius:4px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+  .filters{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .filters .f{display:flex;align-items:center;gap:8px;font-size:13px;color:#333;}
+  .filters select, .filters input{
+    height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;color:#333;background:#fff;outline:none;min-width:140px;
+  }
+  .filters select:focus, .filters input:focus{border-color:var(--blue);}
+  .btn{height:32px;padding:0 16px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;}
+  .btn:hover{border-color:var(--blue);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+  .btn.primary:hover{background:var(--blue-dark);}
+  .btn-row{margin-left:auto;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{background:#fafafa;text-align:left;padding:11px 12px;color:#333;font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody td{padding:11px 12px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:middle;}
+  tbody tr:hover{background:#fafcff;}
+  .status-on{color:var(--green);font-weight:500;}
+  .status-off{color:var(--red);font-weight:500;}
+  .logo-cell{width:44px;height:26px;display:flex;align-items:center;font-weight:800;font-size:14px;}
+  .id-link{color:var(--blue);}
+  .op-icon{color:var(--blue);cursor:pointer;font-size:15px;}
+  .op-icon:hover{color:var(--blue-dark);}
+  .foot{display:flex;align-items:center;gap:10px;padding-top:12px;color:#5c6b7c;font-size:12.5px;}
+  .foot .pg{border:1px solid var(--blue);color:var(--blue);border-radius:3px;padding:2px 8px;}
+  .foot select{height:26px;border:1px solid #d9d9d9;border-radius:4px;}
+
+  .top-btn-row{display:flex;justify-content:flex-end;margin-bottom:10px;}
+
+  /* ---------- modal ---------- */
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:100;}
+  .mask.show{display:flex;}
+  .modal{background:#fff;border-radius:6px;width:760px;max-width:92vw;max-height:88vh;overflow:auto;box-shadow:0 6px 30px rgba(0,0,0,.2);}
+  .modal.small{width:420px;}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+  .modal-head h3{margin:0;font-size:16px;font-weight:600;}
+  .modal-head .close{cursor:pointer;font-size:18px;color:#8c8c8c;}
+  .modal-head .close:hover{color:#333;}
+  .modal-body{padding:20px;}
+  .modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:center;}
+
+  .gt-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .gt-table th{background:#fafafa;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
+  .gt-table td{padding:10px 12px;border-bottom:1px solid #f0f0f0;}
+
+  .form-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .form-row label{width:90px;text-align:right;color:#333;font-size:13px;flex-shrink:0;}
+  .form-row label .req{color:var(--red);margin-right:2px;}
+  .form-row .control{flex:1;}
+  .form-row select, .form-row input[type=text], .form-row input[type=number]{
+    width:100%;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;outline:none;
+  }
+  .form-row select:disabled, .form-row input:disabled{background:#f5f5f5;color:#999;}
+  .radio-group{display:flex;gap:20px;align-items:center;}
+  .radio-group label{width:auto;text-align:left;display:flex;align-items:center;gap:5px;color:#333;}
+
+  .toggle{width:40px;height:20px;border-radius:12px;background:#ccc;position:relative;cursor:pointer;display:inline-block;transition:background .15s;flex-shrink:0;}
+  .toggle.on{background:var(--blue);}
+  .toggle .knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s;}
+  .toggle.on .knob{left:22px;}
+  .toggle-label{font-size:12px;color:var(--blue);margin-right:6px;}
+  .toggle-label.off{color:#999;}
+
+  .og-table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 4px;}
+  .og-table th{text-align:left;padding:8px 6px;color:#333;font-weight:600;border-bottom:1px solid var(--border);}
+  .og-table td{padding:8px 6px;}
+  .og-table input[type=text]{width:120px;height:30px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;}
+  .og-table input[type=text]:disabled{background:#f5f5f5;color:#bbb;}
+  .og-name{display:flex;align-items:center;gap:8px;}
+  .og-name input[type=checkbox]:disabled{cursor:not-allowed;}
+  .og-name:has(input:disabled){color:#999;}
+
+  .logo-box{display:flex;align-items:center;gap:16px;margin-top:4px;}
+  .logo-preview{font-weight:800;font-size:20px;letter-spacing:.5px;}
+  .hint{color:var(--red);font-size:12px;margin-top:2px;}
+
+  .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#323232;color:#fff;padding:9px 20px;border-radius:4px;font-size:13px;z-index:999;opacity:0;pointer-events:none;transition:opacity .2s, top .2s;}
+  .toast.show{opacity:1;top:36px;}
+
+  .placeholder-panel{padding:60px 0;text-align:center;color:#b0b7bf;font-size:13px;}
+
+  .platform-dd{position:relative;}
+  .dd-list{position:absolute;top:36px;left:0;width:100%;min-width:160px;background:#fff;border:1px solid var(--border);border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,.12);max-height:220px;overflow-y:auto;display:none;z-index:20;}
+  .dd-list.show{display:block;}
+  .dd-item{padding:8px 12px;cursor:pointer;color:#333;}
+  .dd-item:hover{background:#f0f6ff;color:var(--blue);}
+  .dd-item.selected{background:#e6f2ff;color:var(--blue);}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo"><span class="mark">P</span> Panda</div>
+    <div class="nav" id="nav">
+      <div class="nav-item">📊 平台概况</div>
+      <div class="nav-item">⚙️ 系统管理</div>
+      <div class="nav-item open top-active" id="gameNavToggle">🎮 商户游戏管理 <span class="chev">▶</span></div>
+      <div class="nav-group open">
+        <div class="nav-sub active" data-target="platform">平台管理</div>
+        <div class="nav-sub" data-target="placeholder">游戏管理</div>
+        <div class="nav-sub" data-target="placeholder">商户热门管理</div>
+      </div>
+      <div class="nav-item">👥 会员管理</div>
+      <div class="nav-item">💰 商户财务管理</div>
+      <div class="nav-item">📋 报表查询</div>
+      <div class="nav-item">🔗 代理中心(无限极差)</div>
+      <div class="nav-item">✉️ 消息管理</div>
+      <div class="nav-item">🎁 福利中心</div>
+      <div class="nav-item">📈 运营相关 <span class="dot"></span></div>
+      <div class="nav-item">📣 推广渠道管理</div>
+      <div class="nav-item">🗂️ 子平台游戏管理</div>
+    </div>
+    <div class="sidebar-foot">V: 2026/06/25 13:06:17</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <span class="burger">☰</span>
+      <span class="breadcrumb"><b>商户游戏管理</b><span class="sep">/</span>平台管理</span>
+      <div class="spacer"></div>
+      <span class="item">📶 <span id="latency">231ms</span></span>
+      <span class="item"><span class="flag"></span> 巴西<br></span>
+      <span class="item">Etc/GMT+3</span>
+      <span class="item" id="clock"></span>
+      <span class="item">🔍</span>
+      <span class="item"><span class="avatar">C</span> Cuculus888</span>
+    </div>
+
+    <div class="content">
+      <div class="tabs">
+        <div class="tab">域名管理</div>
+        <div class="tab">仿应用商店</div>
+        <div class="tab active">平台管理 <span class="x">✕</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="filters">
+          <div class="f">地区：
+            <select id="fRegion">
+              <option>巴西</option>
+              <option>墨西哥</option>
+              <option>秘鲁</option>
+            </select>
+          </div>
+          <div class="f">商户：
+            <select id="fMerchant">
+              <option>762</option>
+              <option>801</option>
+            </select>
+          </div>
+          <div class="f platform-dd">平台：
+            <input id="fPlatform" type="text" value="全部" readonly onclick="togglePlatformDD(event)">
+            <div class="dd-list" id="platformDD"></div>
+          </div>
+          <button class="btn" onclick="resetFilters()">重置</button>
+          <button class="btn primary" onclick="doQuery()">查询</button>
+          <div class="btn-row">
+            <button class="btn primary" onclick="openGameTypeModal()">游戏类型管理</button>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>平台ID</th><th>平台名称</th><th>地区</th><th>平台状态</th><th>游戏logo</th>
+              <th>添加时间</th><th>排序 ⓘ</th><th>最后操作时间</th><th>最近操作人</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+
+        <div class="foot">
+          <span>共 <span id="totalCount">18</span> 条数据</span>
+          <span class="pg">1</span>
+          <select><option>50 条/页</option></select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 游戏类型管理 modal -->
+<div class="mask" id="maskGameType">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>游戏类型管理</h3>
+      <span class="close" onclick="closeModal('maskGameType')">✕</span>
+    </div>
+    <div class="modal-body">
+      <table class="gt-table">
+        <thead><tr><th>游戏类型</th><th>开关</th><th>排序</th><th>操作</th></tr></thead>
+        <tbody id="gtBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 编辑 游戏类型 modal -->
+<div class="mask" id="maskGtEdit">
+  <div class="modal small">
+    <div class="modal-head">
+      <h3>编辑</h3>
+      <span class="close" onclick="closeModal('maskGtEdit')">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label><span class="req">*</span>游戏类型</label>
+        <div class="control"><input type="text" id="gtEditName" disabled></div>
+      </div>
+      <div class="form-row">
+        <label><span class="req">*</span>类型排序</label>
+        <div class="control"><input type="text" id="gtEditSort"></div>
+      </div>
+      <div class="form-row">
+        <label>游戏状态</label>
+        <div class="control" style="display:flex;align-items:center;">
+          <span class="toggle-label" id="gtEditStatusLabel">开启</span>
+          <div class="toggle on" id="gtEditToggle" onclick="toggleSwitch(this,'gtEditStatusLabel')"><div class="knob"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn primary" style="width:100%" onclick="saveGtEdit()">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 平台配置 modal -->
+<div class="mask" id="maskPlatformConfig">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>平台配置</h3>
+      <span class="close" onclick="closeModal('maskPlatformConfig')">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label>平台名称</label>
+        <div class="control"><select id="pcName" disabled><option id="pcNameOpt"></option></select></div>
+      </div>
+      <div class="form-row">
+        <label>地区</label>
+        <div class="control"><select disabled><option>巴西</option></select></div>
+      </div>
+      <div class="form-row">
+        <label>平台状态</label>
+        <div class="control radio-group" id="pcStatusRadios">
+          <label><input type="radio" name="pcStatus" value="关闭"> 关闭</label>
+          <label><input type="radio" name="pcStatus" value="开启"> 开启</label>
+          <label><input type="radio" name="pcStatus" value="维护"> 维护</label>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>排序 ⓘ</label>
+        <div class="control"><input type="text" id="pcSort"></div>
+      </div>
+      <div class="form-row" style="align-items:flex-start;">
+        <label>开放游戏</label>
+        <div class="control">
+          <table class="og-table">
+            <thead><tr><th style="width:45%">游戏类型</th><th>排序</th></tr></thead>
+            <tbody id="pcGameBody"></tbody>
+          </table>
+          <div class="hint" style="color:#999;">游戏类型由系统配置决定，不可手动勾选；仅已开通（已勾选）的类型可编辑排序。</div>
+        </div>
+      </div>
+      <div class="form-row" style="align-items:flex-start;">
+        <label>LOGO：</label>
+        <div class="control">
+          <div class="logo-box">
+            <div class="logo-preview" id="pcLogoPreview"></div>
+          </div>
+          <div class="hint">支持JPG/PNG/SVG格式的图片 (建议尺寸：74 x 74)</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn primary" style="width:160px" onclick="savePlatformConfig()">确定</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- data ---------------- */
+const gameTypes = [
+  {name:"电子游戏", on:true,  sort:999},
+  {name:"棋牌游戏", on:false, sort:996},
+  {name:"捕鱼游戏", on:false, sort:998},
+  {name:"视讯游戏", on:false, sort:998},
+  {name:"体育游戏", on:true,  sort:1},
+  {name:"彩票游戏", on:false, sort:1},
+];
+
+const platformList = ["PG","Tada","CQ9","JDB","Betby","Spribe","PP","CP","G759","FaChai","POPOK","PLAYSON","RUBYPLAY","inout","FASTSPIN","PANDA"];
+
+let platforms = [
+  {id:34, name:"PP", region:"巴西", status:"开启", logo:"🍑", logoText:"PP", added:"2025-10-19 04:05:40", sort:10, lastOp:"2025-10-25 02:05:01", lastUser:"admin555", openGames:{"电子游戏":10}},
+  {id:35, name:"CP", region:"巴西", status:"开启", logo:"CP", logoText:"CP", added:"2025-10-19 04:05:40", sort:6, lastOp:"2025-10-22 02:58:08", lastUser:"super762", openGames:{"电子游戏":6}},
+  {id:36, name:"G759", region:"巴西", status:"开启", logo:"⚙", logoText:"GAXO", added:"2025-10-19 04:05:40", sort:2, lastOp:"2025-10-25 02:58:18", lastUser:"admin555", openGames:{"电子游戏":2}},
+  {id:37, name:"FaChai", region:"巴西", status:"开启", logo:"FC", logoText:"FC", added:"2025-10-19 04:05:40", sort:2, lastOp:"2025-10-25 02:58:27", lastUser:"admin555", openGames:{"电子游戏":2}},
+  {id:38, name:"POPOK", region:"巴西", status:"开启", logo:"POPOK", logoText:"POPOK", added:"2025-10-19 04:05:40", sort:1, lastOp:"2025-10-19 04:05:40", lastUser:"", openGames:{"电子游戏":1}},
+  {id:39, name:"PLAYSON", region:"巴西", status:"开启", logo:"▷", logoText:"PLAYSON", added:"2025-10-19 04:05:40", sort:1, lastOp:"2025-10-19 04:05:40", lastUser:"", openGames:{"电子游戏":1}},
+  {id:40, name:"RUBYPLAY", region:"巴西", status:"开启", logo:"▷", logoText:"RUBYPLAY", added:"2025-10-19 04:05:40", sort:1, lastOp:"2025-10-19 04:05:40", lastUser:"", openGames:{"电子游戏":1}},
+  {id:42, name:"inout", region:"巴西", status:"开启", logo:"IN", logoText:"inout", added:"2025-11-03 04:58:30", sort:1, lastOp:"2025-11-03 04:58:30", lastUser:"", openGames:{"电子游戏":1}},
+  {id:43, name:"FASTSPIN", region:"巴西", status:"开启", logo:"FS", logoText:"FASTSPIN", added:"2025-11-21 06:18:15", sort:1, lastOp:"2025-11-21 06:18:15", lastUser:"", openGames:{"电子游戏":1}},
+  {id:45, name:"PANDA", region:"巴西", status:"开启", logo:"🐼", logoText:"PANDA", added:"2026-01-06 08:06:00", sort:1, lastOp:"2026-01-06 08:06:00", lastUser:"", openGames:{"电子游戏":1}},
+];
+
+let currentFilterPlatform = "全部";
+let editingGtIndex = null;
+let editingPlatformId = null;
+
+/* ---------------- clock ---------------- */
+function tick(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2,"0");
+  document.getElementById("clock").textContent = `${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  document.getElementById("latency").textContent = (200+Math.floor(Math.random()*60))+"ms";
+}
+setInterval(tick,1000); tick();
+
+/* ---------------- render table ---------------- */
+function renderTable(){
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  const rows = platforms.filter(p => currentFilterPlatform==="全部" || p.name===currentFilterPlatform);
+  document.getElementById("totalCount").textContent = platforms.length;
+  rows.forEach(p=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="id-link">${p.id}</span></td>
+      <td>${p.name}</td>
+      <td>${p.region}</td>
+      <td class="${p.status==='开启'?'status-on':'status-off'}">${p.status}</td>
+      <td><div class="logo-cell">${p.logo}</div></td>
+      <td>${p.added}</td>
+      <td>${p.sort}</td>
+      <td>${p.lastOp}</td>
+      <td>${p.lastUser}</td>
+      <td><span class="op-icon" onclick="openPlatformConfig(${p.id})">✎</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+renderTable();
+
+/* ---------------- platform dropdown ---------------- */
+function renderPlatformDD(){
+  const dd = document.getElementById("platformDD");
+  dd.innerHTML = "";
+  ["全部",...platformList].forEach(name=>{
+    const d = document.createElement("div");
+    d.className = "dd-item" + (name===currentFilterPlatform ? " selected":"");
+    d.textContent = name;
+    d.onclick = ()=>{ currentFilterPlatform = name; document.getElementById("fPlatform").value = name; dd.classList.remove("show"); };
+    dd.appendChild(d);
+  });
+}
+function togglePlatformDD(e){
+  e.stopPropagation();
+  renderPlatformDD();
+  document.getElementById("platformDD").classList.toggle("show");
+}
+document.addEventListener("click", ()=>document.getElementById("platformDD").classList.remove("show"));
+
+function resetFilters(){
+  currentFilterPlatform = "全部";
+  document.getElementById("fPlatform").value = "全部";
+  document.getElementById("fRegion").selectedIndex = 0;
+  document.getElementById("fMerchant").selectedIndex = 0;
+  renderTable();
+  showToast("已重置筛选条件");
+}
+function doQuery(){
+  renderTable();
+  showToast("查询完成");
+}
+
+/* ---------------- 游戏类型管理 modal ---------------- */
+function openGameTypeModal(){
+  renderGtBody();
+  document.getElementById("maskGameType").classList.add("show");
+}
+function renderGtBody(){
+  const tb = document.getElementById("gtBody");
+  tb.innerHTML = "";
+  gameTypes.forEach((g,i)=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${g.name}</td>
+      <td class="${g.on?'status-on':'status-off'}">${g.on?'开启':'关闭'}</td>
+      <td>${g.sort}</td>
+      <td><span class="op-icon" onclick="openGtEdit(${i})">✎</span></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+function openGtEdit(i){
+  editingGtIndex = i;
+  const g = gameTypes[i];
+  document.getElementById("gtEditName").value = g.name;
+  document.getElementById("gtEditSort").value = g.sort;
+  const toggle = document.getElementById("gtEditToggle");
+  const label = document.getElementById("gtEditStatusLabel");
+  toggle.classList.toggle("on", g.on);
+  toggle.classList.toggle("off", !g.on);
+  label.textContent = g.on ? "开启" : "关闭";
+  label.classList.toggle("off", !g.on);
+  document.getElementById("maskGtEdit").classList.add("show");
+}
+function saveGtEdit(){
+  const g = gameTypes[editingGtIndex];
+  g.sort = parseInt(document.getElementById("gtEditSort").value)||g.sort;
+  g.on = document.getElementById("gtEditToggle").classList.contains("on");
+  renderGtBody();
+  closeModal("maskGtEdit");
+  showToast("保存成功");
+}
+
+/* ---------------- 平台配置 modal ---------------- */
+function openPlatformConfig(id){
+  editingPlatformId = id;
+  const p = platforms.find(x=>x.id===id);
+  document.getElementById("pcNameOpt").textContent = p.name;
+  document.getElementById("pcSort").value = p.sort;
+  document.getElementById("pcLogoPreview").textContent = p.logo + " " + p.logoText;
+
+  // status radios
+  document.querySelectorAll('input[name="pcStatus"]').forEach(r=>{
+    r.checked = (r.value === p.status);
+  });
+
+  // open games table
+  const tb = document.getElementById("pcGameBody");
+  tb.innerHTML = "";
+  gameTypes.forEach(g=>{
+    const checked = p.openGames.hasOwnProperty(g.name);
+    const val = checked ? p.openGames[g.name] : "";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><label class="og-name"><input type="checkbox" data-game="${g.name}" ${checked?"checked":""} disabled> ${g.name}</label></td>
+      <td><input type="text" data-sortfor="${g.name}" value="${val}" placeholder="请输入" ${checked?"":"disabled"}></td>
+    `;
+    tb.appendChild(tr);
+  });
+
+  document.getElementById("maskPlatformConfig").classList.add("show");
+}
+function savePlatformConfig(){
+  const p = platforms.find(x=>x.id===editingPlatformId);
+  const statusEl = document.querySelector('input[name="pcStatus"]:checked');
+  p.status = statusEl ? statusEl.value : p.status;
+  p.sort = parseInt(document.getElementById("pcSort").value) || p.sort;
+
+  const newOpenGames = {};
+  document.querySelectorAll('#pcGameBody input[type=checkbox]').forEach(cb=>{
+    if(cb.checked){
+      const sortInput = document.querySelector(`input[data-sortfor="${cb.dataset.game}"]`);
+      newOpenGames[cb.dataset.game] = parseInt(sortInput.value)||0;
+    }
+  });
+  p.openGames = newOpenGames;
+
+  renderTable();
+  closeModal("maskPlatformConfig");
+  showToast("平台配置已保存");
+}
+
+/* ---------------- generic helpers ---------------- */
+function toggleSwitch(el,labelId){
+  el.classList.toggle("on");
+  const on = el.classList.contains("on");
+  const label = document.getElementById(labelId);
+  label.textContent = on ? "开启" : "关闭";
+  label.classList.toggle("off", !on);
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove("show");
+}
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1600);
+}
+
+/* nav sub click (visual only) */
+document.querySelectorAll(".nav-sub").forEach(el=>{
+  el.addEventListener("click",()=>{
+    document.querySelectorAll(".nav-sub").forEach(x=>x.classList.remove("active"));
+    el.classList.add("active");
+  });
+});
+</script>
+</body>
+</html>
