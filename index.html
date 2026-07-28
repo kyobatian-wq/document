@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>人工提存交付文档</title>
+  <title>项目交付文档</title>
   <style>
     :root {
       --bg: #f5f7fb;
@@ -22,139 +22,41 @@
       color: var(--text);
       font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     }
-    .wrap {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 48px 24px;
-    }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px; }
     header { margin-bottom: 24px; }
-    .eyebrow {
-      color: var(--blue);
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 34px;
-      line-height: 1.2;
-      letter-spacing: 0;
-    }
-    .summary {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 16px;
-      margin: 0;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-top: 28px;
-    }
-    .card {
-      display: block;
-      min-height: 150px;
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--card);
-      text-decoration: none;
-      color: inherit;
-      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-    }
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: #b7cff4;
-      box-shadow: 0 12px 28px rgba(21, 35, 70, .08);
-    }
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      height: 26px;
-      padding: 0 10px;
-      border-radius: 999px;
-      color: var(--blue);
-      background: var(--blue-soft);
-      font-weight: 700;
-      font-size: 12px;
-      margin-bottom: 16px;
-    }
-    h2 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      line-height: 1.3;
-      letter-spacing: 0;
-    }
-    .card p {
-      margin: 0;
-      color: var(--muted);
-    }
-    .note {
-      margin-top: 28px;
-      padding: 16px 18px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      color: var(--muted);
-    }
-    footer {
-      margin-top: 28px;
-      color: #98a2b3;
-      font-size: 13px;
-    }
+    .eyebrow { color: var(--blue); font-weight: 700; margin-bottom: 8px; }
+    h1 { margin: 0 0 12px; font-size: 34px; line-height: 1.2; letter-spacing: 0; }
+    .summary { max-width: 760px; color: var(--muted); font-size: 16px; margin: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 28px; }
+    .card { display: block; min-height: 150px; padding: 22px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); text-decoration: none; color: inherit; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+    .card:hover { transform: translateY(-2px); border-color: #b7cff4; box-shadow: 0 12px 28px rgba(21, 35, 70, .08); }
+    .tag { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font-weight: 700; font-size: 12px; margin-bottom: 16px; }
+    h2 { margin: 0 0 8px; font-size: 18px; line-height: 1.3; letter-spacing: 0; }
+    .card p { margin: 0; color: var(--muted); }
+    .note { margin-top: 28px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--muted); }
+    footer { margin-top: 28px; color: #98a2b3; font-size: 13px; }
+
   </style>
 </head>
 <body>
   <main class="wrap">
     <header>
-      <div class="eyebrow">商户财务管理 / 人工提存</div>
-      <h1>人工提存交互原型与 PRD</h1>
-      <p class="summary">用于产品评审、交互验收和研发实现对齐。包含后台原型、客户端交互、PRD 文档、PDF 评审稿和批量人工优惠导入模板。</p>
+      <div class="eyebrow">项目交付 / Project Documents</div>
+      <h1>项目交付文档</h1>
+      <p class="summary">用于按站点和项目归档交互原型、PRD、评审稿与研发附件。</p>
     </header>
 
     <section class="grid" aria-label="交付文件">
-      <a class="card" href="./manual-deposit/backend-prototype.html">
-        <span class="tag">后台 HTML</span>
-        <h2>后台交互原型</h2>
-        <p>后台人工存入、人工提出、人工优惠、批量人工优惠、记录页和安全设置。</p>
-      </a>
-      <a class="card" href="./manual-deposit/client-prototype.html">
-        <span class="tag">客户端 HTML</span>
-        <h2>客户端交互原型</h2>
-        <p>玩家侧首页、弹窗领取、加倍奖励、充值后领取和站内信通知演示。</p>
-      </a>
-      <a class="card" href="./manual-deposit/prd.html">
-        <span class="tag">HTML PRD</span>
-        <h2>PRD 在线版</h2>
-        <p>适合浏览器直接评审，包含业务规则、字段字典、数据流转和边界场景。</p>
-      </a>
-      <a class="card" href="./manual-deposit/prd.pdf">
-        <span class="tag">PDF</span>
-        <h2>PRD PDF</h2>
-        <p>适合下载、归档或会议评审。</p>
-      </a>
-      <a class="card" href="./manual-deposit/prd.docx">
-        <span class="tag">DOCX</span>
-        <h2>PRD Word</h2>
-        <p>适合继续编辑和批注。</p>
-      </a>
-      <a class="card" href="./manual-deposit/prd.md">
-        <span class="tag">Markdown</span>
-        <h2>PRD Markdown</h2>
-        <p>适合研发复制到 Wiki、代码仓库或需求管理系统。</p>
-      </a>
-      <a class="card" href="./manual-deposit/batch-discount-template.xlsx">
-        <span class="tag">Excel</span>
-        <h2>批量人工优惠模板</h2>
-        <p>批量人工优惠会员 ID 导入模板。</p>
+      <a class="card" href="./brazil/">
+        <span class="tag">项目</span>
+        <h2>巴西站</h2>
+        <p>巴西站相关需求交付文档，当前包含人工提存项目。</p>
       </a>
     </section>
 
-    <div class="note">
-      最新口径：本期包含人工提出；人工提出只校验金额必填且大于 0，不做单笔金额上限校验。自动优惠、自动优惠统计不在本期范围内。
-    </div>
+    <div class="note">人工提存已归档到：巴西站 / 人工提存。旧链接会自动跳转到新目录。</div>
 
-    <footer>Updated: 2026-07-27</footer>
+    <footer>Updated: 2026-07-28</footer>
   </main>
 </body>
 </html>
