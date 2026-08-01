@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>巴西站项目文档</title>
+  <title>返水模块文档</title>
   <style>
     :root {
       --bg: #f5f7fb;
@@ -34,32 +34,33 @@
     h2 { margin: 0 0 8px; font-size: 18px; line-height: 1.3; letter-spacing: 0; }
     .card p { margin: 0; color: var(--muted); }
     .note { margin-top: 28px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--muted); }
+    .note a { color: var(--blue); text-decoration: none; font-weight: 700; }
+    .note a:hover { text-decoration: underline; }
     footer { margin-top: 28px; color: #98a2b3; font-size: 13px; }
-
   </style>
 </head>
 <body>
   <main class="wrap">
     <header>
-      <div class="eyebrow">项目 / 巴西站</div>
-      <h1>巴西站项目文档</h1>
-      <p class="summary">巴西站项目级交付入口，按需求模块集中管理原型、PRD 和附件。</p>
+      <div class="eyebrow">项目 / 巴西站 / Rebate</div>
+      <h1>返水模块文档</h1>
+      <p class="summary">投注返水模块交付入口，包含 V1.5 PRD 与 pt-BR 客户端交互原型。</p>
     </header>
 
     <section class="grid" aria-label="交付文件">
-      <a class="card" href="./manual-deposit/">
-        <span class="tag">商户财务管理</span>
-        <h2>人工提存</h2>
-        <p>人工存入、人工提出、人工优惠、批量人工优惠、记录页、安全设置与客户端交互。</p>
+      <a class="card" href="./rebate_prd.html">
+        <span class="tag">PRD</span>
+        <h2>返水模块 PRD</h2>
+        <p>实时计算、手动领取模式，包含顶部汇总、Receber 弹窗、历史记录与边界状态说明。</p>
       </a>
-      <a class="card" href="./返水/">
-        <span class="tag">Rebate</span>
-        <h2>返水模块</h2>
-        <p>投注返水、实时计算手动领取、Receber 领取弹窗、历史记录与客户端交互原型。</p>
+      <a class="card" href="./rebate_prototype.html">
+        <span class="tag">Prototype</span>
+        <h2>交互原型</h2>
+        <p>可点击 HTML 原型，覆盖返水首页、场馆详情、领取弹窗和 Histórico 页面。</p>
       </a>
     </section>
 
-    <div class="note">后续巴西站新增项目可继续在此页面追加入口。</div>
+    <div class="note"><a href="../">返回巴西站项目文档</a></div>
 
     <footer>Updated: 2026-08-01</footer>
   </main>
