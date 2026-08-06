@@ -1,0 +1,537 @@
+<div id="vip-br-prototype" class="vip-prototype" aria-label="Protótipo mobile VIP em português do Brasil">
+  <style>
+    #vip-br-prototype {
+      --phone-bg: #07090d;
+      --panel: #10141d;
+      --panel-2: #171c27;
+      --panel-3: #202634;
+      --text: #f4f7fb;
+      --muted: #9da7b7;
+      --soft: #687385;
+      --line: rgba(255, 255, 255, 0.08);
+      --gold: #f3c766;
+      --gold-2: #dca945;
+      --green: #38d17c;
+      --blue: #59a9ff;
+      --red: #ff6b75;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: grid;
+      justify-items: center;
+      padding: 12px;
+      background: transparent;
+    }
+
+    #vip-br-prototype * {
+      box-sizing: border-box;
+    }
+
+    #vip-br-prototype .phone {
+      width: min(390px, 100%);
+      min-height: 760px;
+      border-radius: 28px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 30% -8%, rgba(243, 199, 102, 0.22), transparent 34%),
+        linear-gradient(180deg, #121722 0%, var(--phone-bg) 38%, #080a0f 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+
+    #vip-br-prototype .status {
+      height: 30px;
+      padding: 8px 18px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(244, 247, 251, 0.9);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .signal {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #vip-br-prototype .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.85;
+    }
+
+    #vip-br-prototype .topbar {
+      height: 48px;
+      display: grid;
+      grid-template-columns: 36px 1fr 36px;
+      align-items: center;
+      padding: 0 14px;
+    }
+
+    #vip-br-prototype .icon-btn {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    #vip-br-prototype .title {
+      text-align: center;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    #vip-br-prototype .hero {
+      padding: 4px 16px 14px;
+    }
+
+    #vip-br-prototype .vip-card {
+      min-height: 154px;
+      border-radius: 18px;
+      padding: 18px;
+      background:
+        linear-gradient(135deg, rgba(243, 199, 102, 0.28), rgba(220, 169, 69, 0.07) 45%, rgba(255, 255, 255, 0.04)),
+        linear-gradient(160deg, #25222b, #111620 70%);
+      border: 1px solid rgba(243, 199, 102, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #vip-br-prototype .vip-card::after {
+      content: "";
+      position: absolute;
+      right: -44px;
+      top: -36px;
+      width: 142px;
+      height: 142px;
+      border-radius: 50%;
+      border: 22px solid rgba(243, 199, 102, 0.12);
+    }
+
+    #vip-br-prototype .vip-row {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      z-index: 1;
+    }
+
+    #vip-br-prototype .level-kicker {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    #vip-br-prototype .level {
+      font-size: 32px;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    #vip-br-prototype .badge {
+      flex: 0 0 auto;
+      min-width: 78px;
+      text-align: center;
+      border-radius: 999px;
+      background: rgba(243, 199, 102, 0.14);
+      border: 1px solid rgba(243, 199, 102, 0.3);
+      color: var(--gold);
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .next-line {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    #vip-br-prototype .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 0 16px 12px;
+    }
+
+    #vip-br-prototype .tab {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .tab.active {
+      color: #1b1304;
+      background: linear-gradient(180deg, var(--gold), var(--gold-2));
+      border-color: transparent;
+    }
+
+    #vip-br-prototype .content {
+      padding: 0 16px 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    #vip-br-prototype .config-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    #vip-br-prototype .config-toggle button {
+      min-height: 38px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .config-toggle button[aria-pressed="true"] {
+      background: var(--panel-3);
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    #vip-br-prototype .section {
+      border-radius: 16px;
+      background: rgba(16, 20, 29, 0.96);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    #vip-br-prototype .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    #vip-br-prototype .section-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .pill {
+      flex: 0 0 auto;
+      color: var(--green);
+      background: rgba(56, 209, 124, 0.12);
+      border: 1px solid rgba(56, 209, 124, 0.22);
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .progress-list {
+      padding: 14px;
+      display: grid;
+      gap: 16px;
+    }
+
+    #vip-br-prototype .progress-item {
+      display: grid;
+      gap: 8px;
+    }
+
+    #vip-br-prototype .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    #vip-br-prototype .progress-label {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .progress-value {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    #vip-br-prototype .track {
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    #vip-br-prototype .fill {
+      height: 100%;
+      width: var(--value);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--gold-2), var(--gold));
+      box-shadow: 0 0 18px rgba(243, 199, 102, 0.24);
+    }
+
+    #vip-br-prototype .fill.deposit {
+      background: linear-gradient(90deg, var(--blue), #8bc7ff);
+      box-shadow: 0 0 18px rgba(89, 169, 255, 0.24);
+    }
+
+    #vip-br-prototype .hint {
+      color: var(--soft);
+      font-size: 12px;
+    }
+
+    #vip-br-prototype .deposit-row.is-hidden {
+      display: none;
+    }
+
+    #vip-br-prototype .benefits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    #vip-br-prototype .benefit {
+      min-height: 74px;
+      border-radius: 12px;
+      padding: 12px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    #vip-br-prototype .benefit-label {
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 7px;
+    }
+
+    #vip-br-prototype .benefit-value {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .claim {
+      width: 100%;
+      min-height: 44px;
+      border: 0;
+      border-radius: 12px;
+      color: #1b1304;
+      background: linear-gradient(180deg, var(--gold), var(--gold-2));
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0 14px 14px;
+      width: calc(100% - 28px);
+    }
+
+    #vip-br-prototype .levels {
+      padding: 4px 14px 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    #vip-br-prototype .level-row {
+      min-height: 44px;
+      border-radius: 12px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+    }
+
+    #vip-br-prototype .level-name {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    #vip-br-prototype .level-desc {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    #vip-br-prototype .level-status {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 360px) {
+      #vip-br-prototype {
+        padding: 8px;
+      }
+
+      #vip-br-prototype .phone {
+        border-radius: 22px;
+      }
+
+      #vip-br-prototype .benefits {
+        grid-template-columns: 1fr;
+      }
+
+      #vip-br-prototype .progress-top {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
+      }
+    }
+  </style>
+
+  <div class="phone">
+    <div class="status">
+      <span>10:30</span>
+      <span class="signal" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+    </div>
+
+    <div class="topbar">
+      <button class="icon-btn" aria-label="Voltar">‹</button>
+      <div class="title">VIP</div>
+      <button class="icon-btn" aria-label="Ajuda">?</button>
+    </div>
+
+    <section class="hero" aria-label="Nível VIP atual">
+      <div class="vip-card">
+        <div class="vip-row">
+          <div>
+            <div class="level-kicker">Nível atual</div>
+            <div class="level">VIP 3</div>
+          </div>
+          <div class="badge">Brasil</div>
+        </div>
+        <div class="next-line">Próximo nível: VIP 4</div>
+      </div>
+    </section>
+
+    <div class="tabs" role="tablist" aria-label="Áreas VIP">
+      <button class="tab active" type="button">Meu VIP</button>
+      <button class="tab" type="button">Benefícios</button>
+      <button class="tab" type="button">Histórico</button>
+    </div>
+
+    <main class="content">
+      <div class="config-toggle" aria-label="Condição configurada no painel administrativo">
+        <button type="button" data-mode="zero" aria-pressed="true">Depósito = 0</button>
+        <button type="button" data-mode="positive" aria-pressed="false">Depósito &gt; 0</button>
+      </div>
+
+      <section class="section" aria-label="Progresso para upgrade">
+        <div class="section-head">
+          <div class="section-title">Progresso para upgrade</div>
+          <div class="pill">Em andamento</div>
+        </div>
+        <div class="progress-list">
+          <div class="progress-item">
+            <div class="progress-top">
+              <span class="progress-label">Aposta necessária</span>
+              <span class="progress-value">1.008,50 / 3.000,00</span>
+            </div>
+            <div class="track" aria-label="Progresso de aposta necessária">
+              <div class="fill" style="--value: 34%"></div>
+            </div>
+            <div class="hint">Faltam 1.991,50 para avançar de nível.</div>
+          </div>
+
+          <div class="progress-item deposit-row is-hidden" id="depositProgressRow">
+            <div class="progress-top">
+              <span class="progress-label">Depósito necessário</span>
+              <span class="progress-value" id="depositValue">300,00 / 1.000,00</span>
+            </div>
+            <div class="track" aria-label="Progresso de depósito necessário">
+              <div class="fill deposit" style="--value: 30%"></div>
+            </div>
+            <div class="hint" id="depositHint">Faltam 700,00 em depósitos para concluir a condição.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-label="Benefícios VIP">
+        <div class="section-head">
+          <div class="section-title">Benefícios do nível</div>
+          <div class="pill">VIP 3</div>
+        </div>
+        <div class="benefits">
+          <div class="benefit">
+            <div class="benefit-label">Bônus de upgrade</div>
+            <div class="benefit-value">R$ 88,00</div>
+          </div>
+          <div class="benefit">
+            <div class="benefit-label">Cashback semanal</div>
+            <div class="benefit-value">6%</div>
+          </div>
+        </div>
+        <button class="claim" type="button">Resgatar recompensa</button>
+      </section>
+
+      <section class="section" aria-label="Lista de níveis">
+        <div class="section-head">
+          <div class="section-title">Níveis VIP</div>
+          <div class="pill">Atual</div>
+        </div>
+        <div class="levels">
+          <div class="level-row">
+            <div class="level-name">VIP 3</div>
+            <div class="level-desc">Aposta necessária concluída parcialmente</div>
+            <div class="level-status">Atual</div>
+          </div>
+          <div class="level-row">
+            <div class="level-name">VIP 4</div>
+            <div class="level-desc">Requer completar as condições</div>
+            <div class="level-status">Bloqueado</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const root = document.getElementById("vip-br-prototype");
+      const buttons = root.querySelectorAll(".config-toggle button");
+      const depositRow = root.querySelector("#depositProgressRow");
+      const depositValue = root.querySelector("#depositValue");
+      const depositHint = root.querySelector("#depositHint");
+
+      function setMode(mode) {
+        const showDeposit = mode === "positive";
+        buttons.forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
+        });
+        depositRow.classList.toggle("is-hidden", !showDeposit);
+        depositValue.textContent = showDeposit ? "300,00 / 1.000,00" : "0,00 / 0,00";
+        depositHint.textContent = showDeposit
+          ? "Faltam 700,00 em depósitos para concluir a condição."
+          : "";
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => setMode(button.dataset.mode));
+      });
+    })();
+  </script>
+</div>

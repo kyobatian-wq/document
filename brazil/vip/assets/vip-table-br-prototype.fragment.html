@@ -1,0 +1,530 @@
+<div id="vip-table-br-prototype" class="vip-screen-prototype" aria-label="Protótipo VIP com coluna de progresso">
+  <style>
+    #vip-table-br-prototype {
+      --bg: #111111;
+      --top: #39342d;
+      --panel: #36322c;
+      --row-a: #121212;
+      --row-b: #171717;
+      --text: #e8e4dd;
+      --muted: #8e8981;
+      --dim: #6f6c67;
+      --line: #49443e;
+      --yellow: #f2ff23;
+      --gold: #ffc331;
+      --orange: #ff982c;
+      --green: #25d381;
+      --red: #ff2f3f;
+      width: 100%;
+      display: grid;
+      justify-items: center;
+      padding: 10px;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      background: transparent;
+    }
+
+    #vip-table-br-prototype * {
+      box-sizing: border-box;
+    }
+
+    #vip-table-br-prototype .phone {
+      width: min(486px, 100%);
+      min-height: 980px;
+      background: var(--bg);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #vip-table-br-prototype .top-tabs {
+      height: 56px;
+      background: var(--top);
+      display: flex;
+      align-items: end;
+      gap: 18px;
+      padding: 0 22px;
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    #vip-table-br-prototype .top-tab {
+      height: 100%;
+      display: grid;
+      align-items: center;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    #vip-table-br-prototype .top-tab.active {
+      color: var(--text);
+    }
+
+    #vip-table-br-prototype .top-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--yellow);
+    }
+
+    #vip-table-br-prototype .notify {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      right: -6px;
+      top: 8px;
+    }
+
+    #vip-table-br-prototype .vip-summary {
+      margin: 16px 22px 20px;
+      min-height: 100px;
+      border-radius: 8px;
+      background: var(--panel);
+      display: grid;
+      grid-template-columns: 78px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 12px;
+      position: relative;
+    }
+
+    #vip-table-br-prototype .level-chip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateY(-1px);
+      background: #ff414d;
+      color: #ffffff;
+      border-radius: 3px;
+      padding: 4px 5px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    #vip-table-br-prototype .crown {
+      display: grid;
+      justify-items: center;
+      gap: 2px;
+      color: #d8d8d8;
+      font-size: 36px;
+      text-shadow: 0 1px 0 #fff;
+    }
+
+    #vip-table-br-prototype .crown small {
+      margin-top: -12px;
+      margin-left: 38px;
+      background: #e7e7e7;
+      color: #606060;
+      border-radius: 2px;
+      padding: 1px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-shadow: none;
+    }
+
+    #vip-table-br-prototype .summary-copy {
+      min-width: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    #vip-table-br-prototype .summary-copy b {
+      color: var(--gold);
+      font-size: 16px;
+    }
+
+    #vip-table-br-prototype .summary-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    #vip-table-br-prototype .summary-actions button {
+      border: 0;
+      border-radius: 8px;
+      min-width: 100px;
+      height: 38px;
+      padding: 0 10px;
+      font-size: 15px;
+    }
+
+    #vip-table-br-prototype .collect {
+      background: var(--yellow);
+      color: #111;
+    }
+
+    #vip-table-br-prototype .history {
+      background: var(--green);
+      color: #fff;
+    }
+
+    #vip-table-br-prototype h2 {
+      margin: 0 22px 16px;
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    #vip-table-br-prototype .bonus-tabs {
+      display: flex;
+      gap: 28px;
+      padding: 0 22px;
+      color: var(--muted);
+      font-size: 14px;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    #vip-table-br-prototype .bonus-tab {
+      position: relative;
+      height: 44px;
+      display: grid;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    #vip-table-br-prototype .bonus-tab.active {
+      color: var(--text);
+    }
+
+    #vip-table-br-prototype .bonus-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--yellow);
+    }
+
+    #vip-table-br-prototype .vip-table {
+      margin: 8px 22px 0;
+      display: grid;
+      grid-template-columns: 30% 34% 18% 18%;
+      font-size: 14px;
+    }
+
+    #vip-table-br-prototype .cell {
+      min-height: 75px;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      padding: 8px 5px;
+      color: var(--dim);
+      background: var(--row-a);
+    }
+
+    #vip-table-br-prototype .head {
+      min-height: 70px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    #vip-table-br-prototype .row-alt {
+      background: var(--row-b);
+    }
+
+    #vip-table-br-prototype .level-mark {
+      display: grid;
+      justify-items: center;
+      line-height: 1;
+    }
+
+    #vip-table-br-prototype .level-mark .icon {
+      font-size: 34px;
+      filter: grayscale(1) brightness(1.15);
+    }
+
+    #vip-table-br-prototype .level-mark.gold .icon {
+      filter: sepia(1) saturate(2.1) hue-rotate(345deg) brightness(1.2);
+    }
+
+    #vip-table-br-prototype .level-mark.blue .icon {
+      filter: sepia(1) saturate(0.8) hue-rotate(170deg) brightness(1.3);
+    }
+
+    #vip-table-br-prototype .level-mark small {
+      margin-top: -10px;
+      margin-left: 42px;
+      min-width: 24px;
+      border-radius: 2px;
+      padding: 1px 3px;
+      background: #e8e8e8;
+      color: #6a6a6a;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    #vip-table-br-prototype .level-mark.gold small {
+      color: #b15b14;
+    }
+
+    #vip-table-br-prototype .level-mark.blue small {
+      color: #507093;
+    }
+
+    #vip-table-br-prototype .bonus-value {
+      color: var(--gold);
+    }
+
+    #vip-table-br-prototype .progress-cell {
+      justify-items: stretch;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+
+    #vip-table-br-prototype .progress-wrap {
+      width: 100%;
+      min-width: 0;
+      display: grid;
+      gap: 6px;
+      justify-items: stretch;
+    }
+
+    #vip-table-br-prototype .bar {
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background: #4b4b4b;
+      overflow: hidden;
+    }
+
+    #vip-table-br-prototype .bar span {
+      display: block;
+      width: 34%;
+      height: 100%;
+      background: var(--orange);
+    }
+
+    #vip-table-br-prototype .progress-number {
+      color: #f2f2f2;
+      font-size: 12px;
+      text-align: center;
+      white-space: nowrap;
+      transform: translateX(-10px);
+    }
+
+    #vip-table-br-prototype .empty-progress {
+      width: 100%;
+      height: 1px;
+    }
+
+    #vip-table-br-prototype .claim-btn {
+      margin: 26px auto 68px;
+      width: 72%;
+      height: 50px;
+      border: 0;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: #81811f;
+      color: #101010;
+      font-size: 18px;
+    }
+
+    #vip-table-br-prototype .bottom-nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 57px;
+      background: #25231f;
+      border-radius: 18px 18px 0 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    #vip-table-br-prototype .nav-item {
+      display: grid;
+      justify-items: center;
+      gap: 2px;
+      position: relative;
+    }
+
+    #vip-table-br-prototype .nav-icon {
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    #vip-table-br-prototype .nav-item.active {
+      color: var(--yellow);
+    }
+
+    #vip-table-br-prototype .center-badge {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffe86e 0 37%, #bb8824 61%, rgba(0, 0, 0, 0) 62%);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 31px;
+      text-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: 390px) {
+      #vip-table-br-prototype {
+        padding: 0;
+      }
+
+      #vip-table-br-prototype .phone {
+        width: 100%;
+        min-height: 940px;
+      }
+
+      #vip-table-br-prototype .top-tabs {
+        gap: 15px;
+        padding: 0 20px;
+        font-size: 13px;
+      }
+
+      #vip-table-br-prototype .vip-summary {
+        margin-left: 20px;
+        margin-right: 20px;
+        grid-template-columns: 74px 1fr auto;
+        gap: 10px;
+      }
+
+      #vip-table-br-prototype .summary-actions button {
+        min-width: 90px;
+      }
+
+      #vip-table-br-prototype .bonus-tabs {
+        gap: 25px;
+        font-size: 13px;
+      }
+
+      #vip-table-br-prototype .vip-table {
+        margin-left: 20px;
+        margin-right: 18px;
+        grid-template-columns: 31% 34% 17% 18%;
+      }
+
+      #vip-table-br-prototype .head {
+        font-size: 14px;
+      }
+
+      #vip-table-br-prototype .progress-number {
+        font-size: 11px;
+        transform: translateX(-11px);
+      }
+    }
+  </style>
+
+  <div class="phone">
+    <nav class="top-tabs" aria-label="Promoção">
+      <div class="top-tab">Eventos</div>
+      <div class="top-tab">Rebate</div>
+      <div class="top-tab active">VIP<span class="notify"></span></div>
+      <div class="top-tab">Código de Resgate</div>
+      <div class="top-tab">Histórico</div>
+      <div class="top-tab">Pendente</div>
+    </nav>
+
+    <section class="vip-summary" aria-label="Resumo VIP">
+      <div class="level-chip">Nível Atual</div>
+      <div class="crown">♛<small>V2</small></div>
+      <div class="summary-copy">
+        <div>Siga <b>VIP3</b></div>
+        <div>Ainda precisa apostar 1.991,50</div>
+      </div>
+      <div class="summary-actions">
+        <button class="collect" type="button">Coletar Tudo</button>
+        <button class="history" type="button">Histórias</button>
+      </div>
+    </section>
+
+    <h2>Lista de níveis VIP</h2>
+
+    <nav class="bonus-tabs" aria-label="Tipos de bônus">
+      <div class="bonus-tab active">Bônus</div>
+      <div class="bonus-tab">Bônus Diário<span class="notify"></span></div>
+      <div class="bonus-tab">Bônus Semanal</div>
+      <div class="bonus-tab">Bônus Mensal</div>
+    </nav>
+
+    <section class="vip-table" aria-label="Tabela de níveis VIP">
+      <div class="cell head">Nível</div>
+      <div class="cell head">Aposta necessária</div>
+      <div class="cell head">Progresso</div>
+      <div class="cell head">Bônus</div>
+
+      <div class="cell"><div class="level-mark"><span class="icon">♛</span><small>V0</small></div></div>
+      <div class="cell">0,00</div>
+      <div class="cell progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell bonus-value">0,00</div>
+
+      <div class="cell row-alt"><div class="level-mark"><span class="icon">♛</span><small>V1</small></div></div>
+      <div class="cell row-alt">100,00</div>
+      <div class="cell row-alt progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell row-alt bonus-value">1,00</div>
+
+      <div class="cell"><div class="level-mark"><span class="icon">♛</span><small>V2</small></div></div>
+      <div class="cell">1.000,00</div>
+      <div class="cell progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell bonus-value">3,00</div>
+
+      <div class="cell row-alt"><div class="level-mark gold"><span class="icon">♛</span><small>V3</small></div></div>
+      <div class="cell row-alt">3.000,00</div>
+      <div class="cell row-alt progress-cell">
+        <div class="progress-wrap">
+          <div class="bar" aria-label="Progresso de aposta necessária"><span></span></div>
+          <div class="progress-number">1.008,50/3.000,00</div>
+        </div>
+      </div>
+      <div class="cell row-alt bonus-value">8,00</div>
+
+      <div class="cell"><div class="level-mark gold"><span class="icon">♛</span><small>V4</small></div></div>
+      <div class="cell">10.000,00</div>
+      <div class="cell progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell bonus-value">10,00</div>
+
+      <div class="cell row-alt"><div class="level-mark gold"><span class="icon">♛</span><small>V5</small></div></div>
+      <div class="cell row-alt">30.000,00</div>
+      <div class="cell row-alt progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell row-alt bonus-value">20,00</div>
+
+      <div class="cell"><div class="level-mark blue"><span class="icon">♛</span><small>V6</small></div></div>
+      <div class="cell">60.000,00</div>
+      <div class="cell progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell bonus-value">40,00</div>
+
+      <div class="cell row-alt"><div class="level-mark blue"><span class="icon">♛</span><small>V7</small></div></div>
+      <div class="cell row-alt">100.000,00</div>
+      <div class="cell row-alt progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell row-alt bonus-value">55,00</div>
+
+      <div class="cell"><div class="level-mark blue"><span class="icon">♛</span><small>V8</small></div></div>
+      <div class="cell">300.000,00</div>
+      <div class="cell progress-cell"><div class="empty-progress"></div></div>
+      <div class="cell bonus-value">155,00</div>
+    </section>
+
+    <button class="claim-btn" type="button">Reclamar Recompensa de Upgrade</button>
+
+    <div class="center-badge">👥</div>
+    <nav class="bottom-nav" aria-label="Navegação inferior">
+      <div class="nav-item"><div class="nav-icon">▣</div><div>Início</div></div>
+      <div class="nav-item active"><div class="nav-icon">🎁</div><div>Promoção</div></div>
+      <div class="nav-item"><div class="nav-icon"></div><div>convidar</div></div>
+      <div class="nav-item"><div class="nav-icon">💳</div><div>Saque</div></div>
+      <div class="nav-item"><div class="nav-icon">👤</div><div>Perfil</div></div>
+    </nav>
+  </div>
+</div>
