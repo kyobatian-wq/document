@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>巴西站项目文档</title>
+  <title>VIP 模块文档</title>
   <style>
     :root {
       --bg: #f5f7fb;
@@ -34,37 +34,43 @@
     h2 { margin: 0 0 8px; font-size: 18px; line-height: 1.3; letter-spacing: 0; }
     .card p { margin: 0; color: var(--muted); }
     .note { margin-top: 28px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--muted); }
+    .note a { color: var(--blue); text-decoration: none; font-weight: 700; }
+    .note a:hover { text-decoration: underline; }
     footer { margin-top: 28px; color: #98a2b3; font-size: 13px; }
-
   </style>
 </head>
 <body>
   <main class="wrap">
     <header>
-      <div class="eyebrow">项目 / 巴西站</div>
-      <h1>巴西站项目文档</h1>
-      <p class="summary">巴西站项目级交付入口，按需求模块集中管理原型、PRD 和附件。</p>
+      <div class="eyebrow">项目 / 巴西站 / VIP</div>
+      <h1>VIP 模块交互原型与 PRD</h1>
+      <p class="summary">用于 VIP 客户端页面迭代和管理后台功能评审，包含客户端/后台交互设计稿与对应 PRD 在线版。</p>
     </header>
 
     <section class="grid" aria-label="交付文件">
-      <a class="card" href="./manual-deposit/">
-        <span class="tag">商户财务管理</span>
-        <h2>人工提存</h2>
-        <p>人工存入、人工提出、人工优惠、批量人工优惠、记录页、安全设置与客户端交互。</p>
+      <a class="card" href="./client-prototype.html">
+        <span class="tag">客户端 HTML</span>
+        <h2>VIP 客户端页面迭代原型</h2>
+        <p>客户端 VIP 页面迭代交互原型，用于评审移动端页面结构、等级展示和用户操作路径。</p>
       </a>
-      <a class="card" href="./返水/">
-        <span class="tag">Rebate</span>
-        <h2>返水模块</h2>
-        <p>投注返水、实时计算手动领取、Receber 领取弹窗、历史记录与客户端交互原型。</p>
+      <a class="card" href="./backend-prototype.html">
+        <span class="tag">后台 HTML</span>
+        <h2>VIP 管理后台交互设计稿</h2>
+        <p>管理后台 VIP 功能交互设计稿，用于评审配置、管理和运营操作流程。</p>
       </a>
-      <a class="card" href="./vip/">
-        <span class="tag">VIP</span>
-        <h2>VIP 模块</h2>
-        <p>VIP 客户端页面迭代、管理后台交互设计稿，以及客户端/后台 PRD 在线版。</p>
+      <a class="card" href="./client-prd.html">
+        <span class="tag">客户端 PRD</span>
+        <h2>VIP 客户端页面迭代 PRD</h2>
+        <p>客户端页面迭代产品需求文档，适合浏览器直接查看和研发对齐。</p>
+      </a>
+      <a class="card" href="./backend-prd.html">
+        <span class="tag">后台 PRD</span>
+        <h2>VIP 管理后台产品需求文档</h2>
+        <p>管理后台产品需求文档，覆盖后台配置与管理相关需求说明。</p>
       </a>
     </section>
 
-    <div class="note">后续巴西站新增项目可继续在此页面追加入口。</div>
+    <div class="note"><a href="../">返回巴西站项目文档</a></div>
 
     <footer>Updated: 2026-08-07</footer>
   </main>
