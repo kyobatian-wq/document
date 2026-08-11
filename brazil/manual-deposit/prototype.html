@@ -633,8 +633,19 @@
     }
 
     .batch-form {
-      width: 760px;
+      width: calc(100% - 40px);
+      min-width: 760px;
       margin-left: 20px;
+      position: relative;
+      padding-top: 2px;
+    }
+
+    .batch-form > .form-row,
+    .batch-form > .notice-row,
+    .batch-form > .save-row,
+    .batch-form > .conditional,
+    .batch-form > .batch-popup-only {
+      max-width: 760px;
     }
 
     .batch-form .form-row,
@@ -646,16 +657,28 @@
     .batch-top-selects {
       display: flex;
       justify-content: flex-end;
-      gap: 30px;
-      margin: -3px 30px 10px 0;
+      align-items: center;
+      gap: 34px;
+      width: 100%;
+      min-height: 36px;
+      margin: -4px 18px 10px 0;
+      padding-right: 8px;
       color: #17233d;
       font-weight: 500;
+      box-sizing: border-box;
+    }
+
+    .batch-top-selects label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
     }
 
     .batch-top-selects select {
-      width: 95px;
-      height: 32px;
-      margin-left: 8px;
+      width: 118px;
+      height: 30px;
+      margin-left: 0;
       border: 1px solid #cfd5dd;
       border-radius: 5px;
       background: #fff;
@@ -1885,6 +1908,29 @@
       cursor: pointer;
     }
 
+    .radio.disabled-option {
+      color: #a8b0bb;
+      cursor: not-allowed;
+    }
+
+    .radio.disabled-option input {
+      cursor: not-allowed;
+    }
+
+    .scope-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 8px;
+      border-radius: 10px;
+      background: #f2f4f7;
+      color: #8a94a3;
+      font-size: 12px;
+      line-height: 20px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
     .upload-path {
       width: 390px;
       height: 32px;
@@ -2933,6 +2979,53 @@
       margin-top: 8px;
     }
 
+    .gift-art .bonus-title {
+      font-size: 30px;
+      line-height: 34px;
+      text-transform: uppercase;
+    }
+
+    .gift-art .gift-symbol {
+      width: 118px;
+      height: 96px;
+      margin: 14px auto 8px;
+      border-radius: 18px 18px 26px 26px;
+      background: linear-gradient(90deg, #ff4d48 0 44%, #ffe85c 44% 56%, #ff4d48 56% 100%);
+      box-shadow: 0 0 36px rgba(255, 230, 82, .9), inset 0 -10px 0 rgba(128, 42, 0, .16);
+      position: relative;
+    }
+
+    .gift-art .gift-symbol::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -34px;
+      width: 92px;
+      height: 42px;
+      transform: translateX(-50%);
+      border-radius: 50% 50% 12px 12px;
+      background: linear-gradient(90deg, #ffe85c 0 48%, #ffcf22 48% 52%, #ffe85c 52% 100%);
+      box-shadow: 0 8px 0 #d33d31;
+    }
+
+    .gift-art .bonus-subtitle {
+      min-height: 24px;
+      margin-top: 2px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      text-shadow: 0 2px 10px rgba(0,0,0,.45);
+    }
+
+    .gift-art.reward-open .amount {
+      display: none;
+    }
+
+    .gift-art.reward-open .bonus-title {
+      font-size: 44px;
+      color: #fff44b;
+    }
+
     .reward-receive-btn {
       width: 270px;
       height: 64px;
@@ -3394,7 +3487,7 @@
             <div class="form-row">
               <label class="label" for="amount">存入金额:</label>
               <div class="control-wrap">
-                <input class="text-input" id="amount" name="amount" placeholder="请输入" autocomplete="off">
+                <input class="text-input" id="amount" name="amount" placeholder="请输入" autocomplete="off" inputmode="decimal" data-money-input>
               </div>
               <span class="tip" data-limit-tip="manualDeposit" data-tip="不能大于后台配置的人工存入单笔金额（当前1001）"><span class="arrow"></span></span>
             </div>
@@ -3403,7 +3496,7 @@
               <label class="label" for="ratio">赠送比例:</label>
               <div class="control-wrap">
                 <div class="input-suffix">
-                  <input class="text-input" id="ratio" name="ratio" placeholder="请输入" autocomplete="off">
+                  <input class="text-input" id="ratio" name="ratio" placeholder="请输入" autocomplete="off" inputmode="decimal" data-ratio-input>
                   <span class="suffix">%</span>
                 </div>
               </div>
@@ -3426,7 +3519,7 @@
             <div class="form-row default-coding-row">
               <label class="label" for="depositMultiple">充值提现倍数:</label>
               <div class="control-wrap">
-                <input class="text-input" id="depositMultiple" name="depositMultiple" placeholder="请输入" autocomplete="off">
+                <input class="text-input" id="depositMultiple" name="depositMultiple" placeholder="请输入" autocomplete="off" inputmode="numeric" data-integer-multiple>
               </div>
               <span></span>
             </div>
@@ -3434,7 +3527,7 @@
             <div class="form-row default-coding-row">
               <label class="label" for="bonusMultiple">优惠提现倍数:</label>
               <div class="control-wrap">
-                <input class="text-input" id="bonusMultiple" name="bonusMultiple" placeholder="请输入" autocomplete="off">
+                <input class="text-input" id="bonusMultiple" name="bonusMultiple" placeholder="请输入" autocomplete="off" inputmode="numeric" data-integer-multiple>
               </div>
               <span></span>
             </div>
@@ -3478,9 +3571,9 @@
             <div class="form-row">
               <label class="label" for="withdrawAmount">提现金额:</label>
               <div class="control-wrap">
-                <input class="text-input" id="withdrawAmount" name="withdrawAmount" placeholder="请输入" autocomplete="off">
+                <input class="text-input" id="withdrawAmount" name="withdrawAmount" placeholder="请输入" autocomplete="off" inputmode="decimal">
               </div>
-              <span></span>
+              <span class="tip" data-tip="人工提出不配置后台单笔上限；提现金额需小于或等于会员账户余额，否则提示账户余额不足"><span class="arrow"></span></span>
             </div>
 
             <div class="form-row note-row">
@@ -3523,7 +3616,7 @@
             <div class="form-row">
               <label class="label" for="discountAmount">存入金额:</label>
               <div class="control-wrap">
-                <input class="text-input" id="discountAmount" name="discountAmount" placeholder="请输入" autocomplete="off">
+                <input class="text-input" id="discountAmount" name="discountAmount" placeholder="请输入" autocomplete="off" inputmode="decimal" data-money-input>
               </div>
               <span class="tip" data-limit-tip="manualReward" data-tip="不能大于后台配置的人工优惠单笔金额（当前100）"><span class="arrow"></span></span>
             </div>
@@ -3542,7 +3635,7 @@
             <div class="form-row conditional discount-default-coding">
               <label class="label" for="discountBonusMultiple">优惠提现倍数:</label>
               <div class="control-wrap">
-                <input class="text-input compact-input" id="discountBonusMultiple" name="discountBonusMultiple" placeholder="请输入" autocomplete="off">
+                <input class="text-input compact-input" id="discountBonusMultiple" name="discountBonusMultiple" placeholder="请输入" autocomplete="off" inputmode="numeric" data-integer-multiple>
               </div>
               <span></span>
             </div>
@@ -3749,7 +3842,7 @@
             <div class="form-row">
               <label class="label" for="batchAmount">存入金额:</label>
               <div class="control-wrap">
-                <input class="text-input wide-input" id="batchAmount" placeholder="请输入" autocomplete="off">
+                <input class="text-input wide-input" id="batchAmount" placeholder="请输入" autocomplete="off" inputmode="decimal" data-money-input>
               </div>
               <span class="tip" data-limit-tip="batchReward" data-tip="不能大于后台配置的批量人工优惠单笔金额（当前100）"><span class="arrow"></span></span>
             </div>
@@ -3939,10 +4032,13 @@
                   <label class="filter-label" for="batchStatus">状态:</label>
                   <select class="filter-select" id="batchStatus">
                     <option>全部</option>
-                    <option>待执行</option>
-                    <option>执行中</option>
+                    <option>准备</option>
+                    <option>运行中</option>
+                    <option>暂停</option>
                     <option>已完成</option>
-                    <option>已作废</option>
+                    <option>作废</option>
+                    <option>导入中</option>
+                    <option>导入失败</option>
                   </select>
                 </div>
                 <div class="filter-field">
@@ -3984,14 +4080,14 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr data-batch-status="待执行">
+                    <tr data-batch-status="准备">
                       <td>2026-07-21 05:09:53</td>
                       <td>UserReward1784621393121434067</td>
                       <td>批量导入</td>
                       <td><a href="#" data-modal-open="batchProgressModal">点击查看</a></td>
                       <td><a href="#" data-modal-open="rewardConfigModal">点击查看</a></td>
                       <td class="progress-purple">0/0</td>
-                      <td class="status-pending">待执行</td>
+                      <td class="status-pending">准备</td>
                       <td>-</td>
                       <td>Cuculus888</td>
                       <td><span class="batch-link success" data-modal-open="executeConfirmModal">开始执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span></td>
@@ -4032,14 +4128,62 @@
                       <td>admin555</td>
                       <td><span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span></td>
                     </tr>
-                    <tr data-batch-status="已作废">
+                    <tr data-batch-status="运行中">
+                      <td>2026-07-21 04:58:12</td>
+                      <td>UserReward17846208900123990123</td>
+                      <td>批量导入</td>
+                      <td><a href="#" data-modal-open="batchProgressModal">点击查看</a></td>
+                      <td><a href="#" data-modal-open="rewardConfigModal">点击查看</a></td>
+                      <td class="progress-purple">544/2086</td>
+                      <td class="progress-purple">运行中</td>
+                      <td>1</td>
+                      <td>Cuculus888</td>
+                      <td><span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link warning" data-modal-open="pauseConfirmModal">暂停</span><span class="batch-link">导出数据</span></td>
+                    </tr>
+                    <tr data-batch-status="暂停">
+                      <td>2026-07-21 04:56:26</td>
+                      <td>UserReward17846207562098130566</td>
+                      <td>批量导入</td>
+                      <td><a href="#" data-modal-open="batchProgressModal">点击查看</a></td>
+                      <td><a href="#" data-modal-open="rewardConfigModal">点击查看</a></td>
+                      <td class="progress-purple">544/2086</td>
+                      <td class="status-pending">暂停</td>
+                      <td>1</td>
+                      <td>Cuculus888</td>
+                      <td><span class="batch-link success" data-modal-open="continueConfirmModal">继续执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span></td>
+                    </tr>
+                    <tr data-batch-status="导入中">
+                      <td>2026-07-21 04:54:48</td>
+                      <td>UserReward17846206678091234001</td>
+                      <td>批量导入</td>
+                      <td><a href="#" data-modal-open="batchProgressModal">点击查看</a></td>
+                      <td>-</td>
+                      <td class="progress-purple">导入中</td>
+                      <td class="progress-purple">导入中</td>
+                      <td>-</td>
+                      <td>Cuculus888</td>
+                      <td><span class="batch-link">导出数据</span></td>
+                    </tr>
+                    <tr data-batch-status="导入失败">
+                      <td>2026-07-21 04:53:19</td>
+                      <td>UserReward17846205799182004555</td>
+                      <td>批量导入</td>
+                      <td><a href="#" data-modal-open="batchProgressModal">点击查看</a></td>
+                      <td>-</td>
+                      <td class="status-danger">失败</td>
+                      <td class="status-danger">导入失败</td>
+                      <td>-</td>
+                      <td>Cuculus888</td>
+                      <td><span class="batch-link">导出数据</span></td>
+                    </tr>
+                    <tr data-batch-status="作废">
                       <td>2026-07-21 04:50:59</td>
                       <td>UserReward17846202592937136364</td>
                       <td>批量导入</td>
                       <td><a href="#" data-modal-open="batchProgressModal">点击查看</a></td>
                       <td><a href="#" data-modal-open="rewardConfigModal">点击查看</a></td>
                       <td class="progress-purple">0/0</td>
-                      <td class="status-danger">已作废</td>
+                      <td class="status-danger">作废</td>
                       <td>0</td>
                       <td>Cuculus888</td>
                       <td><span class="batch-link">导出数据</span></td>
@@ -4134,7 +4278,7 @@
 
             <div class="reward-flow-note" aria-label="人工优惠数据流转规则">
               <strong>数据流转</strong>
-              <span>人工存入、人工提出创建成功后直接完成账变，并进入人工提存记录；人工提出不做单笔上限校验，仅校验金额必填且大于0；人工优惠、批量人工优惠创建后按领取方式判断，自动领取直接生成已完成/已领取记录并流入优惠赠送记录，弹窗领取或充值后领取先生成未领取记录，只有玩家成功领取后才流入优惠赠送记录。</span>
+              <span>人工存入、人工提出创建成功后直接完成账变，并进入人工提存记录；人工提出不配置后台单笔上限字段，但需校验金额必填、大于0且不得大于会员账户余额；人工优惠、批量人工优惠创建后按领取方式判断，自动领取直接生成已完成/已领取记录并流入优惠赠送记录，弹窗领取或充值后领取先生成未领取记录，只有玩家成功领取后才流入优惠赠送记录。</span>
             </div>
 
             <div class="reward-section-title">统计数据</div>
@@ -4185,7 +4329,7 @@
                     <th>操作状态<span class="tip table-tip" data-tip="仅显示批量人工优惠批次状态"><span class="arrow"></span></span></th>
                     <th>订单状态<span class="tip table-tip" data-tip="仅显示单人人工优惠状态"><span class="arrow"></span></span></th>
                     <th>领取方式</th>
-                    <th>优惠类型</th>
+                    <th>优惠类型<span class="tip table-tip" data-tip="人工优惠记录口径：单人优惠显示初始奖励或加倍奖励；批量导入批次维度展示-。不同于优惠赠送记录中的人工存入。"><span class="arrow"></span></span></th>
                     <th>是否开启加倍奖励</th>
                     <th>总优惠金额</th>
                     <th>打码倍数</th>
@@ -4224,6 +4368,9 @@
                   </tr>
                   <tr>
                     <td>2026-07-21 02:57:30</td><td>单人优惠</td><td><a href="#">3588828799</a></td><td>UserReward17846134503543381387</td><td>已完成</td><td>已领取</td><td>自动领取</td><td>初始奖励</td><td>否</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>-</td><td>-</td><td>-</td><td>1</td><td>test人工优惠</td><td>Cuculus888</td><td></td>
+                  </tr>
+                  <tr>
+                    <td>2026-07-21 02:59:18</td><td>单人优惠</td><td><a href="#">3588828799</a></td><td>UserReward17846134503543381387-B</td><td>已完成</td><td>已领取</td><td>弹窗领取</td><td>加倍奖励</td><td>是</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>2</td><td>1</td><td>20</td><td>2.00</td><td>固定加倍</td><td>-</td><td>2</td><td>玩家完成加倍任务后显示</td><td>Cuculus888</td><td></td>
                   </tr>
                   <tr>
                     <td>2026-07-21 00:04:03</td><td>批量导入</td><td><a href="#" data-modal-open="rewardMemberModal">查看会员</a></td><td>UserReward17846030434833561545</td><td>已完成</td><td>-</td><td>弹窗领取</td><td>-</td><td>是</td><td>1869.49</td><td>-</td><td>2086</td><td>769</td><td>19</td><td>750</td><td>38.95</td><td>721.93</td><td>19</td><td>244</td><td>-</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>721.93</td><td></td><td>admin555</td><td><span class="batch-link danger" data-modal-open="rewardRecordVoidModal">作废</span></td>
@@ -4345,7 +4492,12 @@
             <div class="filter-field">
               <label class="filter-label" for="recordUserType">用户类型:</label>
               <select class="filter-select" id="recordUserType">
+                <option>全部</option>
                 <option>正式</option>
+                <option>试玩</option>
+                <option>测试</option>
+                <option>内部</option>
+                <option>带单</option>
               </select>
             </div>
             <div class="filter-field">
@@ -4355,26 +4507,26 @@
             <div class="filter-field bonus-filter-only hidden">
               <label class="filter-label" for="bonusType">优惠类型:</label>
               <select class="filter-select" id="bonusType">
-                <option>全部</option>
+                <option>人工存入</option>
               </select>
             </div>
             <div class="filter-field bonus-filter-only hidden">
               <label class="filter-label" for="receiveWay">领取方式:</label>
               <select class="filter-select" id="receiveWay">
                 <option>全部</option>
-              </select>
-            </div>
-            <div class="filter-field bonus-filter-only hidden">
-              <label class="filter-label" for="receiveStatus">领取状态:</label>
-              <select class="filter-select" id="receiveStatus">
-                <option>全部</option>
+                <option>自动领取</option>
+                <option>弹窗领取</option>
+                <option>充值后领取</option>
               </select>
             </div>
             <div class="filter-field bonus-filter-only hidden">
               <label class="filter-label" for="receiveTime">领取时间:</label>
               <input class="date-range" id="receiveTime" value="2026-07-21 00:00:00      →   2026-07-21 23:59:59      ♧" autocomplete="off">
             </div>
-            <div class="bonus-filter-only hidden"></div>
+            <div class="filter-field bonus-filter-only hidden filter-note-field">
+              <span class="filter-label">展示范围:</span>
+              <span class="filter-note">仅展示已领取/成功账变数据</span>
+            </div>
 
             <div class="quick-row">
               <button class="quick-btn" type="button" data-record-date="today">今天</button>
@@ -4516,7 +4668,7 @@
                     <th>会员ID</th>
                     <th>会员账号</th>
                     <th>账号类型</th>
-                    <th>优惠类型</th>
+                    <th>优惠类型<span class="tip table-tip" data-tip="优惠赠送记录为最终账变归类口径，本期仅显示人工存入。"><span class="arrow"></span></span></th>
                     <th>存入时间</th>
                     <th>存入金额</th>
                     <th>领取方式</th>
@@ -4852,7 +5004,7 @@
           </label>
           <label class="filter-field" for="memberViewBonusType">
             <span class="filter-label">优惠类型:</span>
-            <select class="filter-select" id="memberViewBonusType"><option>全部</option></select>
+            <select class="filter-select" id="memberViewBonusType"><option>全部</option><option>初始奖励</option><option>加倍奖励</option></select>
           </label>
           <label class="filter-field" for="memberViewDouble">
             <span class="filter-label">是否开启加倍奖励:</span>
@@ -4884,6 +5036,7 @@
               <tr><td>5</td><td><a href="#">3670893986</a></td><td>CJ17846030955066461906</td><td>批量导入</td><td>初始奖励</td><td>是</td><td>弹窗领取</td><td>0.39</td><td>1</td><td>已领取</td><td>已派发</td><td>-</td><td>0</td><td>-</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>-</td><td></td><td></td></tr>
               <tr><td>6</td><td><a href="#">3406886721</a></td><td>CJ17846030955035630755</td><td>批量导入</td><td>初始奖励</td><td>是</td><td>弹窗领取</td><td>1.69</td><td>1</td><td>未领取</td><td>已派发</td><td>-</td><td>0</td><td>-</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>-</td><td></td><td></td></tr>
               <tr><td>7</td><td><a href="#">3806973524</a></td><td>CJ17846030955045020720</td><td>批量导入</td><td>初始奖励</td><td>是</td><td>弹窗领取</td><td>0.93</td><td>1</td><td>已领取</td><td>已派发</td><td>-</td><td>0</td><td>-</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>-</td><td></td><td></td></tr>
+              <tr><td>7-1</td><td><a href="#">3806973524</a></td><td>CJ17846030955045020720-B</td><td>批量导入</td><td>加倍奖励</td><td>是</td><td>弹窗领取</td><td>0.93</td><td>1</td><td>已领取</td><td>已派发</td><td>0.93</td><td>20.00</td><td>2.00</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>CZ17846030955045020720</td><td>完成加倍任务后显示</td><td></td></tr>
               <tr><td>8</td><td><a href="#">3329466486</a></td><td>CJ17846030955057154032</td><td>批量导入</td><td>初始奖励</td><td>是</td><td>弹窗领取</td><td>0.29</td><td>1</td><td>未领取</td><td>已派发</td><td>-</td><td>0</td><td>-</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>-</td><td></td><td></td></tr>
               <tr><td>9</td><td><a href="#">3605338511</a></td><td>CJ1784603072850619391</td><td>批量导入</td><td>初始奖励</td><td>是</td><td>弹窗领取</td><td>0.88</td><td>1</td><td>未领取</td><td>已派发</td><td>-</td><td>0</td><td>-</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>-</td><td></td><td></td></tr>
               <tr><td>10</td><td><a href="#">3075189395</a></td><td>CJ17846030728477579083</td><td>批量导入</td><td>初始奖励</td><td>是</td><td>弹窗领取</td><td>0.77</td><td>1</td><td>未领取</td><td>已派发</td><td>-</td><td>0</td><td>-</td><td>按充值金额加倍</td><td><a href="#" data-modal-open="templateViewModal" data-template-name="昨日充值用户">昨日充值用户</a></td><td>-</td><td></td><td></td></tr>
@@ -4923,7 +5076,7 @@
             <span class="import-label">导入方式:</span>
             <div class="radio-group">
               <label class="radio"><input type="radio" name="importMode" checked><span>批量导入</span></label>
-              <label class="radio"><input type="radio" name="importMode"><span>按条件导入</span></label>
+              <label class="radio disabled-option"><input type="radio" name="importMode" disabled><span>按条件导入</span><span class="scope-tag">本期不做</span></label>
             </div>
           </div>
           <div class="import-row">
@@ -5066,7 +5219,7 @@
             <span class="import-label">导入方式:</span>
             <div class="radio-group">
               <label class="radio"><input type="radio" name="viewImportMode" checked disabled><span>批量导入</span></label>
-              <label class="radio"><input type="radio" name="viewImportMode" disabled><span>按条件导入</span></label>
+              <label class="radio disabled-option"><input type="radio" name="viewImportMode" disabled><span>按条件导入</span><span class="scope-tag">本期不做</span></label>
             </div>
           </div>
           <div class="import-row">
@@ -5281,6 +5434,38 @@
     </section>
   </div>
 
+
+  <div class="modal-overlay" id="pauseConfirmModal" aria-hidden="true">
+    <section class="modal batch-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="pauseConfirmTitle">
+      <header class="modal-header">
+        <span id="pauseConfirmTitle">提示</span>
+        <button class="modal-close" type="button" data-modal-close aria-label="关闭">×</button>
+      </header>
+      <div class="modal-body batch-confirm-body">
+        <div class="batch-confirm-copy" style="margin-top:54px;">确认暂停此次批量人工优惠吗?</div>
+      </div>
+      <footer class="modal-footer">
+        <button class="modal-secondary" type="button" data-modal-close>取消</button>
+        <button class="modal-primary" type="button" id="pauseConfirmOk">确定</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modal-overlay" id="continueConfirmModal" aria-hidden="true">
+    <section class="modal batch-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="continueConfirmTitle">
+      <header class="modal-header">
+        <span id="continueConfirmTitle">提示</span>
+        <button class="modal-close" type="button" data-modal-close aria-label="关闭">×</button>
+      </header>
+      <div class="modal-body batch-confirm-body">
+        <div class="batch-confirm-copy" style="margin-top:54px;">确认继续执行此次批量人工优惠吗?</div>
+      </div>
+      <footer class="modal-footer">
+        <button class="modal-secondary" type="button" data-modal-close>取消</button>
+        <button class="modal-primary" type="button" id="continueConfirmOk">确定</button>
+      </footer>
+    </section>
+  </div>
   <div class="modal-overlay" id="saveConfirmModal" aria-hidden="true">
     <section class="modal operation-confirm" role="dialog" aria-modal="true" aria-labelledby="saveConfirmTitle">
       <div class="confirm-body">
@@ -5351,6 +5536,11 @@
       const clientMultiplierSimple = root.querySelector("#clientMultiplierSimple");
       const clientMultiplierRates = root.querySelector("#clientMultiplierRates");
       const clientMultiplierRateRows = root.querySelector("#clientMultiplierRateRows");
+      const clientRewardGift = root.querySelector("#clientRewardGift");
+      const clientRewardTitle = root.querySelector("#clientRewardTitle");
+      const clientRewardAmount = root.querySelector("#clientRewardAmount");
+      const clientRewardSubtitle = root.querySelector("#clientRewardSubtitle");
+      const clientMultiplierValue = root.querySelector("#clientMultiplierValue");
       const clientScenarios = root.querySelectorAll("[data-client-scenario]");
       const clientTopMessageTime = root.querySelector("#clientTopMessageTime");
       const clientTopMessageTitle = root.querySelector("#clientTopMessageTitle");
@@ -5361,7 +5551,9 @@
       const clientProfileBadge = root.querySelector("#clientProfileBadge");
       const clientDepositAmount = root.querySelector("#clientDepositAmount");
       let clientRewardHasMultiplier = false;
+      let clientRewardStep = "ready";
       let clientMultiplierMode = "simple";
+      let clientPendingQueueMode = false;
       let clientDepositSource = "normal";
 
       const multiplierRatePresets = {
@@ -5676,7 +5868,7 @@
           }
           const original = batchSaveBtn.textContent;
           batchSaveBtn.textContent = "已保存";
-          showToast("批量优惠已创建，列表生成待执行记录", "success");
+          showToast("批量优惠已创建，列表生成准备记录", "success");
           setTimeout(() => {
             batchSaveBtn.textContent = original;
           }, 1100);
@@ -5712,10 +5904,22 @@
 
       const validateAmountInput = (input, maxAmount, maxLabel) => {
         if (!input || !input.value.trim()) return "请输入金额";
-        const number = Number(input.value.trim());
+        const value = input.value.trim();
+        const number = Number(value);
         if (!Number.isFinite(number) || number <= 0) return "金额必须大于0";
+        if (!/^\d+(?:\.\d{1,2})?$/.test(value)) return "金额最多输入两位小数";
         if (Number.isFinite(maxAmount) && number > maxAmount) {
           return `${maxLabel || "金额"}不能大于后台配置${maxAmount}`;
+        }
+        return "";
+      };
+
+      const validateWithdrawBalance = () => {
+        const input = root.querySelector("#withdrawAmount");
+        const amount = input ? Number(input.value.trim()) : NaN;
+        const balance = Number((accountBalance ? accountBalance.textContent : "").replace(/,/g, ""));
+        if (Number.isFinite(amount) && Number.isFinite(balance) && amount > balance) {
+          return "账户余额不足";
         }
         return "";
       };
@@ -5768,6 +5972,17 @@
 
       updateLimitTips();
 
+      const setBatchRowActions = (row, status) => {
+        if (!row || !row.cells[9]) return;
+        const actions = {
+          "准备": '<span class="batch-link success" data-modal-open="executeConfirmModal">开始执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span>',
+          "运行中": '<span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link warning" data-modal-open="pauseConfirmModal">暂停</span><span class="batch-link">导出数据</span>',
+          "暂停": '<span class="batch-link success" data-modal-open="continueConfirmModal">继续执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span>',
+          "已完成": '<span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span>'
+        };
+        row.cells[9].innerHTML = actions[status] || '<span class="batch-link">导出数据</span>';
+      };
+
       const setBatchRowStatus = (row, status, progressText) => {
         if (!row) return;
         row.dataset.batchStatus = status;
@@ -5776,30 +5991,27 @@
         if (progressCell && progressText) progressCell.textContent = progressText;
         if (statusCell) {
           statusCell.textContent = status;
-          statusCell.className = status === "已作废" ? "status-danger" : status === "已完成" ? "success-text" : status === "执行中" ? "progress-purple" : "status-pending";
+          statusCell.className = status === "作废" || status === "导入失败" ? "status-danger" : status === "已完成" ? "success-text" : status === "运行中" || status === "导入中" ? "progress-purple" : "status-pending";
         }
+        setBatchRowActions(row, status);
       };
 
       const markBatchRowExecuted = (row) => {
-        setBatchRowStatus(row, "执行中", "835/2086");
-        const startAction = row && row.querySelector('[data-modal-open="executeConfirmModal"]');
-        if (startAction) {
-          startAction.textContent = "查看进度";
-          startAction.classList.remove("success");
-          startAction.dataset.modalOpen = "batchProgressModal";
-        }
-        window.setTimeout(() => {
-          setBatchRowStatus(row, "已完成", "2086/2086");
-        }, 1200);
+        setBatchRowStatus(row, "运行中", "835/2086");
+      };
+
+      const markBatchRowPaused = (row) => {
+        const currentProgress = row && row.cells[5] ? row.cells[5].textContent : "544/2086";
+        setBatchRowStatus(row, "暂停", currentProgress);
+      };
+
+      const markBatchRowContinued = (row) => {
+        const currentProgress = row && row.cells[5] ? row.cells[5].textContent : "544/2086";
+        setBatchRowStatus(row, "运行中", currentProgress);
       };
 
       const markBatchRowVoided = (row) => {
-        setBatchRowStatus(row, "已作废", "0/0");
-        if (!row) return;
-        const startAction = row.querySelector('[data-modal-open="executeConfirmModal"]');
-        const voidAction = row.querySelector('[data-modal-open="voidConfirmModal"]');
-        if (startAction) startAction.classList.add("hidden");
-        if (voidAction) voidAction.classList.add("hidden");
+        setBatchRowStatus(row, "作废", "0/0");
       };
 
       const templateRateMap = {
@@ -5866,7 +6078,7 @@
             return;
           }
           closeAllModals();
-          showToast("整批校验通过，已生成待执行记录", "success");
+          showToast("整批校验通过，已生成准备记录", "success");
         });
       }
 
@@ -5887,6 +6099,26 @@
           pendingBatchRow = null;
           closeAllModals();
           showToast("批量优惠已作废", "success");
+        });
+      }
+
+      const pauseConfirmOk = root.querySelector("#pauseConfirmOk");
+      if (pauseConfirmOk) {
+        pauseConfirmOk.addEventListener("click", () => {
+          markBatchRowPaused(pendingBatchRow);
+          pendingBatchRow = null;
+          closeAllModals();
+          showToast("批量优惠已暂停", "success");
+        });
+      }
+
+      const continueConfirmOk = root.querySelector("#continueConfirmOk");
+      if (continueConfirmOk) {
+        continueConfirmOk.addEventListener("click", () => {
+          markBatchRowContinued(pendingBatchRow);
+          pendingBatchRow = null;
+          closeAllModals();
+          showToast("批量优惠已继续执行", "success");
         });
       }
 
@@ -5956,6 +6188,7 @@
         clientMultiplierMode = mode || "simple";
         const isRateMode = clientMultiplierMode === "amountFixed" || clientMultiplierMode === "amountRandom";
         if (clientMultiplierSimple) clientMultiplierSimple.classList.toggle("hidden", isRateMode);
+        if (clientMultiplierValue) clientMultiplierValue.textContent = clientMultiplierMode === "fixed" ? "2x" : "配置倍率x";
         if (clientMultiplierRates) clientMultiplierRates.classList.toggle("hidden", !isRateMode);
         if (clientMultiplierRateRows && isRateMode) {
           const rows = multiplierRatePresets[clientMultiplierMode] || [];
@@ -5965,20 +6198,39 @@
         }
       };
 
-      const showClientReward = (hasMultiplier, multiplierMode = "simple") => {
+      const setClientRewardStep = (step = "ready") => {
+        clientRewardStep = step;
+        const isOpenStep = step === "open";
+        if (clientRewardGift) clientRewardGift.classList.toggle("reward-open", isOpenStep);
+        if (clientRewardTitle) clientRewardTitle.textContent = isOpenStep ? "BÔNUS" : "Receber um bônus";
+        if (clientRewardAmount) clientRewardAmount.textContent = isOpenStep ? "" : "+R$100,00";
+        if (clientRewardSubtitle) clientRewardSubtitle.textContent = isOpenStep ? "TEST 人工优惠-固定金额" : "";
+        if (clientReceiveReward) clientReceiveReward.textContent = isOpenStep ? "ABRIR" : "RECEBER";
+      };
+
+      const showClientReward = (hasMultiplier, multiplierMode = "simple", rewardStep = "ready", keepPendingQueue = false) => {
+        clientPendingQueueMode = keepPendingQueue;
         clientRewardHasMultiplier = hasMultiplier;
         setClientMultiplierMode(multiplierMode);
+        setClientRewardStep(rewardStep);
         showClientView("clientHomeView");
         if (clientRewardOverlay) clientRewardOverlay.classList.remove("hidden");
       };
 
-      const showRechargeReward = () => {
+      const showRechargeReward = (keepPendingQueue = false) => {
+        clientPendingQueueMode = keepPendingQueue;
         clientDepositSource = "rechargeReward";
         showClientView("clientHomeView");
         if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.remove("hidden");
       };
 
-      const setClientScenario = (scenario) => {
+      const showPendingQueueDemo = () => {
+    setClientMessage("offer");
+    showClientReward(true, "amountRandom", "ready", true);
+    showToast("刷新首页：先展示最早创建的待处理优惠", "success");
+  };
+
+  const setClientScenario = (scenario) => {
         clientScenarios.forEach((button) => {
           button.classList.toggle("active", button.dataset.clientScenario === scenario);
         });
@@ -5995,6 +6247,9 @@
         } else if (scenario === "popupReward") {
           setClientMessage("offer");
           showClientReward(false);
+        } else if (scenario === "fixedMultiplierReward") {
+          setClientMessage("offer");
+          showClientReward(true, "fixed", "open");
         } else if (scenario === "amountFixedReward") {
           setClientMessage("offer");
           showClientReward(true, "amountFixed");
@@ -6004,6 +6259,8 @@
         } else if (scenario === "rechargeReward") {
           setClientMessage("offer");
           showRechargeReward();
+        } else if (scenario === "pendingQueue") {
+          showPendingQueueDemo();
         } else if (scenario === "depositPage") {
           clientDepositSource = "normal";
           showClientView("clientDepositView");
@@ -6037,12 +6294,17 @@
       const clientReceiveReward = root.querySelector("#clientReceiveReward");
       if (clientReceiveReward) {
         clientReceiveReward.addEventListener("click", () => {
+          if (clientRewardStep === "open") {
+            setClientRewardStep("ready");
+            return;
+          }
           if (clientRewardOverlay) clientRewardOverlay.classList.add("hidden");
-          setClientMessage("offer");
-          showToast("领取成功，已生成优惠站内信", "success");
           if (clientRewardHasMultiplier && clientMultiplierOverlay) {
             clientMultiplierOverlay.classList.remove("hidden");
+            showToast("已展示加倍提示，完成加倍或取消加倍后生成一次站内信");
           } else {
+            setClientMessage("offer");
+            showToast("领取成功，已生成优惠站内信", "success");
             showClientView("clientHomeView");
           }
         });
@@ -6052,8 +6314,13 @@
       if (clientGiveUpMultiplier) {
         clientGiveUpMultiplier.addEventListener("click", () => {
           if (clientMultiplierOverlay) clientMultiplierOverlay.classList.add("hidden");
-          showToast("已放弃加倍优惠", "success");
-          showClientView("clientHomeView");
+          setClientMessage("offer");
+          showToast("已取消加倍福利，当前奖励已生成一次优惠站内信", "success");
+          if (clientPendingQueueMode) {
+            showRechargeReward(true);
+          } else {
+            showClientView("clientHomeView");
+          }
         });
       }
 
@@ -6080,6 +6347,7 @@
         clientRechargeCancel.addEventListener("click", () => {
           if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
           clientDepositSource = "normal";
+          clientPendingQueueMode = false;
           showToast("已放弃充值后领取优惠", "success");
           showClientView("clientHomeView");
         });
@@ -6186,20 +6454,20 @@
         });
       });
 
-      root.querySelectorAll("[data-modal-open]").forEach((button) => {
-        button.addEventListener("click", (event) => {
-          event.preventDefault();
-          if (button.dataset.templateName) {
-            setTemplateView(button.dataset.templateName);
-          }
-          if (button.dataset.modalOpen === "rewardRecordVoidModal") {
-            pendingRewardVoidRow = button.closest("tr");
-          }
-          if (button.dataset.modalOpen === "executeConfirmModal" || button.dataset.modalOpen === "voidConfirmModal") {
-            pendingBatchRow = button.closest("[data-batch-status]");
-          }
-          openModal(button.dataset.modalOpen);
-        });
+      root.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-modal-open]");
+        if (!button || !root.contains(button)) return;
+        event.preventDefault();
+        if (button.dataset.templateName) {
+          setTemplateView(button.dataset.templateName);
+        }
+        if (button.dataset.modalOpen === "rewardRecordVoidModal") {
+          pendingRewardVoidRow = button.closest("tr");
+        }
+        if (["executeConfirmModal", "voidConfirmModal", "pauseConfirmModal", "continueConfirmModal"].includes(button.dataset.modalOpen)) {
+          pendingBatchRow = button.closest("[data-batch-status]");
+        }
+        openModal(button.dataset.modalOpen);
       });
 
       root.querySelectorAll("[data-modal-switch]").forEach((button) => {
@@ -6326,6 +6594,42 @@
         });
       });
 
+      root.querySelectorAll("[data-money-input]").forEach((input) => {
+        input.addEventListener("input", () => {
+          let value = input.value.replace(/[^0-9.]/g, "");
+          const firstDot = value.indexOf(".");
+          if (firstDot !== -1) {
+            value = value.slice(0, firstDot + 1) + value.slice(firstDot + 1).replace(/\./g, "");
+            const [integer, decimal = ""] = value.split(".");
+            value = `${integer}.${decimal.slice(0, 2)}`;
+          }
+          input.value = value;
+        });
+      });
+
+      root.querySelectorAll("[data-ratio-input]").forEach((input) => {
+        const clampRatio = () => {
+          const number = Number(input.value.trim());
+          if (Number.isFinite(number) && number > 100) {
+            input.value = "100";
+          }
+        };
+        input.addEventListener("input", clampRatio);
+        input.addEventListener("blur", clampRatio);
+      });
+
+      root.querySelectorAll("[data-integer-multiple]").forEach((input) => {
+        const roundMultiple = () => {
+          const value = input.value.trim();
+          if (!value) return;
+          const number = Number(value);
+          if (!Number.isFinite(number)) return;
+          input.value = String(Math.max(0, Math.round(number)));
+        };
+        input.addEventListener("blur", roundMultiple);
+        input.addEventListener("change", roundMultiple);
+      });
+
       root.querySelectorAll(".search-btn").forEach((button) => {
         button.addEventListener("click", () => {
           const input = button.closest(".search-field").querySelector(".text-input");
@@ -6340,7 +6644,7 @@
           if (value !== validMemberId) {
             form.dataset.memberValidated = "false";
             setMemberInfo(false);
-            showToast("数据信息不完整");
+            showToast("请输入正确的会员ID");
             return;
           }
           form.dataset.memberValidated = "true";
@@ -6384,6 +6688,13 @@
           if (amountError) {
             showToast(amountError);
             return;
+          }
+          if (form.id === "withdrawPanel") {
+            const balanceError = validateWithdrawBalance();
+            if (balanceError) {
+              showToast(balanceError);
+              return;
+            }
           }
           pendingSaveForm = form;
           saveConfirmText.textContent = `确认${form.dataset.operation}?`;

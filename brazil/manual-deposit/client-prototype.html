@@ -2930,6 +2930,53 @@
       margin-top: 8px;
     }
 
+    .gift-art .bonus-title {
+      font-size: 30px;
+      line-height: 34px;
+      text-transform: uppercase;
+    }
+
+    .gift-art .gift-symbol {
+      width: 118px;
+      height: 96px;
+      margin: 14px auto 8px;
+      border-radius: 18px 18px 26px 26px;
+      background: linear-gradient(90deg, #ff4d48 0 44%, #ffe85c 44% 56%, #ff4d48 56% 100%);
+      box-shadow: 0 0 36px rgba(255, 230, 82, .9), inset 0 -10px 0 rgba(128, 42, 0, .16);
+      position: relative;
+    }
+
+    .gift-art .gift-symbol::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -34px;
+      width: 92px;
+      height: 42px;
+      transform: translateX(-50%);
+      border-radius: 50% 50% 12px 12px;
+      background: linear-gradient(90deg, #ffe85c 0 48%, #ffcf22 48% 52%, #ffe85c 52% 100%);
+      box-shadow: 0 8px 0 #d33d31;
+    }
+
+    .gift-art .bonus-subtitle {
+      min-height: 24px;
+      margin-top: 2px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      text-shadow: 0 2px 10px rgba(0,0,0,.45);
+    }
+
+    .gift-art.reward-open .amount {
+      display: none;
+    }
+
+    .gift-art.reward-open .bonus-title {
+      font-size: 44px;
+      color: #fff44b;
+    }
+
     .reward-receive-btn {
       width: 270px;
       height: 64px;
@@ -3146,6 +3193,63 @@
     .recharge-actions .recharge-cancel {
       background: linear-gradient(#4f92ff, #1d60ed);
       color: #092957;
+    }
+
+    .cumulative-confirm-card {
+      width: 310px;
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+      color: #6b5d4f;
+      text-align: center;
+      box-shadow: 0 14px 36px rgba(0,0,0,.38);
+    }
+
+    .cumulative-confirm-hero {
+      height: 135px;
+      background:
+        radial-gradient(circle at 70% 35%, #ffe067 0 9%, transparent 10%),
+        linear-gradient(135deg, #351d12, #efb72e 58%, #ffef70);
+      color: #fff;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      padding: 0 18px 18px;
+      font-size: 22px;
+      font-weight: 900;
+      text-shadow: 0 2px 3px rgba(0,0,0,.35);
+    }
+
+    .cumulative-confirm-body {
+      padding: 22px 22px 18px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .cumulative-confirm-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 0 22px 24px;
+    }
+
+    .cumulative-confirm-actions button {
+      height: 40px;
+      border-radius: 7px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .cumulative-confirm-actions .desist {
+      border: 0;
+      background: #f5a623;
+      color: #fff;
+    }
+
+    .cumulative-confirm-actions .confirm {
+      border: 1px solid #e7ad49;
+      background: #fff;
+      color: #7a6f63;
     }
 
     .deposit-panel {
@@ -3373,13 +3477,16 @@
                 <button class="client-scenario" type="button" data-client-scenario="withdrawMail">人工提出站内信</button>
                 <button class="client-scenario" type="button" data-client-scenario="autoReward">自动领取优惠通知</button>
                 <button class="client-scenario" type="button" data-client-scenario="popupReward">弹窗领取-不开启加倍</button>
+                <button class="client-scenario" type="button" data-client-scenario="fixedMultiplierReward">弹窗领取-按固定金额加倍</button>
                 <button class="client-scenario" type="button" data-client-scenario="amountFixedReward">弹窗领取-按充值金额固定倍数</button>
                 <button class="client-scenario" type="button" data-client-scenario="amountRandomReward">弹窗领取-按充值金额随机倍数</button>
-                <button class="client-scenario" type="button" data-client-scenario="rechargeReward">充值后领取</button>
+                <button class="client-scenario" type="button" data-client-scenario="singleRechargeReward">充值后领取-单笔充值</button>
+                <button class="client-scenario" type="button" data-client-scenario="cumulativeRechargeReward">充值后领取-累计充值</button>
+                <button class="client-scenario" type="button" data-client-scenario="pendingQueue">刷新/登录-待处理优惠队列</button>
                 <button class="client-scenario" type="button" data-client-scenario="depositPage">充值页面</button>
               </div>
               <div class="client-note">
-                原型规则：人工优惠站内信只在领取成功后生成。自动领取视为后台直接领取成功；弹窗领取需玩家点击 RECEBER；开启加倍时，初始奖励领取成功发一次站内信，加倍奖励成功后再发一次站内信。充值后领取先展示充值条件，满足条件后仍需点击 RECEBER，领取成功后才发站内信。
+                原型规则：人工优惠站内信只在领取成功后生成。自动领取视为后台直接领取成功；弹窗领取需玩家点击 RECEBER；开启加倍时，点击 RECEBER 后先展示加倍提示，不立即生成站内信。玩家完成加倍后按加倍后奖励发一次站内信；点击 Continue reivindicando 取消加倍福利并直接领取当前奖励时，按当前奖励发一次站内信；加倍场景全流程只发一次站内信。充值后领取区分单笔充值和累计充值，满足条件后仍需点击 RECEBER，领取成功后才发站内信。所有需要充值领取的优惠从提示页进入充值页后，未充值直接返回时回到原提示页；累计充值首次点击 Desistir 先展示累计充值提示，只有在二次提示中点击 Desistir 才视为放弃并同步后台订单状态为放弃。
               </div>
             </aside>
 
@@ -3527,7 +3634,7 @@
 
                 <section class="client-view hidden" id="clientDepositView">
                   <div class="client-header">
-                    <button class="client-back" type="button" data-client-open="clientHomeView">‹</button>
+                    <button class="client-back" type="button" id="clientDepositBack">‹</button>
                     <span>Depósito</span>
                     <span>▤</span>
                   </div>
@@ -3558,9 +3665,11 @@
 
                 <div class="client-overlay hidden" id="clientRewardOverlay">
                   <div class="reward-popup" role="dialog" aria-label="领取人工优惠">
-                    <div class="gift-art">
-                      <div>Receber um bônus</div>
-                      <div class="amount">+R$配置金额</div>
+                    <div class="gift-art" id="clientRewardGift">
+                      <div class="bonus-title" id="clientRewardTitle">Receber um bônus</div>
+                      <div class="gift-symbol" aria-hidden="true"></div>
+                      <div class="amount" id="clientRewardAmount">+R$配置金额</div>
+                      <div class="bonus-subtitle" id="clientRewardSubtitle"></div>
                     </div>
                     <button class="reward-receive-btn" type="button" id="clientReceiveReward">RECEBER</button>
                   </div>
@@ -3571,7 +3680,7 @@
                     <div class="multiplier-ribbon">Multiplier Rewards</div>
                     <div class="multiplier-card" id="clientMultiplierSimple">
                       <div>Faça outro depósito</div>
-                      <span class="big">配置倍率x</span>
+                      <span class="big" id="clientMultiplierValue">配置倍率x</span>
                       <strong>VEZES o bônus</strong>
                     </div>
                     <div class="multiplier-rate-card hidden" id="clientMultiplierRates">
@@ -3592,10 +3701,10 @@
                     <div class="recharge-gift">
                       <div class="recharge-gift-art">
                         <div>Receber um bônus</div>
-                        <div class="amount">+R$配置金额</div>
+                        <div class="amount" id="clientRechargeRewardAmount">+R$配置金额</div>
                       </div>
                       <div class="recharge-rule-title">Detalhes do Evento</div>
-                      <div class="recharge-rule-copy">
+                      <div class="recharge-rule-copy" id="clientRechargeRuleCopy">
                         Deposite um único valor de R$配置充值金额 para receber sua recompensa.
                         Caso contrário, a recompensa será perdida.
                       </div>
@@ -3603,6 +3712,19 @@
                     <div class="recharge-actions">
                       <button class="deposit-now" type="button" id="clientRechargeGoDeposit">Depositar Agora</button>
                       <button class="recharge-cancel" type="button" id="clientRechargeCancel">Desistir</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="client-overlay hidden" id="clientCumulativeConfirmOverlay">
+                  <div class="cumulative-confirm-card" role="dialog" aria-label="累计充值取消提示">
+                    <div class="cumulative-confirm-hero">Complete a recarga</div>
+                    <div class="cumulative-confirm-body">
+                      Você já acumulou recargas para esta recompensa. Se clicar em Desistir aqui, a recompensa será encerrada e o pedido será marcado como abandonado.
+                    </div>
+                    <div class="cumulative-confirm-actions">
+                      <button class="desist" type="button" id="clientCumulativeDesist">Desistir</button>
+                      <button class="confirm" type="button" id="clientCumulativeConfirm">Confirmar</button>
                     </div>
                   </div>
                 </div>
@@ -3620,9 +3742,12 @@
                   <tr><td>人工提出成功</td><td>后台选择发送站内信时，消息中心新增“Notificação de Dedução Manual”；如选择不发送，则不新增站内信。</td></tr>
                   <tr><td>自动领取优惠</td><td>无需玩家点击弹窗，后台直接领取成功后按后台配置优惠金额新增“Notificação de Ofertas de Manuais”。</td></tr>
                   <tr><td>弹窗领取-不开启加倍</td><td>首页按后台配置优惠金额展示领取弹窗，点击 RECEBER 领取成功后关闭弹窗并新增优惠站内信，不自动跳转消息中心。</td></tr>
-                  <tr><td>弹窗领取-按充值金额固定倍数</td><td>点击 RECEBER 后初始奖励领取成功并发一次站内信；随后按后台模板展示充值金额与固定倍率表，继续充值且加倍成功后再发一次站内信。</td></tr>
-                  <tr><td>弹窗领取-按充值金额随机倍数</td><td>流程同固定倍数，但表格展示每档充值金额的最小/最大随机倍率范围；加倍成功后按实际结果再发一次站内信。</td></tr>
-                  <tr><td>充值后领取</td><td>首页展示充值后领取活动弹窗，金额和充值条件按后台配置；点击 Depositar Agora 进入充值页，满足条件后展示 RECEBER，点击领取成功才生成优惠站内信。</td></tr>
+                  <tr><td>弹窗领取-按固定金额加倍</td><td>先展示 ABRIR 礼盒态，点击后展示 RECEBER +R$100,00；点击 RECEBER 后不立即生成站内信，先展示 Multiplier Rewards 固定 2x 加倍弹窗；完成加倍或取消加倍直接领取当前奖励时，按最终领取结果只发一次站内信。</td></tr>
+                  <tr><td>弹窗领取-按充值金额固定倍数</td><td>点击 RECEBER 后不立即生成站内信，随后按后台模板展示充值金额与固定倍率表；继续充值且加倍成功后按加倍结果发一次站内信，取消加倍直接领取当前奖励时按当前奖励发一次站内信。</td></tr>
+                  <tr><td>弹窗领取-按充值金额随机倍数</td><td>流程同固定倍数，但表格展示每档充值金额的最小/最大随机倍率范围；加倍成功后按实际加倍结果发一次站内信，取消加倍直接领取当前奖励时按当前奖励发一次站内信。</td></tr>
+                  <tr><td>充值后领取-单笔充值</td><td>首页展示单笔充值活动弹窗，点击 Depositar Agora 进入充值页；未充值点击返回时回到该提示页。满足单笔充值条件后展示 RECEBER，点击领取成功才生成优惠站内信。</td></tr>
+                  <tr><td>充值后领取-累计充值</td><td>首页展示累计充值活动弹窗，首次点击 Desistir 不直接放弃，而是展示累计充值确认提示；只有在确认提示中点击 Desistir 才结束该优惠并同步后台订单状态为放弃。</td></tr>
+                  <tr><td>刷新/登录-待处理优惠队列</td><td>模拟存在多条未完成优惠：先展示创建时间最早的弹窗领取加倍优惠；弹窗领取未点击 Continue reivindicando，或充值后领取未点击 Desistir 时，优惠保持并在下次登录/刷新首页继续展示，处理完当前优惠后再展示下一条。</td></tr>
                 </tbody>
               </table>
             </aside>
@@ -3641,9 +3766,17 @@
   const clientRewardOverlay = root.querySelector("#clientRewardOverlay");
   const clientMultiplierOverlay = root.querySelector("#clientMultiplierOverlay");
   const clientRechargeRewardOverlay = root.querySelector("#clientRechargeRewardOverlay");
+  const clientCumulativeConfirmOverlay = root.querySelector("#clientCumulativeConfirmOverlay");
+  const clientRechargeRuleCopy = root.querySelector("#clientRechargeRuleCopy");
+  const clientRechargeRewardAmount = root.querySelector("#clientRechargeRewardAmount");
   const clientMultiplierSimple = root.querySelector("#clientMultiplierSimple");
   const clientMultiplierRates = root.querySelector("#clientMultiplierRates");
   const clientMultiplierRateRows = root.querySelector("#clientMultiplierRateRows");
+  const clientRewardGift = root.querySelector("#clientRewardGift");
+  const clientRewardTitle = root.querySelector("#clientRewardTitle");
+  const clientRewardAmount = root.querySelector("#clientRewardAmount");
+  const clientRewardSubtitle = root.querySelector("#clientRewardSubtitle");
+  const clientMultiplierValue = root.querySelector("#clientMultiplierValue");
   const clientScenarios = root.querySelectorAll("[data-client-scenario]");
   const clientTopMessageTime = root.querySelector("#clientTopMessageTime");
   const clientTopMessageTitle = root.querySelector("#clientTopMessageTitle");
@@ -3654,8 +3787,11 @@
   const clientProfileBadge = root.querySelector("#clientProfileBadge");
   const clientDepositAmount = root.querySelector("#clientDepositAmount");
   let clientRewardHasMultiplier = false;
+  let clientRewardStep = "ready";
   let clientMultiplierMode = "simple";
+  let clientPendingQueueMode = false;
   let clientDepositSource = "normal";
+  let clientRechargeMode = "single";
   let toastTimer = 0;
 
   const multiplierRatePresets = {
@@ -3734,12 +3870,14 @@
     if (clientRewardOverlay) clientRewardOverlay.classList.add("hidden");
     if (clientMultiplierOverlay) clientMultiplierOverlay.classList.add("hidden");
     if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+    if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
   };
 
   const setClientMultiplierMode = (mode) => {
     clientMultiplierMode = mode || "simple";
     const isRateMode = clientMultiplierMode === "amountFixed" || clientMultiplierMode === "amountRandom";
     if (clientMultiplierSimple) clientMultiplierSimple.classList.toggle("hidden", isRateMode);
+    if (clientMultiplierValue) clientMultiplierValue.textContent = clientMultiplierMode === "fixed" ? "2x" : "配置倍率x";
     if (clientMultiplierRates) clientMultiplierRates.classList.toggle("hidden", !isRateMode);
     if (clientMultiplierRateRows && isRateMode) {
       const rows = multiplierRatePresets[clientMultiplierMode] || [];
@@ -3749,17 +3887,43 @@
     }
   };
 
-  const showClientReward = (hasMultiplier, multiplierMode = "simple") => {
+  const setClientRewardStep = (step = "ready") => {
+    clientRewardStep = step;
+    const isOpenStep = step === "open";
+    if (clientRewardGift) clientRewardGift.classList.toggle("reward-open", isOpenStep);
+    if (clientRewardTitle) clientRewardTitle.textContent = isOpenStep ? "BÔNUS" : "Receber um bônus";
+    if (clientRewardAmount) clientRewardAmount.textContent = isOpenStep ? "" : "+R$100,00";
+    if (clientRewardSubtitle) clientRewardSubtitle.textContent = isOpenStep ? "TEST 人工优惠-固定金额" : "";
+    if (clientReceiveReward) clientReceiveReward.textContent = isOpenStep ? "ABRIR" : "RECEBER";
+  };
+
+  const showClientReward = (hasMultiplier, multiplierMode = "simple", rewardStep = "ready", keepPendingQueue = false) => {
+    clientPendingQueueMode = keepPendingQueue;
     clientRewardHasMultiplier = hasMultiplier;
     setClientMultiplierMode(multiplierMode);
+    setClientRewardStep(rewardStep);
     showClientView("clientHomeView");
     if (clientRewardOverlay) clientRewardOverlay.classList.remove("hidden");
   };
 
-  const showRechargeReward = () => {
+  const showRechargeReward = (keepPendingQueue = false, mode = "single") => {
+    clientPendingQueueMode = keepPendingQueue;
+    clientRechargeMode = mode;
     clientDepositSource = "rechargeReward";
+    if (clientRechargeRewardAmount) clientRechargeRewardAmount.textContent = "+R$100,00";
+    if (clientRechargeRuleCopy) {
+      clientRechargeRuleCopy.textContent = mode === "cumulative"
+        ? "Deposite o valor acumulado configurado para receber sua recompensa. Caso contrário, a recompensa será perdida."
+        : "Deposite um único valor de R$配置充值金额 para receber sua recompensa. Caso contrário, a recompensa será perdida.";
+    }
     showClientView("clientHomeView");
     if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.remove("hidden");
+  };
+
+  const showPendingQueueDemo = () => {
+    setClientMessage("offer");
+    showClientReward(true, "amountRandom", "ready", true);
+    showToast("刷新首页：先展示最早创建的待处理优惠", "success");
   };
 
   const setClientScenario = (scenario) => {
@@ -3779,15 +3943,23 @@
     } else if (scenario === "popupReward") {
       setClientMessage("offer");
       showClientReward(false);
+    } else if (scenario === "fixedMultiplierReward") {
+      setClientMessage("offer");
+      showClientReward(true, "fixed", "open");
     } else if (scenario === "amountFixedReward") {
       setClientMessage("offer");
       showClientReward(true, "amountFixed");
     } else if (scenario === "amountRandomReward") {
       setClientMessage("offer");
       showClientReward(true, "amountRandom");
-    } else if (scenario === "rechargeReward") {
+    } else if (scenario === "singleRechargeReward") {
       setClientMessage("offer");
-      showRechargeReward();
+      showRechargeReward(false, "single");
+    } else if (scenario === "cumulativeRechargeReward") {
+      setClientMessage("offer");
+      showRechargeReward(false, "cumulative");
+    } else if (scenario === "pendingQueue") {
+      showPendingQueueDemo();
     } else if (scenario === "depositPage") {
       clientDepositSource = "normal";
       showClientView("clientDepositView");
@@ -3802,7 +3974,10 @@
   });
 
   root.querySelectorAll("[data-client-open]").forEach((button) => {
-    button.addEventListener("click", () => showClientView(button.dataset.clientOpen));
+    button.addEventListener("click", () => {
+      if (button.dataset.clientOpen === "clientDepositView") clientDepositSource = "normal";
+      showClientView(button.dataset.clientOpen);
+    });
   });
 
   root.querySelectorAll("[data-client-detail]").forEach((card) => {
@@ -3815,12 +3990,17 @@
   const clientReceiveReward = root.querySelector("#clientReceiveReward");
   if (clientReceiveReward) {
     clientReceiveReward.addEventListener("click", () => {
+      if (clientRewardStep === "open") {
+        setClientRewardStep("ready");
+        return;
+      }
       if (clientRewardOverlay) clientRewardOverlay.classList.add("hidden");
-      setClientMessage("offer");
-      showToast("领取成功，已生成优惠站内信", "success");
       if (clientRewardHasMultiplier && clientMultiplierOverlay) {
         clientMultiplierOverlay.classList.remove("hidden");
+        showToast("已展示加倍提示，完成加倍或取消加倍后生成一次站内信");
       } else {
+        setClientMessage("offer");
+        showToast("领取成功，已生成优惠站内信", "success");
         showClientView("clientHomeView");
       }
     });
@@ -3830,8 +4010,13 @@
   if (clientGiveUpMultiplier) {
     clientGiveUpMultiplier.addEventListener("click", () => {
       if (clientMultiplierOverlay) clientMultiplierOverlay.classList.add("hidden");
-      showToast("已放弃加倍优惠", "success");
-      showClientView("clientHomeView");
+      setClientMessage("offer");
+      showToast("已取消加倍福利，当前奖励已生成一次优惠站内信", "success");
+      if (clientPendingQueueMode) {
+        showRechargeReward(true, "single");
+      } else {
+        showClientView("clientHomeView");
+      }
     });
   }
 
@@ -3853,12 +4038,56 @@
     });
   }
 
+  const abandonRechargeReward = () => {
+    if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+    if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
+    clientDepositSource = "normal";
+    clientPendingQueueMode = false;
+    showToast("已放弃充值后领取优惠，后台订单状态更新为放弃", "success");
+    showClientView("clientHomeView");
+  };
+
   const clientRechargeCancel = root.querySelector("#clientRechargeCancel");
   if (clientRechargeCancel) {
     clientRechargeCancel.addEventListener("click", () => {
-      if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
-      clientDepositSource = "normal";
-      showToast("已放弃充值后领取优惠", "success");
+      if (clientRechargeMode === "cumulative") {
+        if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+        if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.remove("hidden");
+        showToast("累计充值需二次确认后才会放弃");
+        return;
+      }
+      abandonRechargeReward();
+    });
+  }
+
+  const clientCumulativeDesist = root.querySelector("#clientCumulativeDesist");
+  if (clientCumulativeDesist) {
+    clientCumulativeDesist.addEventListener("click", abandonRechargeReward);
+  }
+
+  const clientCumulativeConfirm = root.querySelector("#clientCumulativeConfirm");
+  if (clientCumulativeConfirm) {
+    clientCumulativeConfirm.addEventListener("click", () => {
+      if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
+      if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.remove("hidden");
+      showToast("继续保留累计充值优惠", "success");
+    });
+  }
+
+  const clientDepositBack = root.querySelector("#clientDepositBack");
+  if (clientDepositBack) {
+    clientDepositBack.addEventListener("click", () => {
+      if (clientDepositSource === "multiplier") {
+        showClientView("clientHomeView");
+        if (clientMultiplierOverlay) clientMultiplierOverlay.classList.remove("hidden");
+        showToast("未充值返回，回到加倍彩金提示页");
+        return;
+      }
+      if (clientDepositSource === "rechargeReward") {
+        showRechargeReward(clientPendingQueueMode, clientRechargeMode);
+        showToast("未充值返回，回到充值后领取提示页");
+        return;
+      }
       showClientView("clientHomeView");
     });
   }
@@ -3880,7 +4109,7 @@
         setClientMessage("multiplierOffer");
         showToast("充值成功，已生成加倍优惠站内信", "success");
       } else if (clientDepositSource === "rechargeReward") {
-        showToast("充值条件已满足，请点击领取优惠");
+        showToast(clientRechargeMode === "cumulative" ? "累计充值条件已满足，请点击领取优惠" : "单笔充值条件已满足，请点击领取优惠");
         showClientReward(false);
       } else {
         showToast("充值成功", "success");

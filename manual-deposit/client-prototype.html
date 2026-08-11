@@ -1,14 +1,4125 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=../brazil/manual-deposit/client-prototype.html">
-  <title>人工提存交付文档</title>
-  <style>body{font:14px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;background:#f5f7fb;color:#172033;padding:40px;}a{color:#1266d6;}</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人工提存客户端交互原型</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    #manual-deposit-app {
+      min-height: 100vh;
+      background: #fff;
+      color: #17233d;
+      font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+      font-size: 14px;
+    }
+
+    #manual-deposit-app button,
+    #manual-deposit-app input,
+    #manual-deposit-app textarea {
+      font: inherit;
+    }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 206px minmax(960px, 1fr);
+      background: #fff;
+    }
+
+    .sidebar {
+      background: #061c2f;
+      color: #c7d3df;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px 0 8px;
+      gap: 9px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .mark {
+      width: 31px;
+      height: 22px;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .mark::before,
+    .mark::after {
+      content: "";
+      position: absolute;
+      border-radius: 2px;
+      transform: skewX(-24deg);
+    }
+
+    .mark::before {
+      left: 1px;
+      top: 4px;
+      width: 17px;
+      height: 14px;
+      border: 5px solid #1867b9;
+      border-right-width: 4px;
+    }
+
+    .mark::after {
+      right: 1px;
+      top: 2px;
+      width: 17px;
+      height: 15px;
+      border: 5px solid #d34f6a;
+      border-left-width: 4px;
+    }
+
+    .menu {
+      flex: 1;
+      padding-top: 4px;
+    }
+
+    .menu-item,
+    .submenu-item {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      color: #c6d4df;
+      white-space: nowrap;
+    }
+
+    .menu-item {
+      font-weight: 500;
+    }
+
+    .menu-item .icon {
+      width: 16px;
+      color: #a8bac9;
+      text-align: center;
+      opacity: .96;
+    }
+
+    .menu-item .arrow {
+      margin-left: auto;
+      color: #c6d4df;
+      font-size: 14px;
+    }
+
+    .menu-item.active-parent {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .submenu {
+      background: #0d263b;
+    }
+
+    .submenu-item {
+      height: 44px;
+      padding-left: 39px;
+      color: #c4d3df;
+      font-weight: 500;
+    }
+
+    .submenu-item.has-change {
+      gap: 7px;
+    }
+
+    .change-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 9px;
+      margin-left: auto;
+      margin-right: 7px;
+      background: #ff4d4f;
+      color: #fff;
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .submenu-item.active {
+      background: #0f70cf;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 5px;
+      border-radius: 9px;
+      margin-left: 2px;
+      background: #f20d1a;
+      color: #fff;
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .version {
+      padding: 0 0 8px 25px;
+      color: #fff;
+      font-weight: 700;
+      line-height: 18px;
+    }
+
+    .main {
+      min-width: 0;
+      background: #fff;
+    }
+
+    .topbar {
+      height: 39px;
+      border-bottom: 1px solid #e4e8ee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #6a7480;
+      background: #fff;
+    }
+
+    .crumbs {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 12px;
+    }
+
+    .hamburger {
+      width: 22px;
+      height: 22px;
+      border: 0;
+      background: transparent;
+      color: #192333;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .crumb-link {
+      color: #075de6;
+      font-weight: 500;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding-right: 18px;
+      height: 100%;
+      color: #566271;
+      font-size: 13px;
+    }
+
+    .signal {
+      color: #f5b34d;
+      font-size: 13px;
+    }
+
+    .flag {
+      width: 31px;
+      height: 22px;
+      border-radius: 3px;
+      background: #1f9d55;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #f8d743;
+      font-size: 15px;
+      margin-right: -9px;
+    }
+
+    .region {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #2e3b48;
+    }
+
+    .time {
+      color: #2e3b48;
+      min-width: 185px;
+    }
+
+    .search-icon {
+      color: #26313c;
+      font-size: 18px;
+    }
+
+    .avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #73d3dc, #efb76a);
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .tabbar {
+      height: 42px;
+      border-bottom: 1px solid #e4e8ee;
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      padding-left: 8px;
+      background: #fff;
+    }
+
+    .page-tab {
+      min-width: 91px;
+      height: 34px;
+      border: 1px solid #d5dbe3;
+      border-bottom: 0;
+      border-radius: 3px 3px 0 0;
+      background: #fff;
+      color: #364152;
+      cursor: pointer;
+      padding: 0 14px;
+    }
+
+    .page-tab.active {
+      background: #0f70cf;
+      border-color: #0f70cf;
+      color: #fff;
+    }
+
+    .page-tab .close {
+      margin-left: 8px;
+      opacity: .95;
+    }
+
+    .content {
+      padding: 22px 24px 0 24px;
+    }
+
+    .page-view.hidden {
+      display: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .records-content {
+      padding: 18px 20px 0 20px;
+    }
+
+    .security-content {
+      padding: 18px 20px;
+      min-height: calc(100vh - 82px);
+      background: #f2f5f8;
+    }
+
+    .security-card {
+      min-height: 420px;
+      background: #fff;
+      padding: 24px 18px;
+    }
+
+    .security-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      margin-bottom: 26px;
+      color: #17233d;
+      font-weight: 500;
+    }
+
+    .security-toolbar select {
+      width: 116px;
+      height: 32px;
+      border: 1px solid #d7dde5;
+      border-radius: 3px;
+      color: #17233d;
+      padding-left: 12px;
+      background: #fff;
+    }
+
+    .security-form {
+      width: 620px;
+      margin-left: 54px;
+      display: grid;
+      grid-template-columns: 160px 330px;
+      align-items: center;
+      row-gap: 22px;
+      color: #17233d;
+      font-weight: 500;
+    }
+
+    .security-form .security-note {
+      grid-column: 2;
+      color: #ff4d4f;
+      font-weight: 400;
+      margin-bottom: 2px;
+    }
+
+    .security-form label {
+      text-align: right;
+      padding-right: 10px;
+    }
+
+    .security-form .text-input {
+      width: 330px;
+    }
+
+    .security-form .switch-line {
+      display: flex;
+      align-items: center;
+    }
+
+    .security-form .security-save {
+      grid-column: 2;
+      justify-self: center;
+      margin-top: 6px;
+    }
+
+    .records-tabs {
+      height: 42px;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid #e9edf2;
+      margin-bottom: 14px;
+    }
+
+    .record-filter {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(180px, 1fr));
+      column-gap: 34px;
+      row-gap: 8px;
+      align-items: center;
+      padding-bottom: 28px;
+      border-bottom: 1px solid #e9edf2;
+    }
+
+    .filter-field {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      align-items: center;
+      min-height: 32px;
+    }
+
+    .filter-label {
+      color: #17233d;
+      font-weight: 500;
+      text-align: right;
+      padding-right: 10px;
+    }
+
+    .filter-input,
+    .filter-select,
+    .date-range {
+      height: 32px;
+      border: 1px solid #cfd5dd;
+      border-radius: 5px;
+      background: #fff;
+      color: #253044;
+      padding: 0 12px;
+      width: 100%;
+    }
+
+    .filter-input::placeholder {
+      color: #b8c0c9;
+    }
+
+    .amount-range {
+      display: grid;
+      grid-template-columns: 1fr 22px 1fr;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .range-sep {
+      text-align: center;
+      color: #17233d;
+    }
+
+    .quick-row {
+      grid-column: 1 / span 3;
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .quick-btn,
+    .query-btn,
+    .export-btn {
+      height: 32px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .quick-btn {
+      min-width: 50px;
+      border: 1px solid #d5dbe3;
+      background: #fff;
+      color: #5a6573;
+      padding: 0 13px;
+    }
+
+    .quick-btn.active {
+      border-color: #0f70cf;
+      color: #0f70cf;
+    }
+
+    .query-btn {
+      min-width: 58px;
+      border: 0;
+      background: #0f70cf;
+      color: #fff;
+      padding: 0 18px;
+    }
+
+    .record-list-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 31px;
+      padding: 0 12px;
+    }
+
+    .record-title {
+      font-weight: 700;
+      color: #17233d;
+    }
+
+    .record-total {
+      color: #ff4d4f;
+      font-weight: 700;
+      margin-left: 42px;
+    }
+
+    .export-btn {
+      min-width: 64px;
+      border: 1px solid #d5dbe3;
+      background: #fff;
+      color: #5a6573;
+      padding: 0 18px;
+    }
+
+    .record-table-wrap {
+      margin-top: 8px;
+      border: 1px solid #edf0f4;
+      min-height: 540px;
+      overflow: hidden;
+    }
+
+    .record-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .record-table th,
+    .record-table td {
+      border-right: 1px solid #edf0f4;
+      border-bottom: 1px solid #edf0f4;
+      text-align: center;
+      color: #17233d;
+      padding: 0 12px;
+      height: 47px;
+      font-weight: 400;
+      vertical-align: middle;
+    }
+
+    .record-table th {
+      background: #fafafa;
+      height: 46px;
+      font-weight: 700;
+    }
+
+    .record-table a {
+      color: #1f5bff;
+      text-decoration: none;
+    }
+
+    .record-table .remark-cell {
+      text-align: center;
+      line-height: 21px;
+    }
+
+    .record-pagination {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #17233d;
+    }
+
+    .pager-link {
+      color: #1f5bff;
+      cursor: pointer;
+    }
+
+    .jump-input {
+      width: 44px;
+      height: 26px;
+      border: 1px solid #d5dbe3;
+      border-radius: 4px;
+      padding: 0 6px;
+    }
+
+    .subtabs {
+      height: 42px;
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      border-bottom: 1px solid #e9edf2;
+      margin-bottom: 18px;
+    }
+
+    .subtab {
+      min-width: 89px;
+      border: 1px solid #d7dce5;
+      border-bottom: 0;
+      border-radius: 5px 5px 0 0;
+      background: #fff;
+      color: #17233d;
+      padding: 0 18px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-right: 2px;
+    }
+
+    .subtab.active {
+      color: #076ad1;
+      border-top-color: #e1e5eb;
+    }
+
+    .tab-panel.hidden {
+      display: none;
+    }
+
+    .record-panel.hidden {
+      display: none;
+    }
+
+    .bonus-filter-only.hidden {
+      display: none;
+    }
+
+    .form-area {
+      width: 520px;
+      margin-left: 20px;
+    }
+
+    .discount-form {
+      width: 760px;
+      margin-left: 20px;
+    }
+
+    .batch-form {
+      width: 760px;
+      margin-left: 20px;
+    }
+
+    .batch-form .form-row,
+    .batch-form .notice-row,
+    .batch-form .save-row {
+      grid-template-columns: 83px 1fr 32px;
+    }
+
+    .batch-top-selects {
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+      margin: -3px 30px 10px 0;
+      color: #17233d;
+      font-weight: 500;
+    }
+
+    .batch-top-selects select {
+      width: 95px;
+      height: 32px;
+      margin-left: 8px;
+      border: 1px solid #cfd5dd;
+      border-radius: 5px;
+      background: #fff;
+      color: #253044;
+      padding: 0 10px;
+    }
+
+    .discount-form .form-row,
+    .discount-form .notice-row,
+    .discount-form .save-row {
+      grid-template-columns: 124px 1fr 32px;
+    }
+
+    .form-row {
+      min-height: 55px;
+      display: grid;
+      grid-template-columns: 83px 1fr 32px;
+      align-items: center;
+    }
+
+    .label {
+      text-align: right;
+      padding-right: 16px;
+      color: #17233d;
+      font-weight: 500;
+    }
+
+    .control-wrap {
+      display: flex;
+      align-items: center;
+    }
+
+    .text-input,
+    .textarea {
+      width: 100%;
+      border: 1px solid #cfd5dd;
+      border-radius: 5px;
+      color: #253044;
+      outline: none;
+      transition: border-color .15s;
+      background: #fff;
+    }
+
+    .text-input {
+      height: 32px;
+      padding: 0 13px;
+    }
+
+    .text-input::placeholder,
+    .textarea::placeholder {
+      color: #b8c0c9;
+    }
+
+    .text-input:focus,
+    .textarea:focus {
+      border-color: #78aee8;
+      box-shadow: 0 0 0 2px rgba(15, 112, 207, .08);
+    }
+
+    .search-field {
+      display: grid;
+      grid-template-columns: 1fr 36px;
+      width: 100%;
+    }
+
+    .search-field .text-input {
+      border-radius: 5px 0 0 5px;
+    }
+
+    .search-btn {
+      height: 32px;
+      border: 1px solid #cfd5dd;
+      border-left: 0;
+      border-radius: 0 5px 5px 0;
+      background: #fff;
+      color: #7b8591;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .input-suffix {
+      display: grid;
+      grid-template-columns: 1fr 34px;
+      width: 100%;
+    }
+
+    .input-suffix .text-input {
+      border-radius: 5px 0 0 5px;
+    }
+
+    .suffix {
+      height: 32px;
+      border: 1px solid #cfd5dd;
+      border-left: 0;
+      border-radius: 0 5px 5px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #17233d;
+      background: #fff;
+    }
+
+    .tip {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #8e98a4;
+      cursor: default;
+      margin-left: 10px;
+    }
+
+    .tip::before {
+      content: "i";
+      width: 14px;
+      height: 14px;
+      border: 1px solid #8e98a4;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      background: #161b22;
+      color: #fff;
+      border-radius: 4px;
+      padding: 8px 11px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 22px;
+      white-space: pre-line;
+      min-width: max-content;
+      max-width: 720px;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 5px 0 0 rgba(0, 0, 0, .24);
+      z-index: 5;
+    }
+
+    .tip .arrow {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 1px);
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid #161b22;
+      visibility: hidden;
+      opacity: 0;
+      z-index: 6;
+    }
+
+    .tip:hover::after,
+    .tip:hover .arrow,
+    .tip:focus-within::after,
+    .tip:focus-within .arrow {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .tip.use-floating::after,
+    .tip.use-floating .arrow,
+    .tip.use-floating:hover::after,
+    .tip.use-floating:hover .arrow,
+    .tip.use-floating:focus-within::after,
+    .tip.use-floating:focus-within .arrow {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    .floating-tip {
+      position: fixed;
+      left: 0;
+      top: 0;
+      max-width: min(720px, calc(100vw - 24px));
+      min-width: 160px;
+      padding: 8px 11px;
+      border-radius: 4px;
+      background: #161b22;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 22px;
+      white-space: pre-line;
+      text-align: left;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .12s, visibility .12s;
+    }
+
+    .floating-tip.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .tip.big::after {
+      width: 728px;
+      min-width: 728px;
+      left: 0;
+      transform: translateX(-49%);
+      text-align: left;
+    }
+
+    .tip.table-tip {
+      width: 14px;
+      height: 14px;
+      margin-left: 3px;
+      vertical-align: -2px;
+    }
+
+    .tip.table-tip::before {
+      width: 12px;
+      height: 12px;
+      font-size: 9px;
+      font-weight: 700;
+      background: #fff;
+    }
+
+    .tip.table-tip::after {
+      top: calc(100% + 8px);
+      bottom: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: normal;
+      width: max-content;
+      min-width: 180px;
+      max-width: 560px;
+      z-index: 80;
+    }
+
+    .tip.table-tip .arrow {
+      top: calc(100% + 1px);
+      bottom: auto;
+      border-top: 0;
+      border-bottom: 7px solid #161b22;
+      z-index: 81;
+    }
+
+    .reward-stats-table .tip::after,
+    .reward-detail-table .tip::after {
+      z-index: 80;
+      text-align: left;
+    }
+
+    .reward-detail-table .tip.tip-left::after {
+      left: auto;
+      right: -6px;
+      transform: none;
+    }
+
+    .reward-detail-table .tip.tip-left .arrow {
+      left: auto;
+      right: 4px;
+      transform: none;
+    }
+
+    .radio-group {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: #17233d;
+    }
+
+    .radio {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .radio input {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #cbd2db;
+      border-radius: 50%;
+      margin: 0;
+      background: #fff;
+      position: relative;
+    }
+
+    .radio input:checked {
+      border: 5px solid #0f70cf;
+    }
+
+    .serial-row {
+      display: none;
+    }
+
+    .serial-row.visible {
+      display: grid;
+    }
+
+    .default-coding-row {
+      display: grid;
+    }
+
+    .default-coding-row.hidden {
+      display: none;
+    }
+
+    .conditional.hidden {
+      display: none;
+    }
+
+    .textarea {
+      height: 54px;
+      resize: none;
+      padding: 7px 12px;
+    }
+
+    .note-row {
+      align-items: start;
+      padding-top: 2px;
+      min-height: 78px;
+    }
+
+    .counter {
+      color: #8c96a3;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .save-row {
+      display: grid;
+      grid-template-columns: 83px 1fr 32px;
+      margin-top: 6px;
+    }
+
+    .notice-row {
+      display: grid;
+      grid-template-columns: 83px 1fr 32px;
+      align-items: center;
+      min-height: 55px;
+    }
+
+    .unit-field {
+      display: grid;
+      grid-template-columns: 1fr 34px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .unit {
+      color: #17233d;
+    }
+
+    .save-btn {
+      width: 57px;
+      height: 32px;
+      border: 0;
+      border-radius: 5px;
+      background: #0f70cf;
+      color: #fff;
+      cursor: pointer;
+      margin-left: 80px;
+      font-weight: 500;
+    }
+
+    .discount-form .save-btn {
+      margin-left: 190px;
+    }
+
+    .bonus-box {
+      width: 700px;
+      border: 1px solid #d7dce5;
+      border-radius: 3px;
+      padding: 10px 15px 14px 15px;
+      margin: 7px 0 24px 0;
+    }
+
+    .bonus-row {
+      min-height: 40px;
+      display: grid;
+      grid-template-columns: 124px 1fr;
+      align-items: center;
+    }
+
+    .platform-picker {
+      width: 620px;
+      border: 1px solid #d5dbe3;
+      background: #fff;
+      margin: 6px 0 8px 52px;
+      padding: 34px 15px 12px 15px;
+    }
+
+    .platform-tabs {
+      display: flex;
+      border-bottom: 1px solid #edf0f4;
+      margin-bottom: 13px;
+    }
+
+    .platform-tab {
+      min-width: 82px;
+      height: 40px;
+      border: 1px solid #edf0f4;
+      border-bottom: 0;
+      border-radius: 5px 5px 0 0;
+      background: #fff;
+      color: #17233d;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .platform-tab.active {
+      color: #0f70cf;
+    }
+
+    .platform-all {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #17233d;
+    }
+
+    .platform-list {
+      border: 1px solid #d0d4da;
+    }
+
+    .platform-row {
+      height: 54px;
+      display: grid;
+      grid-template-columns: 26px 1fr 22px;
+      align-items: center;
+      border-bottom: 1px solid #d0d4da;
+      padding: 0 28px 0 10px;
+      color: #17233d;
+    }
+
+    .platform-row:last-child {
+      border-bottom: 0;
+    }
+
+    .check,
+    .mini-check {
+      appearance: none;
+      border: 1px solid #cfd5dd;
+      border-radius: 3px;
+      background: #fff;
+      margin: 0;
+      position: relative;
+    }
+
+    .check {
+      width: 16px;
+      height: 16px;
+    }
+
+    .mini-check {
+      width: 14px;
+      height: 14px;
+    }
+
+    .check:checked,
+    .mini-check:checked {
+      background: #0f70cf;
+      border-color: #0f70cf;
+    }
+
+    .check:checked::after,
+    .mini-check:checked::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 5px;
+      height: 9px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .mini-check:checked::after {
+      left: 3px;
+      top: 1px;
+      width: 4px;
+      height: 8px;
+    }
+
+    .platform-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .platform-arrow {
+      color: #17233d;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .bonus-label {
+      text-align: right;
+      padding-right: 16px;
+      color: #17233d;
+      font-weight: 500;
+    }
+
+    .bonus-help {
+      color: #ff4d4f;
+      font-size: 12px;
+      margin-left: 9px;
+    }
+
+    .switch {
+      position: relative;
+      width: 42px;
+      height: 22px;
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: #bfc5cc;
+      cursor: pointer;
+      vertical-align: middle;
+      margin: 0;
+      transition: background .15s;
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .15s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    }
+
+    .switch:checked {
+      background: #0f70cf;
+    }
+
+    .switch:checked::after {
+      transform: translateX(20px);
+    }
+
+    .compact-input {
+      max-width: 320px;
+    }
+
+    .medium-input {
+      max-width: 520px;
+    }
+
+    .wide-input {
+      max-width: 620px;
+    }
+
+    .level-box {
+      width: 620px;
+      border: 1px solid #e1e5eb;
+      border-radius: 3px;
+      padding: 13px 13px 12px 13px;
+      margin-top: 8px;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(68px, 1fr));
+      row-gap: 14px;
+      column-gap: 12px;
+    }
+
+    .check-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #17233d;
+      white-space: nowrap;
+    }
+
+    .batch-divider {
+      height: 1px;
+      background: #e9edf2;
+      margin: 14px 0 12px 0;
+    }
+
+    .batch-records {
+      width: calc(100vw - 260px);
+      max-width: 1620px;
+      min-width: 1080px;
+      margin-top: 8px;
+    }
+
+    .batch-record-title {
+      font-weight: 700;
+      color: #17233d;
+      margin: 0 0 20px 0;
+    }
+
+    .batch-record-filter {
+      display: grid;
+      grid-template-columns: 170px 240px 320px 240px minmax(270px, 1fr);
+      gap: 14px 24px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .batch-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .batch-actions .query-btn {
+      min-width: 64px;
+      white-space: nowrap;
+    }
+
+    .batch-actions .download-template {
+      min-width: 88px;
+    }
+
+    .batch-table-wrap {
+      min-height: 210px !important;
+      overflow-x: auto;
+    }
+
+    .batch-table-wrap .record-table {
+      min-width: 1480px;
+    }
+
+    .batch-table-wrap .record-table th,
+    .batch-table-wrap .record-table td {
+      padding: 0 10px;
+      line-height: 18px;
+    }
+
+    .batch-table-wrap .record-table td:nth-child(2),
+    .batch-table-wrap .record-table td:nth-child(6),
+    .batch-table-wrap .record-table td:nth-child(9) {
+      white-space: nowrap;
+    }
+
+    .download-template {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .batch-link {
+      color: #1f5bff;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 4px;
+      white-space: nowrap;
+    }
+
+    .batch-link.danger {
+      color: #ff4d4f;
+    }
+
+    .progress-purple {
+      color: #b455ff;
+    }
+
+    .success-text {
+      color: #19be6b;
+    }
+
+    .status-pending,
+    .status-paused {
+      color: #b455ff;
+    }
+
+    .status-running {
+      color: #0f70cf;
+    }
+
+    .status-importing {
+      color: #ff9900;
+    }
+
+    .status-danger {
+      color: #ff4d4f;
+    }
+
+    .batch-link.success {
+      color: #19be6b;
+    }
+
+    .batch-link.warning {
+      color: #ff9900;
+    }
+
+    .reward-record-panel {
+      width: calc(100vw - 248px);
+      max-width: 1780px;
+      min-width: 1180px;
+      margin-left: 20px;
+      padding-bottom: 24px;
+    }
+
+    .reward-record-top-selects {
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+      margin: -3px 28px 16px 0;
+      color: #17233d;
+      font-weight: 500;
+    }
+
+    .reward-record-top-selects select {
+      width: 95px;
+      height: 32px;
+      margin-left: 8px;
+      border: 1px solid #cfd5dd;
+      border-radius: 5px;
+      background: #fff;
+      color: #253044;
+      padding: 0 10px;
+    }
+
+    .reward-filter-grid {
+      display: grid;
+      grid-template-columns: 220px 230px 300px 390px 280px 240px;
+      gap: 12px 24px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .reward-filter-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .reward-section-title {
+      font-weight: 700;
+      color: #17233d;
+      margin: 22px 0 12px 0;
+    }
+
+    .reward-flow-note {
+      display: grid;
+      grid-template-columns: 94px 1fr;
+      gap: 8px 14px;
+      width: min(980px, 100%);
+      margin: 4px 0 18px;
+      padding: 12px 16px;
+      border: 1px solid #d9e8ff;
+      border-left: 3px solid #0f70cf;
+      border-radius: 4px;
+      background: #f7fbff;
+      color: #253044;
+      line-height: 22px;
+    }
+
+    .reward-flow-note strong {
+      color: #0f70cf;
+      font-weight: 700;
+    }
+
+    .reward-flow-note span {
+      color: #536079;
+    }
+
+    .reward-stats-table,
+    .reward-detail-table,
+    .reward-member-table {
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .reward-stats-table {
+      width: 100%;
+      border: 1px solid #edf0f4;
+    }
+
+    .reward-stats-table th,
+    .reward-stats-table td,
+    .reward-detail-table th,
+    .reward-detail-table td,
+    .reward-member-table th,
+    .reward-member-table td {
+      border-right: 1px solid #edf0f4;
+      border-bottom: 1px solid #edf0f4;
+      text-align: center;
+      color: #17233d;
+      padding: 0 10px;
+      font-weight: 400;
+      vertical-align: middle;
+    }
+
+    .reward-stats-table th,
+    .reward-detail-table th,
+    .reward-member-table th {
+      background: #fafafa;
+      font-weight: 700;
+    }
+
+    .reward-stats-table th,
+    .reward-stats-table td {
+      height: 44px;
+    }
+
+    .reward-detail-wrap {
+      border: 1px solid #edf0f4;
+      min-height: 462px;
+      overflow: auto;
+      box-shadow: inset -8px 0 12px rgba(23, 35, 61, .04);
+    }
+
+    .reward-detail-table {
+      width: 2920px;
+      min-width: 2920px;
+    }
+
+    .reward-detail-table th,
+    .reward-detail-table td {
+      height: 44px;
+      line-height: 18px;
+      padding-left: 16px;
+      padding-right: 16px;
+      white-space: nowrap;
+    }
+
+    .reward-detail-table .wrap-cell {
+      white-space: normal;
+    }
+
+    .reward-record-panel a,
+    .reward-member-table a {
+      color: #1f5bff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .reward-pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+    }
+
+    .template-link {
+      color: #1f5bff;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .reward-template-modal {
+      width: 1000px;
+      min-height: 630px;
+    }
+
+    .reward-template-modal .template-form {
+      margin-top: 22px;
+    }
+
+    .reward-template-modal .editable-rates input,
+    .reward-template-modal .template-form > .template-form-row input {
+      background: #f5f5f5;
+      color: #a3abb5;
+    }
+
+    .reward-template-modal .row-btn,
+    .reward-template-modal .modal-primary[disabled] {
+      opacity: .55;
+      cursor: default;
+    }
+
+    .reward-member-modal {
+      width: 1200px;
+      min-height: 930px;
+      max-height: calc(100vh - 24px);
+      overflow: hidden;
+    }
+
+    .reward-member-body {
+      padding: 36px 30px 18px 30px;
+    }
+
+    .reward-member-filter {
+      display: grid;
+      grid-template-columns: 210px 210px 260px 300px 140px 1fr;
+      gap: 26px 30px;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .reward-member-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reward-member-export {
+      display: flex;
+      justify-content: flex-end;
+      margin: -4px 10px 8px 0;
+    }
+
+    .reward-member-table-wrap {
+      border: 1px solid #edf0f4;
+      height: 640px;
+      overflow: auto;
+    }
+
+    .reward-member-table {
+      width: 1900px;
+      min-width: 1900px;
+    }
+
+    .reward-member-table th,
+    .reward-member-table td {
+      height: 47px;
+      white-space: nowrap;
+    }
+
+    .select-line {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      max-width: 470px;
+    }
+
+    .select {
+      height: 32px;
+      border: 1px solid #cfd5dd;
+      border-radius: 5px;
+      background: #fff;
+      color: #253044;
+      padding: 0 12px;
+      flex: 1;
+    }
+
+    .template-btn {
+      width: 89px;
+      height: 32px;
+      border: 0;
+      border-radius: 5px;
+      background: #0f70cf;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 116px;
+      background: rgba(0, 0, 0, .43);
+      z-index: 20;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      width: 980px;
+      min-height: 406px;
+      border-radius: 7px;
+      background: #fff;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, .22);
+      overflow: hidden;
+    }
+
+    .modal.small {
+      width: 420px;
+      min-height: 169px;
+      margin-top: 48px;
+    }
+
+    .modal.import-modal,
+    .modal.config-modal {
+      width: 980px;
+      max-height: calc(100vh - 38px);
+      overflow-y: auto;
+    }
+
+    .modal.progress-modal {
+      width: 1020px;
+      min-height: 742px;
+      max-height: calc(100vh - 48px);
+      overflow: hidden;
+    }
+
+    .modal.operation-confirm {
+      width: 416px;
+      min-height: 146px;
+      margin-top: 250px;
+    }
+
+    .modal.batch-confirm-modal {
+      width: 800px;
+      min-height: 270px;
+      max-height: calc(100vh - 80px);
+      overflow-y: auto;
+      margin-top: 90px;
+    }
+
+    .modal.new-template-modal {
+      width: 1000px;
+      min-height: 620px;
+    }
+
+    .modal-header {
+      height: 56px;
+      border-bottom: 1px solid #edf0f4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      color: #17233d;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .modal-close {
+      border: 0;
+      background: transparent;
+      color: #8d97a3;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .modal-body {
+      padding: 30px 22px 28px 22px;
+    }
+
+    .batch-confirm-body {
+      padding: 42px 36px 24px 36px;
+    }
+
+    .batch-confirm-row {
+      display: grid;
+      grid-template-columns: 178px 1fr;
+      align-items: center;
+      min-height: 40px;
+      color: #17233d;
+    }
+
+    .batch-confirm-label {
+      text-align: right;
+      padding-right: 16px;
+      font-weight: 500;
+    }
+
+    .batch-confirm-copy {
+      text-align: center;
+      color: #17233d;
+      margin: 26px 0 4px 0;
+    }
+
+    .execute-config-panel {
+      margin-top: 10px;
+    }
+
+    .execute-config-panel .bonus-box {
+      width: 690px;
+      margin-left: 62px;
+    }
+
+    .progress-body {
+      padding: 18px 12px 28px 12px;
+    }
+
+    .progress-filter {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 8px;
+      color: #17233d;
+    }
+
+    .progress-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .progress-field .text-input {
+      width: 300px;
+    }
+
+    .progress-field .filter-select {
+      width: 150px;
+    }
+
+    .progress-refresh {
+      width: 60px;
+      height: 32px;
+      border: 0;
+      border-radius: 5px;
+      background: #0f70cf;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .progress-table-wrap {
+      border: 1px solid #edf0f4;
+      max-height: 572px;
+      overflow: auto;
+    }
+
+    .progress-table {
+      min-width: 1680px;
+      width: 1680px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .progress-table th,
+    .progress-table td {
+      height: 36px;
+      border-right: 1px solid #edf0f4;
+      border-bottom: 1px solid #edf0f4;
+      padding: 0 10px;
+      text-align: center;
+      color: #17233d;
+      white-space: nowrap;
+    }
+
+    .progress-table th {
+      height: 44px;
+      background: #fafafa;
+      font-weight: 700;
+    }
+
+    .progress-table a {
+      color: #1f5bff;
+      text-decoration: none;
+    }
+
+    .progress-status-ok {
+      color: #19be6b !important;
+    }
+
+    .progress-status-wait {
+      color: #ff2b35 !important;
+    }
+
+    .sort-mark {
+      color: #b6bec9;
+      margin-left: 4px;
+      font-size: 12px;
+    }
+
+    .progress-pagination {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #17233d;
+    }
+
+    .progress-pagination a {
+      color: #1f5bff;
+      text-decoration: none;
+      padding: 0 4px;
+    }
+
+    .jump-input {
+      width: 44px;
+      height: 22px;
+      border: 1px solid #d5dbe3;
+      border-radius: 5px;
+      padding: 0 6px;
+    }
+
+    .import-body {
+      padding: 36px 30px 32px 30px;
+    }
+
+    .import-form {
+      width: 920px;
+    }
+
+    .import-row {
+      display: grid;
+      grid-template-columns: 98px 1fr;
+      align-items: start;
+      min-height: 40px;
+      color: #17233d;
+    }
+
+    .import-label {
+      text-align: right;
+      padding: 7px 14px 0 0;
+      font-weight: 500;
+    }
+
+    .upload-btn {
+      min-width: 88px;
+      height: 32px;
+      border: 0;
+      border-radius: 5px;
+      padding: 0 18px;
+      background: #0f70cf;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .upload-path {
+      width: 390px;
+      height: 32px;
+      border: 1px solid #cfd5dd;
+      border-radius: 5px;
+      background: #f7f8fa;
+      color: #5a6573;
+      line-height: 32px;
+      padding: 0 12px;
+      margin-top: 8px;
+    }
+
+    .upload-path:not(.filled) {
+      color: transparent;
+    }
+
+    .import-level-box {
+      width: 820px;
+      min-height: 100px;
+      border: 1px solid #e1e5eb;
+      border-radius: 3px;
+      padding: 14px 12px;
+      margin-top: 12px;
+    }
+
+    .import-level-grid {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(78px, 1fr));
+      row-gap: 15px;
+      column-gap: 14px;
+    }
+
+    .config-divider-title {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      margin: 26px 0 18px 0;
+      color: #5a6573;
+      font-weight: 500;
+    }
+
+    .config-divider-title::before,
+    .config-divider-title::after {
+      content: "";
+      height: 1px;
+      background: #edf0f4;
+    }
+
+    .batch-config-card {
+      width: 920px;
+      border: 1px solid #d7dce5;
+      border-radius: 3px;
+      padding: 10px 16px 16px 16px;
+      margin-top: 8px;
+    }
+
+    .config-rate-table {
+      margin-left: 90px;
+    }
+
+    .config-rate-table .rate-head {
+      width: 310px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin: 6px 0 8px 0;
+      color: #17233d;
+      text-align: center;
+    }
+
+    .config-rate-table .rate-row {
+      width: 310px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .config-rate-table .text-input {
+      width: 144px;
+    }
+
+    .modal .disabled-view,
+    .modal .disabled-view input,
+    .modal .disabled-view select,
+    .modal .disabled-view button {
+      color: #aab2bd;
+      cursor: default;
+    }
+
+    .modal .disabled-view input,
+    .modal .disabled-view select {
+      background: #f5f5f5;
+    }
+
+    .modal .disabled-view .switch:checked {
+      background: #6da8e6;
+    }
+
+    .modal .disabled-view .check:checked,
+    .modal .disabled-view .mini-check:checked {
+      background: #e8ecef;
+      border-color: #cfd5dd;
+    }
+
+    .modal .disabled-view .check:checked::after,
+    .modal .disabled-view .mini-check:checked::after {
+      border-color: #aab2bd;
+    }
+
+    .modal-footer {
+      height: 54px;
+      border-top: 1px solid #edf0f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #fff;
+    }
+
+    .modal-primary,
+    .modal-secondary,
+    .modal-danger,
+    .icon-action,
+    .row-btn {
+      border: 0;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .modal-primary {
+      min-width: 59px;
+      height: 32px;
+      border-radius: 5px;
+      padding: 0 18px;
+      background: #0f70cf;
+      color: #fff;
+    }
+
+    .modal-secondary {
+      min-width: 59px;
+      height: 32px;
+      border: 1px solid #d5dbe3;
+      border-radius: 5px;
+      padding: 0 18px;
+      background: #fff;
+      color: #5a6573;
+    }
+
+    .template-list-tools {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+
+    .template-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 1px solid #edf0f4;
+    }
+
+    .template-table th,
+    .template-table td {
+      height: 48px;
+      border: 1px solid #edf0f4;
+      text-align: center;
+      color: #17233d;
+      font-weight: 400;
+    }
+
+    .template-table th {
+      background: #fafafa;
+      font-weight: 500;
+    }
+
+    .template-table col:nth-child(1),
+    .template-table col:nth-child(2),
+    .template-table col:nth-child(3),
+    .template-table col:nth-child(4) {
+      width: 22%;
+    }
+
+    .template-table col:nth-child(5) {
+      width: 12%;
+    }
+
+    .table-summary {
+      margin-top: 12px;
+      color: #17233d;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-number {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #0f70cf;
+      border-radius: 6px;
+      color: #0f70cf;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-select {
+      height: 26px;
+      border: 1px solid #d5dbe3;
+      border-radius: 5px;
+      color: #17233d;
+      background: #fff;
+    }
+
+    .icon-action {
+      width: 26px;
+      height: 26px;
+      background: transparent;
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .icon-action.edit {
+      color: #0f70cf;
+    }
+
+    .icon-action.delete {
+      color: #ff5b65;
+    }
+
+    .template-form {
+      width: 650px;
+      margin: 0 auto;
+    }
+
+    .new-template-modal .template-form.random-active {
+      width: 870px;
+    }
+
+    .template-form-row {
+      min-height: 56px;
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      align-items: center;
+    }
+
+    .template-form-label {
+      text-align: right;
+      padding-right: 16px;
+      color: #17233d;
+      font-weight: 500;
+    }
+
+    .template-form .radio-group {
+      gap: 14px;
+    }
+
+    .editable-rates {
+      margin: 16px 0 8px 96px;
+      width: 505px;
+    }
+
+    .editable-rates .rate-head {
+      grid-template-columns: 1fr 1fr 100px;
+      gap: 16px;
+      margin-left: 0;
+    }
+
+    .editable-rates .rate-row {
+      grid-template-columns: 1fr 1fr 40px 40px;
+      gap: 16px;
+    }
+
+    .editable-rates .text-input {
+      background: #fff;
+      color: #253044;
+    }
+
+    .random-rates {
+      margin: 16px 0 8px 96px;
+      width: 738px;
+    }
+
+    .random-rates .rate-head {
+      display: grid;
+      grid-template-columns: 116px 392px 116px 40px 40px;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+      color: #17233d;
+      text-align: center;
+    }
+
+    .random-rates .rate-row {
+      display: grid;
+      grid-template-columns: 116px 190px 12px 190px 116px 40px 40px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .random-rates .text-input {
+      width: 100%;
+      background: #fff;
+      color: #253044;
+    }
+
+    .random-rates .range-mark {
+      text-align: center;
+      color: #17233d;
+    }
+
+    .row-btn {
+      width: 40px;
+      height: 32px;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .row-btn.add {
+      background: #2759b6;
+    }
+
+    .row-btn.remove {
+      background: #dd6b6b;
+    }
+
+    .confirm-body {
+      padding: 26px 28px 16px 28px;
+    }
+
+    .confirm-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #17233d;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .warn-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #f5bd45;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .confirm-copy {
+      padding-left: 38px;
+      color: #5a6573;
+      line-height: 26px;
+    }
+
+    .confirm-copy strong {
+      display: block;
+      color: #ff1f1f;
+      font-weight: 700;
+    }
+
+    .operation-confirm .confirm-body {
+      padding: 24px 24px 10px 24px;
+    }
+
+    .operation-confirm .confirm-title {
+      margin-bottom: 10px;
+    }
+
+    .operation-confirm .confirm-copy {
+      padding-left: 38px;
+    }
+
+    .operation-confirm .modal-footer {
+      height: 50px;
+      border-top: 0;
+      justify-content: flex-end;
+      padding-right: 24px;
+    }
+
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      min-width: 174px;
+      height: 40px;
+      border-radius: 5px;
+      background: #fff;
+      color: #17233d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .18s, transform .18s, visibility .18s;
+      z-index: 40;
+      font-weight: 500;
+    }
+
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f5bd45;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .toast.success .toast-icon {
+      background: #63d39a;
+    }
+
+    .rate-table {
+      margin-left: 84px;
+      width: 310px;
+    }
+
+    .rate-head,
+    .rate-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .rate-head {
+      color: #17233d;
+      margin-bottom: 7px;
+    }
+
+    .rate-row {
+      margin-bottom: 8px;
+    }
+
+    .rate-row .text-input {
+      background: #f5f5f5;
+      color: #a3abb5;
+    }
+
+    .divider {
+      height: 1px;
+      background: #e9edf2;
+      margin-top: 48px;
+    }
+
+    .member-info {
+      margin-left: 69px;
+      padding-top: 21px;
+      color: #17233d;
+      line-height: 29px;
+      font-weight: 500;
+    }
+
+    .member-info .info-row {
+      display: grid;
+      grid-template-columns: 88px 180px;
+    }
+
+    .info-value {
+      color: #5a6573;
+    }
+
+    .status-strip {
+      height: 33px;
+      border-top: 1px solid #edf0f4;
+      border-left: 1px solid #edf0f4;
+      position: absolute;
+      right: 0;
+      top: 39px;
+      display: flex;
+      align-items: center;
+      color: #99a4b1;
+      background: #fff;
+    }
+
+    .status-strip span {
+      width: 39px;
+      text-align: center;
+      border-left: 1px solid #edf0f4;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .workspace {
+      position: relative;
+    }
+
+    .client-content {
+      min-height: calc(100vh - 82px);
+      padding: 18px 22px 28px;
+      background: #eef2f6;
+    }
+
+    .client-layout {
+      display: grid;
+      grid-template-columns: 260px 430px minmax(320px, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .client-card {
+      background: #fff;
+      border: 1px solid #dfe5ed;
+      border-radius: 4px;
+      padding: 14px;
+    }
+
+    .client-card h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      color: #17233d;
+    }
+
+    .client-scenario-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .client-scenario {
+      height: 34px;
+      border: 1px solid #d5dbe3;
+      border-radius: 4px;
+      background: #fff;
+      color: #17233d;
+      cursor: pointer;
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    .client-scenario.active {
+      border-color: #0f70cf;
+      color: #0f70cf;
+      background: #f0f7ff;
+      font-weight: 700;
+    }
+
+    .client-note {
+      margin-top: 14px;
+      color: #667485;
+      line-height: 22px;
+      font-size: 13px;
+    }
+
+    .phone-shell {
+      width: 390px;
+      height: 790px;
+      border-radius: 28px;
+      background: #0e0e0f;
+      padding: 10px;
+      box-shadow: 0 18px 42px rgba(6, 28, 47, .22);
+    }
+
+    .client-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #151515;
+      color: #fff;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+
+    .client-view {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #151515;
+    }
+
+    .client-view.hidden,
+    .client-overlay.hidden {
+      display: none;
+    }
+
+    .client-home-scroll,
+    .client-profile-scroll,
+    .client-message-scroll,
+    .client-deposit-scroll {
+      height: calc(100% - 58px);
+      overflow: hidden;
+      padding: 12px 14px 76px;
+    }
+
+    .client-app-install {
+      height: 37px;
+      margin: -12px -14px 10px;
+      padding: 0 14px;
+      background: linear-gradient(90deg, #103d35, #194f3e);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .client-install-btn {
+      border: 0;
+      border-radius: 7px;
+      background: #35e0a0;
+      color: #061c2f;
+      height: 25px;
+      padding: 0 12px;
+      font-weight: 700;
+    }
+
+    .client-top-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 10px;
+    }
+
+    .client-logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: #f5f5f5;
+      letter-spacing: 0;
+    }
+
+    .client-balance {
+      margin-left: auto;
+      color: #f6f0dd;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .client-deposit-chip {
+      min-width: 86px;
+      height: 29px;
+      border: 1px solid #c8d927;
+      border-radius: 8px;
+      background: #201f16;
+      color: #f1ff21;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .client-hero {
+      height: 134px;
+      border-radius: 10px;
+      border: 1px solid #ffe100;
+      background: radial-gradient(circle at 78% 35%, #24465f 0, #4b250d 36%, #191511 100%);
+      padding: 19px 14px;
+      color: #ffe76a;
+      font-size: 22px;
+      line-height: 29px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .client-promo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin: 7px 0 10px;
+    }
+
+    .client-promo {
+      height: 62px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #704411, #f3c43f);
+      color: #fff;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .client-search-bar {
+      height: 38px;
+      border-radius: 8px;
+      background: #22211f;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      color: #f3eac7;
+    }
+
+    .client-category-row,
+    .client-games {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+    }
+
+    .client-category {
+      height: 70px;
+      border: 1px solid #57524b;
+      border-radius: 7px;
+      background: #22211f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 12px;
+      color: #d9d4cc;
+    }
+
+    .client-section-title {
+      margin: 14px 0 9px;
+      font-weight: 800;
+      color: #fff8ce;
+    }
+
+    .client-game {
+      height: 95px;
+      border-radius: 9px;
+      background: linear-gradient(150deg, #7927b6, #f7a423 58%, #5b140f);
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      padding: 7px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .client-bottom-nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 58px;
+      background: #23211f;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
+      border-radius: 17px 17px 0 0;
+      color: #918d85;
+      z-index: 5;
+    }
+
+    .client-nav-item {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 12px;
+      display: grid;
+      gap: 2px;
+      justify-items: center;
+      cursor: pointer;
+    }
+
+    .client-nav-item.active {
+      color: #efff24;
+    }
+
+    .client-nav-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: #766cf0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .profile-card,
+    .vip-card,
+    .profile-menu {
+      background: #242321;
+      border-radius: 8px;
+      padding: 13px;
+      margin-bottom: 14px;
+    }
+
+    .profile-main {
+      display: grid;
+      grid-template-columns: 78px 1fr 36px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .profile-avatar {
+      width: 78px;
+      height: 78px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #d9d9d9, #6e513a);
+    }
+
+    .profile-id {
+      color: #d5d5d5;
+      line-height: 24px;
+      font-size: 15px;
+    }
+
+    .profile-wallet {
+      font-size: 24px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .client-mail-btn {
+      position: relative;
+      width: 34px;
+      height: 34px;
+      border: 0;
+      background: transparent;
+      color: #d9d0c1;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .client-badge {
+      position: absolute;
+      top: -4px;
+      right: -2px;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      background: #ff1d25;
+      color: #fff;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    .profile-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .profile-action {
+      height: 45px;
+      border: 0;
+      border-radius: 7px;
+      background: #3a352f;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .profile-action.deposit {
+      background: #f2ff24;
+      color: #181812;
+    }
+
+    .vip-progress {
+      height: 17px;
+      border-radius: 9px;
+      background: #3a342d;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .vip-progress span {
+      display: block;
+      width: 43%;
+      height: 100%;
+      background: linear-gradient(90deg, #ffd36a, #ff9a2f);
+    }
+
+    .profile-menu-row {
+      height: 54px;
+      display: grid;
+      grid-template-columns: 35px 1fr 20px;
+      align-items: center;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+
+    .profile-menu-row:last-child {
+      border-bottom: 0;
+    }
+
+    .client-header {
+      height: 58px;
+      background: #35302a;
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      text-align: center;
+      font-size: 22px;
+    }
+
+    .client-back {
+      border: 0;
+      background: transparent;
+      color: #fff;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .message-tabs {
+      height: 58px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: end;
+      border-bottom: 1px solid #4c473f;
+      color: #928d86;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .message-tab {
+      padding-bottom: 16px;
+      position: relative;
+    }
+
+    .message-tab.active {
+      color: #fff;
+    }
+
+    .message-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 0;
+      height: 2px;
+      background: #f1ff29;
+    }
+
+    .message-read-all {
+      margin: 22px 0 16px auto;
+      width: 153px;
+      height: 39px;
+      border-radius: 20px;
+      background: #37322c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .message-time {
+      text-align: center;
+      color: #7d7972;
+      margin: 12px 0 8px;
+    }
+
+    .message-card {
+      position: relative;
+      background: #242321;
+      border-radius: 7px;
+      padding: 13px;
+      margin-bottom: 12px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .message-card .title {
+      font-size: 16px;
+      margin-bottom: 9px;
+    }
+
+    .message-card .body {
+      color: #928d86;
+      line-height: 22px;
+    }
+
+    .message-unread {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ff1d25;
+    }
+
+    .detail-body {
+      padding: 22px 16px;
+      color: #fff;
+    }
+
+    .detail-body h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .detail-body p {
+      margin: 0;
+      color: #928d86;
+      line-height: 24px;
+      font-size: 15px;
+    }
+
+    .client-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      background: rgba(0,0,0,.74);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .reward-popup {
+      width: 330px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .gift-art {
+      height: 315px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff7a8 0, #ffd23d 22%, #ff6d49 45%, rgba(255,255,255,0) 72%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff44b;
+      text-shadow: 0 3px 0 #e64b45, 0 0 25px #fff380;
+      font-size: 34px;
+      font-weight: 900;
+    }
+
+    .gift-art .amount {
+      font-size: 44px;
+      margin-top: 8px;
+    }
+
+    .gift-art .bonus-title {
+      font-size: 30px;
+      line-height: 34px;
+      text-transform: uppercase;
+    }
+
+    .gift-art .gift-symbol {
+      width: 118px;
+      height: 96px;
+      margin: 14px auto 8px;
+      border-radius: 18px 18px 26px 26px;
+      background: linear-gradient(90deg, #ff4d48 0 44%, #ffe85c 44% 56%, #ff4d48 56% 100%);
+      box-shadow: 0 0 36px rgba(255, 230, 82, .9), inset 0 -10px 0 rgba(128, 42, 0, .16);
+      position: relative;
+    }
+
+    .gift-art .gift-symbol::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -34px;
+      width: 92px;
+      height: 42px;
+      transform: translateX(-50%);
+      border-radius: 50% 50% 12px 12px;
+      background: linear-gradient(90deg, #ffe85c 0 48%, #ffcf22 48% 52%, #ffe85c 52% 100%);
+      box-shadow: 0 8px 0 #d33d31;
+    }
+
+    .gift-art .bonus-subtitle {
+      min-height: 24px;
+      margin-top: 2px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      text-shadow: 0 2px 10px rgba(0,0,0,.45);
+    }
+
+    .gift-art.reward-open .amount {
+      display: none;
+    }
+
+    .gift-art.reward-open .bonus-title {
+      font-size: 44px;
+      color: #fff44b;
+    }
+
+    .reward-receive-btn {
+      width: 270px;
+      height: 64px;
+      border: 0;
+      border-radius: 9px;
+      background: linear-gradient(#ffe45d, #ffb300);
+      color: #5e4100;
+      font-size: 26px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #8c5b00;
+    }
+
+    .multiplier-popup {
+      width: 350px;
+      min-height: 475px;
+      border-radius: 18px;
+      background: linear-gradient(#e84048 0 24%, #fff2df 24% 100%);
+      position: relative;
+      padding: 76px 22px 22px;
+      text-align: center;
+      box-shadow: 0 14px 50px rgba(0,0,0,.45);
+    }
+
+    .multiplier-ribbon {
+      position: absolute;
+      top: 32px;
+      left: 28px;
+      right: 28px;
+      height: 54px;
+      border-radius: 8px;
+      background: #d92f38;
+      color: #fff9d0;
+      font-size: 26px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-6deg);
+    }
+
+    .multiplier-card {
+      margin-top: 56px;
+      border: 1px dashed #ffb57b;
+      border-radius: 14px;
+      padding: 18px 10px;
+      color: #e84b37;
+      background: #fff3df;
+    }
+
+    .multiplier-card .big {
+      display: block;
+      font-size: 58px;
+      font-weight: 900;
+      margin: 10px 0;
+    }
+
+    .multiplier-rate-card {
+      margin-top: 56px;
+      border: 1px dashed #ffb57b;
+      border-radius: 14px;
+      padding: 14px 16px 16px;
+      color: #e84b37;
+      background: #fff3df;
+    }
+
+    .multiplier-rate-title {
+      color: #2a221b;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .multiplier-rate-head,
+    .multiplier-rate-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 18px;
+      min-height: 28px;
+    }
+
+    .multiplier-rate-head {
+      width: 210px;
+      height: 28px;
+      margin: 0 auto 5px;
+      border-radius: 14px;
+      background: #ff9644;
+      color: #fff8dc;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .multiplier-rate-row {
+      border-bottom: 1px solid rgba(237, 150, 78, .35);
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .multiplier-rate-row:last-child {
+      border-bottom: 0;
+    }
+
+    .multiplier-rate-amount {
+      color: #20a83b;
+    }
+
+    .multiplier-rate-value {
+      color: #ef4d3d;
+    }
+
+    .multiplier-copy {
+      color: #9d8071;
+      line-height: 26px;
+      font-size: 17px;
+      margin: 18px 0 24px;
+    }
+
+    .multiplier-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .multiplier-actions button {
+      height: 56px;
+      border: 0;
+      border-radius: 28px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .multiplier-actions .give-up {
+      background: #9a968d;
+    }
+
+    .multiplier-actions .continue {
+      background: linear-gradient(90deg, #5b85ff, #ad48ee);
+    }
+
+    .recharge-popup {
+      width: 360px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .recharge-gift {
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 26%, rgba(255, 248, 122, .95), rgba(255, 108, 45, .42) 28%, rgba(255, 108, 45, 0) 48%),
+        linear-gradient(180deg, rgba(0,0,0,0) 0 43%, rgba(25, 58, 116, .76) 43% 72%, rgba(0,0,0,0) 72% 100%);
+    }
+
+    .recharge-gift-art {
+      height: 235px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: end;
+      color: #fff44b;
+      text-shadow: 0 3px 0 #e64b45, 0 0 25px #fff380;
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .recharge-gift-art .amount {
+      font-size: 43px;
+      margin-top: 4px;
+    }
+
+    .recharge-rule-title {
+      color: #21e782;
+      font-size: 27px;
+      font-weight: 900;
+      margin: 12px 0 8px;
+      text-transform: uppercase;
+    }
+
+    .recharge-rule-copy {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 30px;
+      text-transform: uppercase;
+      padding: 0 8px;
+    }
+
+    .recharge-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 26px;
+    }
+
+    .recharge-actions button {
+      height: 56px;
+      border: 0;
+      border-radius: 9px;
+      font-size: 22px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, .28);
+    }
+
+    .recharge-actions .deposit-now {
+      background: linear-gradient(#ffe45d, #ffb300);
+      color: #5e4100;
+    }
+
+    .recharge-actions .recharge-cancel {
+      background: linear-gradient(#4f92ff, #1d60ed);
+      color: #092957;
+    }
+
+    .cumulative-confirm-card {
+      width: 310px;
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+      color: #6b5d4f;
+      text-align: center;
+      box-shadow: 0 14px 36px rgba(0,0,0,.38);
+    }
+
+    .cumulative-confirm-hero {
+      height: 135px;
+      background:
+        radial-gradient(circle at 70% 35%, #ffe067 0 9%, transparent 10%),
+        linear-gradient(135deg, #351d12, #efb72e 58%, #ffef70);
+      color: #fff;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      padding: 0 18px 18px;
+      font-size: 22px;
+      font-weight: 900;
+      text-shadow: 0 2px 3px rgba(0,0,0,.35);
+    }
+
+    .cumulative-confirm-body {
+      padding: 22px 22px 18px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .cumulative-confirm-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 0 22px 24px;
+    }
+
+    .cumulative-confirm-actions button {
+      height: 40px;
+      border-radius: 7px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .cumulative-confirm-actions .desist {
+      border: 0;
+      background: #f5a623;
+      color: #fff;
+    }
+
+    .cumulative-confirm-actions .confirm {
+      border: 1px solid #e7ad49;
+      background: #fff;
+      color: #7a6f63;
+    }
+
+    .deposit-panel {
+      padding: 18px 20px;
+      color: #fff;
+    }
+
+    .deposit-tabs {
+      display: flex;
+      gap: 16px;
+      border-bottom: 1px solid #4c473f;
+      margin-bottom: 18px;
+    }
+
+    .deposit-tabs span {
+      padding: 0 16px 14px;
+    }
+
+    .deposit-tabs .active {
+      border-bottom: 2px solid #efff24;
+    }
+
+    .pix-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .pix-card {
+      height: 50px;
+      border-radius: 7px;
+      border: 0;
+      background: #292723;
+      color: #7d7972;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .pix-card.active {
+      background: #f2ff24;
+      color: #181812;
+      font-weight: 700;
+    }
+
+    .deposit-ad {
+      color: #fff;
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 25px;
+      margin: 12px 0 18px;
+    }
+
+    .deposit-amount-input {
+      height: 55px;
+      border-radius: 8px;
+      background: #242321;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 8px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .deposit-amount-input input {
+      border: 0;
+      background: transparent;
+      color: #fff;
+      outline: none;
+      width: 100%;
+    }
+
+    .deposit-presets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .deposit-preset {
+      height: 50px;
+      border: 0;
+      border-radius: 7px;
+      background: #3a352f;
+      color: #928d86;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .deposit-submit {
+      display: block;
+      width: 290px;
+      height: 50px;
+      margin: 0 auto;
+      border: 0;
+      border-radius: 10px;
+      background: #d8e235;
+      color: #686915;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 22px rgba(239, 255, 36, .28);
+    }
+
+    .client-flow-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .client-flow-table th,
+    .client-flow-table td {
+      border: 1px solid #e4e8ee;
+      padding: 9px;
+      line-height: 20px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .client-flow-table th {
+      background: #f7f8fa;
+      color: #17233d;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 176px minmax(680px, 1fr);
+      }
+
+      .sidebar {
+        font-size: 13px;
+      }
+
+      .top-actions {
+        gap: 9px;
+        padding-right: 8px;
+      }
+
+      .time {
+        min-width: 150px;
+      }
+
+      .form-area {
+        margin-left: 8px;
+      }
+    }
+  </style>
+  <style>
+    body {
+      background: #eef2f6;
+      min-width: 1180px;
+    }
+    .client-standalone-shell {
+      min-height: 100vh;
+      padding: 22px 24px 34px;
+    }
+    .client-standalone-head {
+      max-width: 1250px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .client-standalone-head h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      color: #17233d;
+    }
+    .client-standalone-head p {
+      margin: 0;
+      color: #667485;
+      line-height: 22px;
+    }
+    .client-standalone-links {
+      display: flex;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .client-standalone-links a {
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 14px;
+      border: 1px solid #cfd8e3;
+      border-radius: 4px;
+      background: #fff;
+      color: #0f70cf;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .client-content {
+      max-width: 1250px;
+      min-height: auto;
+      margin: 0 auto;
+      padding: 0;
+      background: transparent;
+    }
+    .client-layout {
+      grid-template-columns: 260px 430px minmax(360px, 1fr);
+    }
+  </style>
 </head>
 <body>
-  <p>人工提存交付文档 已移入项目：巴西站 / 人工提存。</p>
-  <p>如未自动跳转，请点击：<a href="../brazil/manual-deposit/client-prototype.html">../brazil/manual-deposit/client-prototype.html</a></p>
+  <div id="manual-deposit-app" class="client-standalone-shell">
+    <header class="client-standalone-head">
+      <div>
+        <h1>客户端交互原型</h1>
+        <p>独立展示玩家侧首页、弹窗领取、加倍奖励、充值后领取与站内信通知流程。该页面不属于后台菜单。</p>
+      </div>
+      <nav class="client-standalone-links" aria-label="相关文件">
+        <a href="./backend-prototype.html">后台交互 HTML</a>
+        <a href="./prd.html">PRD 文档</a>
+      </nav>
+    </header>
+    <div class="client-content page-view" id="clientPage">
+          <div class="client-layout">
+            <aside class="client-card">
+              <h3>客户端状态演示</h3>
+              <div class="client-scenario-list" aria-label="客户端演示场景">
+                <button class="client-scenario active" type="button" data-client-scenario="home">客户端首页</button>
+                <button class="client-scenario" type="button" data-client-scenario="depositMail">人工存入成功站内信</button>
+                <button class="client-scenario" type="button" data-client-scenario="withdrawMail">人工提出站内信</button>
+                <button class="client-scenario" type="button" data-client-scenario="autoReward">自动领取优惠通知</button>
+                <button class="client-scenario" type="button" data-client-scenario="popupReward">弹窗领取-不开启加倍</button>
+                <button class="client-scenario" type="button" data-client-scenario="fixedMultiplierReward">弹窗领取-按固定金额加倍</button>
+                <button class="client-scenario" type="button" data-client-scenario="amountFixedReward">弹窗领取-按充值金额固定倍数</button>
+                <button class="client-scenario" type="button" data-client-scenario="amountRandomReward">弹窗领取-按充值金额随机倍数</button>
+                <button class="client-scenario" type="button" data-client-scenario="singleRechargeReward">充值后领取-单笔充值</button>
+                <button class="client-scenario" type="button" data-client-scenario="cumulativeRechargeReward">充值后领取-累计充值</button>
+                <button class="client-scenario" type="button" data-client-scenario="pendingQueue">刷新/登录-待处理优惠队列</button>
+                <button class="client-scenario" type="button" data-client-scenario="depositPage">充值页面</button>
+              </div>
+              <div class="client-note">
+                原型规则：人工优惠站内信只在领取成功后生成。自动领取视为后台直接领取成功；弹窗领取需玩家点击 RECEBER；开启加倍时，点击 RECEBER 后先展示加倍提示，不立即生成站内信。玩家完成加倍后按加倍后奖励发一次站内信；点击 Continue reivindicando 取消加倍福利并直接领取当前奖励时，按当前奖励发一次站内信；加倍场景全流程只发一次站内信。充值后领取区分单笔充值和累计充值，满足条件后仍需点击 RECEBER，领取成功后才发站内信。所有需要充值领取的优惠从提示页进入充值页后，未充值直接返回时回到原提示页；累计充值首次点击 Desistir 先展示累计充值提示，只有在二次提示中点击 Desistir 才视为放弃并同步后台订单状态为放弃。
+              </div>
+            </aside>
+
+            <section class="phone-shell" aria-label="客户端手机预览">
+              <div class="client-screen">
+                <section class="client-view" id="clientHomeView">
+                  <div class="client-home-scroll">
+                    <div class="client-app-install">
+                      <span>Baixe Nosso APP, Ganhe Super Prêmios!</span>
+                      <button class="client-install-btn" type="button">Instalar</button>
+                    </div>
+                    <div class="client-top-row">
+                      <button class="client-back" type="button" aria-label="菜单">≡</button>
+                      <div class="client-logo">FF789</div>
+                      <div class="client-balance">R$ 170,48</div>
+                      <button class="client-deposit-chip" type="button" data-client-open="clientDepositView">Depósito</button>
+                    </div>
+                    <div class="client-hero">
+                      Siga o canal oficial no Telegram<br>
+                      Códigos exclusivos<br>
+                      Dinheiro na hora
+                    </div>
+                    <div class="client-promo-grid">
+                      <div class="client-promo">Roleta<br>até R$1,888</div>
+                      <div class="client-promo">Diário check-in<br>ganhe R$320</div>
+                      <div class="client-promo">Bônus VIP<br>mensal</div>
+                    </div>
+                    <div class="client-search-bar"><span>大大大</span><span>⌕</span></div>
+                    <div class="client-category-row">
+                      <div class="client-category">Popular</div>
+                      <div class="client-category">CQ9</div>
+                      <div class="client-category">JDB</div>
+                      <div class="client-category">MG</div>
+                      <div class="client-category">PG</div>
+                    </div>
+                    <div class="client-section-title">Popular</div>
+                    <div class="client-games">
+                      <div class="client-game">WINNING MASK II</div>
+                      <div class="client-game">FORTUNE DRAGON</div>
+                      <div class="client-game">TREASURE BOWL</div>
+                      <div class="client-game">MONEY TREE</div>
+                      <div class="client-game">GANESHA</div>
+                      <div class="client-game">ZEUS</div>
+                      <div class="client-game">GOOD FORTUNE</div>
+                      <div class="client-game">WHEEL MONEY</div>
+                    </div>
+                  </div>
+                  <div class="client-bottom-nav">
+                    <button class="client-nav-item active" type="button" data-client-open="clientHomeView"><span class="client-nav-icon">⌂</span><span>Início</span></button>
+                    <button class="client-nav-item" type="button"><span class="client-nav-icon">🎁</span><span>Promoção</span></button>
+                    <button class="client-nav-item" type="button"><span class="client-nav-icon">♚</span><span>convidar</span></button>
+                    <button class="client-nav-item" type="button" data-client-open="clientDepositView"><span class="client-nav-icon">▰</span><span>Saque</span></button>
+                    <button class="client-nav-item" type="button" data-client-open="clientProfileView"><span class="client-nav-icon">●</span><span>Perfil</span></button>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientProfileView">
+                  <div class="client-profile-scroll">
+                    <div class="profile-card">
+                      <div class="profile-main">
+                        <div class="profile-avatar" aria-hidden="true"></div>
+                        <div>
+                          <div class="profile-id">ID: 3588828799<br>Conta: 11912365485</div>
+                          <div class="profile-wallet">76,92 R$</div>
+                        </div>
+                        <button class="client-mail-btn" type="button" data-client-open="clientMessagesView">✉<span class="client-badge" id="clientProfileBadge">8</span></button>
+                      </div>
+                      <div class="profile-actions">
+                        <button class="profile-action" type="button">Saque</button>
+                        <button class="profile-action deposit" type="button" data-client-open="clientDepositView">Depósito</button>
+                      </div>
+                    </div>
+                    <div class="vip-card">
+                      <div>Siga <strong style="color:#fff34a;">VIP3</strong> Ainda precisa apostar 1.992,90</div>
+                      <div class="vip-progress"><span></span></div>
+                    </div>
+                    <div class="profile-menu">
+                      <div class="profile-menu-row"><span>▤</span><span>Relatórios</span><span>›</span></div>
+                      <div class="profile-menu-row"><span>◎</span><span>Convidar</span><span>›</span></div>
+                      <div class="profile-menu-row"><span>$</span><span>Código de Resgate</span><span>›</span></div>
+                      <div class="profile-menu-row"><span>?</span><span>Suporte</span><span>›</span></div>
+                      <div class="profile-menu-row"><span>✓</span><span>Centro de Segurança</span><span>›</span></div>
+                      <div class="profile-menu-row"><span>→</span><span>Sair</span><span>›</span></div>
+                    </div>
+                  </div>
+                  <div class="client-bottom-nav">
+                    <button class="client-nav-item" type="button" data-client-open="clientHomeView"><span class="client-nav-icon">⌂</span><span>Início</span></button>
+                    <button class="client-nav-item" type="button"><span class="client-nav-icon">🎁</span><span>Promoção</span></button>
+                    <button class="client-nav-item" type="button"><span class="client-nav-icon">♚</span><span>convidar</span></button>
+                    <button class="client-nav-item" type="button" data-client-open="clientDepositView"><span class="client-nav-icon">▰</span><span>Saque</span></button>
+                    <button class="client-nav-item active" type="button"><span class="client-nav-icon">●</span><span>Perfil</span></button>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientMessagesView">
+                  <div class="client-header">
+                    <button class="client-back" type="button" data-client-open="clientProfileView">‹</button>
+                    <span>Centro de Mensagens</span>
+                    <span></span>
+                  </div>
+                  <div class="message-tabs">
+                    <div class="message-tab">Suporte</div>
+                    <div class="message-tab active">Notificação<span class="client-badge" id="clientMessageBadge">8</span></div>
+                    <div class="message-tab">Anúncio</div>
+                  </div>
+                  <div class="client-message-scroll">
+                    <div class="message-read-all">Leia com um clique</div>
+                    <div class="message-time" id="clientTopMessageTime">2026-07-22 08:22:05</div>
+                    <article class="message-card" data-client-detail="current">
+                      <div class="title" id="clientTopMessageTitle">Notificação de Depósito Bem-sucedida</div>
+                      <div class="body" id="clientTopMessageBody">Seu depósito foi bem-sucedido, 1,01 foi creditado em sua conta,dos quais 0,01 é o valor do desconto de depósito</div>
+                      <span class="message-unread"></span>
+                    </article>
+                    <div class="message-time">2026-07-22 06:16:14</div>
+                    <article class="message-card" data-client-detail="offer">
+                      <div class="title">Notificação de Ofertas de Manuais</div>
+                      <div class="body">[Ofertas de Manuais] Recompensa: {valor configurado} foi emitida, por favor, note a mudança no saldo</div>
+                      <span class="message-unread"></span>
+                    </article>
+                    <article class="message-card" data-client-detail="offer">
+                      <div class="title">Notificação de Ofertas de Manuais</div>
+                      <div class="body">[Ofertas de Manuais] Recompensa: {valor configurado} foi emitida, por favor, note a mudança no saldo</div>
+                      <span class="message-unread"></span>
+                    </article>
+                    <div class="message-time">2026-07-22 00:01:58</div>
+                    <article class="message-card">
+                      <div class="title">Código de Resgate Especial 【77777】</div>
+                      <div class="body">Olá! Use agora o código 【77777】 e ganhe...</div>
+                      <span class="message-unread"></span>
+                    </article>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientDetailView">
+                  <div class="client-header">
+                    <button class="client-back" type="button" data-client-open="clientMessagesView">‹</button>
+                    <span>Detalhes</span>
+                    <span></span>
+                  </div>
+                  <div class="detail-body">
+                    <h2 id="clientDetailTitle">Notificação de Depósito Bem-sucedida</h2>
+                    <p id="clientDetailBody">Seu depósito foi bem-sucedido, 1,01 foi creditado em sua conta,dos quais 0,01 é o valor do desconto de depósito</p>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientDepositView">
+                  <div class="client-header">
+                    <button class="client-back" type="button" id="clientDepositBack">‹</button>
+                    <span>Depósito</span>
+                    <span>▤</span>
+                  </div>
+                  <div class="client-deposit-scroll">
+                    <div class="deposit-panel">
+                      <div class="deposit-tabs"><span class="active">Depósito on-line</span></div>
+                      <div class="pix-row">
+                        <button class="pix-card active" type="button">pix-1</button>
+                        <button class="pix-card" type="button">pix-2</button>
+                      </div>
+                      <div class="deposit-ad">Prêmio de login diário de até R$ 678! Convide seus amigos agora, ganhe R$ 56 imediatamente.</div>
+                      <div class="deposit-amount-input"><span>R$</span><input id="clientDepositAmount" placeholder="10 - 15.000" autocomplete="off"></div>
+                      <div class="deposit-presets">
+                        <button class="deposit-preset" type="button" data-client-amount="10,00">10,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="30,00">30,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="50,00">50,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="100,00">100,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="500,00">500,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="1.000,00">1.000,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="5.000,00">5.000,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="10.000,00">10.000,00</button>
+                        <button class="deposit-preset" type="button" data-client-amount="15.000,00">15.000,00</button>
+                      </div>
+                      <button class="deposit-submit" type="button" id="clientDepositSubmit">Depositar Agora</button>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="client-overlay hidden" id="clientRewardOverlay">
+                  <div class="reward-popup" role="dialog" aria-label="领取人工优惠">
+                    <div class="gift-art" id="clientRewardGift">
+                      <div class="bonus-title" id="clientRewardTitle">Receber um bônus</div>
+                      <div class="gift-symbol" aria-hidden="true"></div>
+                      <div class="amount" id="clientRewardAmount">+R$配置金额</div>
+                      <div class="bonus-subtitle" id="clientRewardSubtitle"></div>
+                    </div>
+                    <button class="reward-receive-btn" type="button" id="clientReceiveReward">RECEBER</button>
+                  </div>
+                </div>
+
+                <div class="client-overlay hidden" id="clientMultiplierOverlay">
+                  <div class="multiplier-popup" role="dialog" aria-label="加倍奖励提示">
+                    <div class="multiplier-ribbon">Multiplier Rewards</div>
+                    <div class="multiplier-card" id="clientMultiplierSimple">
+                      <div>Faça outro depósito</div>
+                      <span class="big" id="clientMultiplierValue">配置倍率x</span>
+                      <strong>VEZES o bônus</strong>
+                    </div>
+                    <div class="multiplier-rate-card hidden" id="clientMultiplierRates">
+                      <div class="multiplier-rate-title">Faça outro depósito</div>
+                      <div class="multiplier-rate-head"><span>Depósito</span><span>múltiplo</span></div>
+                      <div id="clientMultiplierRateRows"></div>
+                    </div>
+                    <div class="multiplier-copy">Você deve depositar por esta interface para receber o bônus multiplicado.</div>
+                    <div class="multiplier-actions">
+                      <button class="give-up" type="button" id="clientGiveUpMultiplier">Continue reivindicando</button>
+                      <button class="continue" type="button" id="clientContinueMultiplier">Coletar Bônus Multiplicado</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="client-overlay hidden" id="clientRechargeRewardOverlay">
+                  <div class="recharge-popup" role="dialog" aria-label="充值后领取提示">
+                    <div class="recharge-gift">
+                      <div class="recharge-gift-art">
+                        <div>Receber um bônus</div>
+                        <div class="amount" id="clientRechargeRewardAmount">+R$配置金额</div>
+                      </div>
+                      <div class="recharge-rule-title">Detalhes do Evento</div>
+                      <div class="recharge-rule-copy" id="clientRechargeRuleCopy">
+                        Deposite um único valor de R$配置充值金额 para receber sua recompensa.
+                        Caso contrário, a recompensa será perdida.
+                      </div>
+                    </div>
+                    <div class="recharge-actions">
+                      <button class="deposit-now" type="button" id="clientRechargeGoDeposit">Depositar Agora</button>
+                      <button class="recharge-cancel" type="button" id="clientRechargeCancel">Desistir</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="client-overlay hidden" id="clientCumulativeConfirmOverlay">
+                  <div class="cumulative-confirm-card" role="dialog" aria-label="累计充值取消提示">
+                    <div class="cumulative-confirm-hero">Complete a recarga</div>
+                    <div class="cumulative-confirm-body">
+                      Você já acumulou recargas para esta recompensa. Se clicar em Desistir aqui, a recompensa será encerrada e o pedido será marcado como abandonado.
+                    </div>
+                    <div class="cumulative-confirm-actions">
+                      <button class="desist" type="button" id="clientCumulativeDesist">Desistir</button>
+                      <button class="confirm" type="button" id="clientCumulativeConfirm">Confirmar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <aside class="client-card">
+              <h3>交互说明</h3>
+              <table class="client-flow-table">
+                <thead>
+                  <tr><th>场景</th><th>点击后状态</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>人工存入成功</td><td>消息中心新增“Notificação de Depósito Bem-sucedida”，点击进入详情。</td></tr>
+                  <tr><td>人工提出成功</td><td>后台选择发送站内信时，消息中心新增“Notificação de Dedução Manual”；如选择不发送，则不新增站内信。</td></tr>
+                  <tr><td>自动领取优惠</td><td>无需玩家点击弹窗，后台直接领取成功后按后台配置优惠金额新增“Notificação de Ofertas de Manuais”。</td></tr>
+                  <tr><td>弹窗领取-不开启加倍</td><td>首页按后台配置优惠金额展示领取弹窗，点击 RECEBER 领取成功后关闭弹窗并新增优惠站内信，不自动跳转消息中心。</td></tr>
+                  <tr><td>弹窗领取-按固定金额加倍</td><td>先展示 ABRIR 礼盒态，点击后展示 RECEBER +R$100,00；点击 RECEBER 后不立即生成站内信，先展示 Multiplier Rewards 固定 2x 加倍弹窗；完成加倍或取消加倍直接领取当前奖励时，按最终领取结果只发一次站内信。</td></tr>
+                  <tr><td>弹窗领取-按充值金额固定倍数</td><td>点击 RECEBER 后不立即生成站内信，随后按后台模板展示充值金额与固定倍率表；继续充值且加倍成功后按加倍结果发一次站内信，取消加倍直接领取当前奖励时按当前奖励发一次站内信。</td></tr>
+                  <tr><td>弹窗领取-按充值金额随机倍数</td><td>流程同固定倍数，但表格展示每档充值金额的最小/最大随机倍率范围；加倍成功后按实际加倍结果发一次站内信，取消加倍直接领取当前奖励时按当前奖励发一次站内信。</td></tr>
+                  <tr><td>充值后领取-单笔充值</td><td>首页展示单笔充值活动弹窗，点击 Depositar Agora 进入充值页；未充值点击返回时回到该提示页。满足单笔充值条件后展示 RECEBER，点击领取成功才生成优惠站内信。</td></tr>
+                  <tr><td>充值后领取-累计充值</td><td>首页展示累计充值活动弹窗，首次点击 Desistir 不直接放弃，而是展示累计充值确认提示；只有在确认提示中点击 Desistir 才结束该优惠并同步后台订单状态为放弃。</td></tr>
+                  <tr><td>刷新/登录-待处理优惠队列</td><td>模拟存在多条未完成优惠：先展示创建时间最早的弹窗领取加倍优惠；弹窗领取未点击 Continue reivindicando，或充值后领取未点击 Desistir 时，优惠保持并在下次登录/刷新首页继续展示，处理完当前优惠后再展示下一条。</td></tr>
+                </tbody>
+              </table>
+            </aside>
+          </div>
+        </div>
+    <div class="toast" id="toast" aria-live="polite"><span class="toast-icon">!</span><span id="toastText">请输入充值金额</span></div>
+  </div>
+  
+<script>
+(() => {
+  const root = document.getElementById("manual-deposit-app");
+  const toast = root.querySelector("#toast");
+  const toastText = root.querySelector("#toastText");
+  const toastIcon = root.querySelector(".toast-icon");
+  const clientViews = root.querySelectorAll(".client-view");
+  const clientRewardOverlay = root.querySelector("#clientRewardOverlay");
+  const clientMultiplierOverlay = root.querySelector("#clientMultiplierOverlay");
+  const clientRechargeRewardOverlay = root.querySelector("#clientRechargeRewardOverlay");
+  const clientCumulativeConfirmOverlay = root.querySelector("#clientCumulativeConfirmOverlay");
+  const clientRechargeRuleCopy = root.querySelector("#clientRechargeRuleCopy");
+  const clientRechargeRewardAmount = root.querySelector("#clientRechargeRewardAmount");
+  const clientMultiplierSimple = root.querySelector("#clientMultiplierSimple");
+  const clientMultiplierRates = root.querySelector("#clientMultiplierRates");
+  const clientMultiplierRateRows = root.querySelector("#clientMultiplierRateRows");
+  const clientRewardGift = root.querySelector("#clientRewardGift");
+  const clientRewardTitle = root.querySelector("#clientRewardTitle");
+  const clientRewardAmount = root.querySelector("#clientRewardAmount");
+  const clientRewardSubtitle = root.querySelector("#clientRewardSubtitle");
+  const clientMultiplierValue = root.querySelector("#clientMultiplierValue");
+  const clientScenarios = root.querySelectorAll("[data-client-scenario]");
+  const clientTopMessageTime = root.querySelector("#clientTopMessageTime");
+  const clientTopMessageTitle = root.querySelector("#clientTopMessageTitle");
+  const clientTopMessageBody = root.querySelector("#clientTopMessageBody");
+  const clientDetailTitle = root.querySelector("#clientDetailTitle");
+  const clientDetailBody = root.querySelector("#clientDetailBody");
+  const clientMessageBadge = root.querySelector("#clientMessageBadge");
+  const clientProfileBadge = root.querySelector("#clientProfileBadge");
+  const clientDepositAmount = root.querySelector("#clientDepositAmount");
+  let clientRewardHasMultiplier = false;
+  let clientRewardStep = "ready";
+  let clientMultiplierMode = "simple";
+  let clientPendingQueueMode = false;
+  let clientDepositSource = "normal";
+  let clientRechargeMode = "single";
+  let toastTimer = 0;
+
+  const multiplierRatePresets = {
+    amountFixed: [
+      ["R$ 10", "2 x"],
+      ["R$ 20", "5 x"],
+      ["R$ 30", "6 x"],
+      ["R$ 40", "7 x"],
+      ["R$ 80", "8 x"],
+      ["R$ 100", "6 x"]
+    ],
+    amountRandom: [
+      ["R$ 10", "1,10 - 2 x"],
+      ["R$ 20", "1,10 - 3 x"],
+      ["R$ 30", "2 - 3 x"],
+      ["R$ 40", "2 - 4 x"],
+      ["R$ 80", "3 - 4 x"]
+    ]
+  };
+
+  const showToast = (message, type = "warning") => {
+    if (!toast || !toastText || !toastIcon) return;
+    toastText.textContent = message;
+    toastIcon.textContent = type === "success" ? "✓" : "!";
+    toast.classList.toggle("success", type === "success");
+    toast.classList.add("show");
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+      toast.classList.remove("show");
+      toast.classList.remove("success");
+    }, 1800);
+  };
+
+  const clientMessages = {
+    deposit: {
+      time: "2026-07-22 08:22:05",
+      title: "Notificação de Depósito Bem-sucedida",
+      body: "Seu depósito foi bem-sucedido, 1,01 foi creditado em sua conta,dos quais 0,01 é o valor do desconto de depósito",
+      badge: "8"
+    },
+    withdraw: {
+      time: "2026-07-22 08:25:07",
+      title: "Notificação de Dedução Manual",
+      body: "Sua conta foi deduzida em {valor da dedução}, por favor, note a mudança no saldo",
+      badge: "9"
+    },
+    offer: {
+      time: "2026-07-22 06:16:14",
+      title: "Notificação de Ofertas de Manuais",
+      body: "[Ofertas de Manuais] Recompensa: {valor configurado} foi emitida, por favor, note a mudança no saldo",
+      badge: "8"
+    },
+    multiplierOffer: {
+      time: "2026-07-22 08:36:10",
+      title: "Notificação de Ofertas de Manuais",
+      body: "[Ofertas de Manuais] Recompensa: {valor multiplicado} foi emitida, por favor, note a mudança no saldo",
+      badge: "10"
+    }
+  };
+
+  const setClientMessage = (type) => {
+    const message = clientMessages[type] || clientMessages.offer;
+    if (clientTopMessageTime) clientTopMessageTime.textContent = message.time;
+    if (clientTopMessageTitle) clientTopMessageTitle.textContent = message.title;
+    if (clientTopMessageBody) clientTopMessageBody.textContent = message.body;
+    if (clientDetailTitle) clientDetailTitle.textContent = message.title;
+    if (clientDetailBody) clientDetailBody.textContent = message.body;
+    if (clientMessageBadge) clientMessageBadge.textContent = message.badge;
+    if (clientProfileBadge) clientProfileBadge.textContent = message.badge;
+  };
+
+  const showClientView = (viewId) => {
+    clientViews.forEach((view) => {
+      view.classList.toggle("hidden", view.id !== viewId);
+    });
+    if (clientRewardOverlay) clientRewardOverlay.classList.add("hidden");
+    if (clientMultiplierOverlay) clientMultiplierOverlay.classList.add("hidden");
+    if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+    if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
+  };
+
+  const setClientMultiplierMode = (mode) => {
+    clientMultiplierMode = mode || "simple";
+    const isRateMode = clientMultiplierMode === "amountFixed" || clientMultiplierMode === "amountRandom";
+    if (clientMultiplierSimple) clientMultiplierSimple.classList.toggle("hidden", isRateMode);
+    if (clientMultiplierValue) clientMultiplierValue.textContent = clientMultiplierMode === "fixed" ? "2x" : "配置倍率x";
+    if (clientMultiplierRates) clientMultiplierRates.classList.toggle("hidden", !isRateMode);
+    if (clientMultiplierRateRows && isRateMode) {
+      const rows = multiplierRatePresets[clientMultiplierMode] || [];
+      clientMultiplierRateRows.innerHTML = rows.map(([amount, rate]) => (
+        '<div class="multiplier-rate-row"><span class="multiplier-rate-amount">' + amount + '</span><span class="multiplier-rate-value">' + rate + '</span></div>'
+      )).join("");
+    }
+  };
+
+  const setClientRewardStep = (step = "ready") => {
+    clientRewardStep = step;
+    const isOpenStep = step === "open";
+    if (clientRewardGift) clientRewardGift.classList.toggle("reward-open", isOpenStep);
+    if (clientRewardTitle) clientRewardTitle.textContent = isOpenStep ? "BÔNUS" : "Receber um bônus";
+    if (clientRewardAmount) clientRewardAmount.textContent = isOpenStep ? "" : "+R$100,00";
+    if (clientRewardSubtitle) clientRewardSubtitle.textContent = isOpenStep ? "TEST 人工优惠-固定金额" : "";
+    if (clientReceiveReward) clientReceiveReward.textContent = isOpenStep ? "ABRIR" : "RECEBER";
+  };
+
+  const showClientReward = (hasMultiplier, multiplierMode = "simple", rewardStep = "ready", keepPendingQueue = false) => {
+    clientPendingQueueMode = keepPendingQueue;
+    clientRewardHasMultiplier = hasMultiplier;
+    setClientMultiplierMode(multiplierMode);
+    setClientRewardStep(rewardStep);
+    showClientView("clientHomeView");
+    if (clientRewardOverlay) clientRewardOverlay.classList.remove("hidden");
+  };
+
+  const showRechargeReward = (keepPendingQueue = false, mode = "single") => {
+    clientPendingQueueMode = keepPendingQueue;
+    clientRechargeMode = mode;
+    clientDepositSource = "rechargeReward";
+    if (clientRechargeRewardAmount) clientRechargeRewardAmount.textContent = "+R$100,00";
+    if (clientRechargeRuleCopy) {
+      clientRechargeRuleCopy.textContent = mode === "cumulative"
+        ? "Deposite o valor acumulado configurado para receber sua recompensa. Caso contrário, a recompensa será perdida."
+        : "Deposite um único valor de R$配置充值金额 para receber sua recompensa. Caso contrário, a recompensa será perdida.";
+    }
+    showClientView("clientHomeView");
+    if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.remove("hidden");
+  };
+
+  const showPendingQueueDemo = () => {
+    setClientMessage("offer");
+    showClientReward(true, "amountRandom", "ready", true);
+    showToast("刷新首页：先展示最早创建的待处理优惠", "success");
+  };
+
+  const setClientScenario = (scenario) => {
+    clientScenarios.forEach((button) => {
+      button.classList.toggle("active", button.dataset.clientScenario === scenario);
+    });
+    if (scenario === "depositMail") {
+      setClientMessage("deposit");
+      showClientView("clientMessagesView");
+    } else if (scenario === "withdrawMail") {
+      setClientMessage("withdraw");
+      showClientView("clientMessagesView");
+    } else if (scenario === "autoReward") {
+      setClientMessage("offer");
+      showClientView("clientMessagesView");
+      showToast("自动领取成功，已生成优惠站内信", "success");
+    } else if (scenario === "popupReward") {
+      setClientMessage("offer");
+      showClientReward(false);
+    } else if (scenario === "fixedMultiplierReward") {
+      setClientMessage("offer");
+      showClientReward(true, "fixed", "open");
+    } else if (scenario === "amountFixedReward") {
+      setClientMessage("offer");
+      showClientReward(true, "amountFixed");
+    } else if (scenario === "amountRandomReward") {
+      setClientMessage("offer");
+      showClientReward(true, "amountRandom");
+    } else if (scenario === "singleRechargeReward") {
+      setClientMessage("offer");
+      showRechargeReward(false, "single");
+    } else if (scenario === "cumulativeRechargeReward") {
+      setClientMessage("offer");
+      showRechargeReward(false, "cumulative");
+    } else if (scenario === "pendingQueue") {
+      showPendingQueueDemo();
+    } else if (scenario === "depositPage") {
+      clientDepositSource = "normal";
+      showClientView("clientDepositView");
+    } else {
+      clientDepositSource = "normal";
+      showClientView("clientHomeView");
+    }
+  };
+
+  clientScenarios.forEach((button) => {
+    button.addEventListener("click", () => setClientScenario(button.dataset.clientScenario));
+  });
+
+  root.querySelectorAll("[data-client-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.dataset.clientOpen === "clientDepositView") clientDepositSource = "normal";
+      showClientView(button.dataset.clientOpen);
+    });
+  });
+
+  root.querySelectorAll("[data-client-detail]").forEach((card) => {
+    card.addEventListener("click", () => {
+      if (card.dataset.clientDetail === "offer") setClientMessage("offer");
+      showClientView("clientDetailView");
+    });
+  });
+
+  const clientReceiveReward = root.querySelector("#clientReceiveReward");
+  if (clientReceiveReward) {
+    clientReceiveReward.addEventListener("click", () => {
+      if (clientRewardStep === "open") {
+        setClientRewardStep("ready");
+        return;
+      }
+      if (clientRewardOverlay) clientRewardOverlay.classList.add("hidden");
+      if (clientRewardHasMultiplier && clientMultiplierOverlay) {
+        clientMultiplierOverlay.classList.remove("hidden");
+        showToast("已展示加倍提示，完成加倍或取消加倍后生成一次站内信");
+      } else {
+        setClientMessage("offer");
+        showToast("领取成功，已生成优惠站内信", "success");
+        showClientView("clientHomeView");
+      }
+    });
+  }
+
+  const clientGiveUpMultiplier = root.querySelector("#clientGiveUpMultiplier");
+  if (clientGiveUpMultiplier) {
+    clientGiveUpMultiplier.addEventListener("click", () => {
+      if (clientMultiplierOverlay) clientMultiplierOverlay.classList.add("hidden");
+      setClientMessage("offer");
+      showToast("已取消加倍福利，当前奖励已生成一次优惠站内信", "success");
+      if (clientPendingQueueMode) {
+        showRechargeReward(true, "single");
+      } else {
+        showClientView("clientHomeView");
+      }
+    });
+  }
+
+  const clientContinueMultiplier = root.querySelector("#clientContinueMultiplier");
+  if (clientContinueMultiplier) {
+    clientContinueMultiplier.addEventListener("click", () => {
+      if (clientMultiplierOverlay) clientMultiplierOverlay.classList.add("hidden");
+      clientDepositSource = "multiplier";
+      showClientView("clientDepositView");
+    });
+  }
+
+  const clientRechargeGoDeposit = root.querySelector("#clientRechargeGoDeposit");
+  if (clientRechargeGoDeposit) {
+    clientRechargeGoDeposit.addEventListener("click", () => {
+      if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+      clientDepositSource = "rechargeReward";
+      showClientView("clientDepositView");
+    });
+  }
+
+  const abandonRechargeReward = () => {
+    if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+    if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
+    clientDepositSource = "normal";
+    clientPendingQueueMode = false;
+    showToast("已放弃充值后领取优惠，后台订单状态更新为放弃", "success");
+    showClientView("clientHomeView");
+  };
+
+  const clientRechargeCancel = root.querySelector("#clientRechargeCancel");
+  if (clientRechargeCancel) {
+    clientRechargeCancel.addEventListener("click", () => {
+      if (clientRechargeMode === "cumulative") {
+        if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+        if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.remove("hidden");
+        showToast("累计充值需二次确认后才会放弃");
+        return;
+      }
+      abandonRechargeReward();
+    });
+  }
+
+  const clientCumulativeDesist = root.querySelector("#clientCumulativeDesist");
+  if (clientCumulativeDesist) {
+    clientCumulativeDesist.addEventListener("click", abandonRechargeReward);
+  }
+
+  const clientCumulativeConfirm = root.querySelector("#clientCumulativeConfirm");
+  if (clientCumulativeConfirm) {
+    clientCumulativeConfirm.addEventListener("click", () => {
+      if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
+      if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.remove("hidden");
+      showToast("继续保留累计充值优惠", "success");
+    });
+  }
+
+  const clientDepositBack = root.querySelector("#clientDepositBack");
+  if (clientDepositBack) {
+    clientDepositBack.addEventListener("click", () => {
+      if (clientDepositSource === "multiplier") {
+        showClientView("clientHomeView");
+        if (clientMultiplierOverlay) clientMultiplierOverlay.classList.remove("hidden");
+        showToast("未充值返回，回到加倍彩金提示页");
+        return;
+      }
+      if (clientDepositSource === "rechargeReward") {
+        showRechargeReward(clientPendingQueueMode, clientRechargeMode);
+        showToast("未充值返回，回到充值后领取提示页");
+        return;
+      }
+      showClientView("clientHomeView");
+    });
+  }
+
+  root.querySelectorAll("[data-client-amount]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (clientDepositAmount) clientDepositAmount.value = button.dataset.clientAmount;
+    });
+  });
+
+  const clientDepositSubmit = root.querySelector("#clientDepositSubmit");
+  if (clientDepositSubmit) {
+    clientDepositSubmit.addEventListener("click", () => {
+      if (!clientDepositAmount || !clientDepositAmount.value.trim()) {
+        showToast("请输入充值金额");
+        return;
+      }
+      if (clientDepositSource === "multiplier") {
+        setClientMessage("multiplierOffer");
+        showToast("充值成功，已生成加倍优惠站内信", "success");
+      } else if (clientDepositSource === "rechargeReward") {
+        showToast(clientRechargeMode === "cumulative" ? "累计充值条件已满足，请点击领取优惠" : "单笔充值条件已满足，请点击领取优惠");
+        showClientReward(false);
+      } else {
+        showToast("充值成功", "success");
+      }
+    });
+  }
+
+  setClientMessage("deposit");
+  showClientView("clientHomeView");
+})();
+</script>
 </body>
 </html>
