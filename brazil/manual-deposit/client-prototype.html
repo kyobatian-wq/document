@@ -3195,6 +3195,119 @@
       color: #092957;
     }
 
+
+
+    .recharge-result-popup {
+      width: 330px;
+      min-height: 470px;
+      border-radius: 18px;
+      background: linear-gradient(#e84048 0 25%, #fff1dc 25% 100%);
+      position: relative;
+      padding: 70px 22px 26px;
+      text-align: center;
+      color: #3c2a1e;
+      box-shadow: 0 14px 50px rgba(0,0,0,.45);
+      overflow: hidden;
+    }
+
+    .recharge-result-popup::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: -8px;
+      height: 72px;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(90deg, #ef4b9d, #ffd94f, #ef4b9d);
+      opacity: .95;
+    }
+
+    .result-ribbon {
+      position: absolute;
+      top: 28px;
+      left: 32px;
+      right: 32px;
+      height: 48px;
+      border-radius: 8px;
+      background: #d92f38;
+      color: #fff9d0;
+      font-size: 22px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-6deg);
+      box-shadow: 0 6px 0 rgba(127, 20, 26, .25);
+    }
+
+    .result-check {
+      width: 26px;
+      height: 26px;
+      margin: 58px auto 8px;
+      border-radius: 50%;
+      background: #2bcf67;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .result-title {
+      color: #47bd64;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .result-card {
+      width: 248px;
+      min-height: 135px;
+      margin: 0 auto 58px;
+      border: 1px dashed #ffb57b;
+      border-radius: 14px;
+      background: #fff3df;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #e84b37;
+    }
+
+    .result-card span {
+      min-width: 95px;
+      height: 22px;
+      border-radius: 12px;
+      background: #ff9644;
+      color: #fff9d0;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 22px;
+    }
+
+    .result-card strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 44px;
+      line-height: 48px;
+      font-weight: 900;
+    }
+
+    .result-claim-btn {
+      position: relative;
+      z-index: 1;
+      width: 178px;
+      height: 44px;
+      border: 0;
+      border-radius: 22px;
+      background: linear-gradient(90deg, #5b85ff, #ad48ee);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(71, 79, 211, .35);
+    }
+
     .cumulative-confirm-card {
       width: 310px;
       border-radius: 18px;
@@ -3401,30 +3514,46 @@
   </style>
   <style>
     body {
-      background: #eef2f6;
+      background: #edf3f8;
       min-width: 1180px;
     }
     .client-standalone-shell {
       min-height: 100vh;
-      padding: 22px 24px 34px;
+      padding: 26px 28px 36px;
     }
     .client-standalone-head {
-      max-width: 1250px;
-      margin: 0 auto 14px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 20px;
+      max-width: 1380px;
+      margin: 0 auto 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 22px;
+    }
+    .client-kicker {
+      display: inline-flex;
+      height: 24px;
+      align-items: center;
+      padding: 0 10px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      background: #e7f0ff;
+      color: #0f70cf;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
     }
     .client-standalone-head h1 {
-      margin: 0 0 6px;
-      font-size: 24px;
-      color: #17233d;
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 34px;
+      color: #111827;
+      letter-spacing: 0;
     }
     .client-standalone-head p {
+      max-width: 760px;
       margin: 0;
-      color: #667485;
-      line-height: 22px;
+      color: #5d6b7d;
+      line-height: 23px;
     }
     .client-standalone-links {
       display: flex;
@@ -3432,26 +3561,147 @@
       white-space: nowrap;
     }
     .client-standalone-links a {
-      height: 34px;
+      height: 38px;
       display: inline-flex;
       align-items: center;
-      padding: 0 14px;
-      border: 1px solid #cfd8e3;
-      border-radius: 4px;
+      padding: 0 16px;
+      border: 1px solid #c8d5e3;
+      border-radius: 8px;
       background: #fff;
       color: #0f70cf;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(15, 42, 78, .06);
+    }
+    .client-summary-strip {
+      max-width: 1380px;
+      margin: 0 auto 18px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .client-summary-card {
+      min-height: 72px;
+      padding: 14px 16px;
+      border: 1px solid #dbe5ef;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(15, 42, 78, .05);
+    }
+    .client-summary-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #111827;
+      font-size: 14px;
+    }
+    .client-summary-card span {
+      color: #667485;
+      font-size: 12px;
+      line-height: 18px;
     }
     .client-content {
-      max-width: 1250px;
+      max-width: 1380px;
       min-height: auto;
       margin: 0 auto;
       padding: 0;
       background: transparent;
     }
     .client-layout {
-      grid-template-columns: 260px 430px minmax(360px, 1fr);
+      grid-template-columns: 286px 430px minmax(420px, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .client-card {
+      border: 1px solid #dbe5ef;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 12px 28px rgba(15, 42, 78, .05);
+    }
+    .client-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-size: 16px;
+    }
+    .client-card h3::before {
+      content: "";
+      width: 4px;
+      height: 16px;
+      border-radius: 3px;
+      background: #0f70cf;
+    }
+    .client-scenario-group {
+      margin: 14px 0 8px;
+      color: #738295;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .client-scenario-list {
+      gap: 7px;
+    }
+    .client-scenario {
+      height: 38px;
+      border-radius: 8px;
+      padding: 0 12px;
+      transition: background .15s ease, border-color .15s ease, color .15s ease;
+    }
+    .client-scenario:hover {
+      border-color: #7aaee2;
+      background: #f7fbff;
+    }
+    .client-scenario.active {
+      box-shadow: inset 3px 0 0 #0f70cf;
+    }
+    .client-note {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #f7f9fc;
+      border: 1px solid #e2e9f1;
+      color: #5d6b7d;
+      line-height: 22px;
+      font-size: 13px;
+    }
+    .client-rule-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .client-rule-list li + li {
+      margin-top: 8px;
+    }
+    .client-flow-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid #dbe5ef;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+    .client-flow-table th,
+    .client-flow-table td {
+      border: 0;
+      border-bottom: 1px solid #e8eef5;
+      padding: 11px 12px;
+      line-height: 21px;
+      vertical-align: top;
+    }
+    .client-flow-table th {
+      background: #f3f7fb;
+      color: #17233d;
+    }
+    .client-flow-table tr:last-child td {
+      border-bottom: 0;
+    }
+    .client-flow-table td:first-child {
+      width: 145px;
+      color: #0f70cf;
+      font-weight: 800;
+      background: #fbfdff;
+    }
+    .phone-shell {
+      justify-self: center;
+      box-shadow: 0 24px 56px rgba(6, 28, 47, .24);
     }
   </style>
 </head>
@@ -3459,34 +3709,52 @@
   <div id="manual-deposit-app" class="client-standalone-shell">
     <header class="client-standalone-head">
       <div>
+        <div class="client-kicker">MANUAL DEPOSIT · CLIENT FLOW</div>
         <h1>客户端交互原型</h1>
-        <p>独立展示玩家侧首页、弹窗领取、加倍奖励、充值后领取与站内信通知流程。该页面不属于后台菜单。</p>
+        <p>用于评审玩家侧首页、站内信、弹窗领取、加倍奖励、充值后领取与领取结果页。页面聚焦流程演示，不代表后台真实菜单入口。</p>
       </div>
       <nav class="client-standalone-links" aria-label="相关文件">
         <a href="./backend-prototype.html">后台交互 HTML</a>
         <a href="./prd.html">PRD 文档</a>
       </nav>
     </header>
+    <section class="client-summary-strip" aria-label="核心规则摘要">
+      <div class="client-summary-card"><strong>领取成功才发信</strong><span>自动领取视为立即成功；弹窗和充值类优惠以玩家确认领取为准。</span></div>
+      <div class="client-summary-card"><strong>加倍只发一次</strong><span>完成加倍或取消加倍后按最终结果生成一次优惠站内信。</span></div>
+      <div class="client-summary-card"><strong>充值后先出结果页</strong><span>满足充值条件后展示领取结果页，点击领取后才写入帐变和稽核。</span></div>
+      <div class="client-summary-card"><strong>未领取继续保留</strong><span>结果页未点击领取时，刷新或下次登录继续展示，直到成功领取。</span></div>
+    </section>
     <div class="client-content page-view" id="clientPage">
           <div class="client-layout">
             <aside class="client-card">
               <h3>客户端状态演示</h3>
               <div class="client-scenario-list" aria-label="客户端演示场景">
+                <div class="client-scenario-group">基础页面</div>
                 <button class="client-scenario active" type="button" data-client-scenario="home">客户端首页</button>
                 <button class="client-scenario" type="button" data-client-scenario="depositMail">人工存入成功站内信</button>
                 <button class="client-scenario" type="button" data-client-scenario="withdrawMail">人工提出站内信</button>
                 <button class="client-scenario" type="button" data-client-scenario="autoReward">自动领取优惠通知</button>
+                <div class="client-scenario-group">弹窗领取 / 加倍</div>
                 <button class="client-scenario" type="button" data-client-scenario="popupReward">弹窗领取-不开启加倍</button>
                 <button class="client-scenario" type="button" data-client-scenario="fixedMultiplierReward">弹窗领取-按固定金额加倍</button>
                 <button class="client-scenario" type="button" data-client-scenario="amountFixedReward">弹窗领取-按充值金额固定倍数</button>
                 <button class="client-scenario" type="button" data-client-scenario="amountRandomReward">弹窗领取-按充值金额随机倍数</button>
+                <div class="client-scenario-group">充值后领取</div>
                 <button class="client-scenario" type="button" data-client-scenario="singleRechargeReward">充值后领取-单笔充值</button>
                 <button class="client-scenario" type="button" data-client-scenario="cumulativeRechargeReward">充值后领取-累计充值</button>
+                <button class="client-scenario" type="button" data-client-scenario="rechargeClaimResult">充值后领取-领取结果页</button>
+                <div class="client-scenario-group">恢复与队列</div>
                 <button class="client-scenario" type="button" data-client-scenario="pendingQueue">刷新/登录-待处理优惠队列</button>
                 <button class="client-scenario" type="button" data-client-scenario="depositPage">充值页面</button>
               </div>
               <div class="client-note">
-                原型规则：人工优惠站内信只在领取成功后生成。自动领取视为后台直接领取成功；弹窗领取需玩家点击 RECEBER；开启加倍时，点击 RECEBER 后先展示加倍提示，不立即生成站内信。玩家完成加倍后按加倍后奖励发一次站内信；点击 Continue reivindicando 取消加倍福利并直接领取当前奖励时，按当前奖励发一次站内信；加倍场景全流程只发一次站内信。充值后领取区分单笔充值和累计充值，满足条件后仍需点击 RECEBER，领取成功后才发站内信。所有需要充值领取的优惠从提示页进入充值页后，未充值直接返回时回到原提示页；累计充值首次点击 Desistir 先展示累计充值提示，只有在二次提示中点击 Desistir 才视为放弃并同步后台订单状态为放弃。
+                <ul class="client-rule-list">
+                  <li>人工优惠站内信只在领取成功后生成；自动领取视为后台直接领取成功。</li>
+                  <li>弹窗领取开启加倍时，点击 RECEBER 后先展示加倍提示，不立即生成站内信；完成加倍或取消加倍后按最终结果只发一次。</li>
+                  <li>充值后领取满足条件后统一展示领取结果页；玩家点击 Reivindicar Bônus 后才发站内信，并写入帐变和稽核记录。</li>
+                  <li>领取结果页未点击领取时，该优惠继续保持待领取状态，刷新首页或下次登录仍展示，直到成功领取。</li>
+                  <li>累计充值首次点击 Desistir 只展示确认提示；二次点击 Desistir 才视为放弃。</li>
+                </ul>
               </div>
             </aside>
 
@@ -3716,6 +3984,19 @@
                   </div>
                 </div>
 
+                <div class="client-overlay hidden" id="clientRechargeResultOverlay">
+                  <div class="recharge-result-popup" role="dialog" aria-label="充值后领取结果页">
+                    <div class="result-ribbon">Multiplier Rewards</div>
+                    <div class="result-check">✓</div>
+                    <div class="result-title">Concluir Depósito</div>
+                    <div class="result-card">
+                      <span>Ganho</span>
+                      <strong id="clientRechargeResultAmount">R$ 100,00</strong>
+                    </div>
+                    <button class="result-claim-btn" type="button" id="clientRechargeResultClaim">Reivindicar Bônus</button>
+                  </div>
+                </div>
+
                 <div class="client-overlay hidden" id="clientCumulativeConfirmOverlay">
                   <div class="cumulative-confirm-card" role="dialog" aria-label="累计充值取消提示">
                     <div class="cumulative-confirm-hero">Complete a recarga</div>
@@ -3745,8 +4026,9 @@
                   <tr><td>弹窗领取-按固定金额加倍</td><td>先展示 ABRIR 礼盒态，点击后展示 RECEBER +R$100,00；点击 RECEBER 后不立即生成站内信，先展示 Multiplier Rewards 固定 2x 加倍弹窗；完成加倍或取消加倍直接领取当前奖励时，按最终领取结果只发一次站内信。</td></tr>
                   <tr><td>弹窗领取-按充值金额固定倍数</td><td>点击 RECEBER 后不立即生成站内信，随后按后台模板展示充值金额与固定倍率表；继续充值且加倍成功后按加倍结果发一次站内信，取消加倍直接领取当前奖励时按当前奖励发一次站内信。</td></tr>
                   <tr><td>弹窗领取-按充值金额随机倍数</td><td>流程同固定倍数，但表格展示每档充值金额的最小/最大随机倍率范围；加倍成功后按实际加倍结果发一次站内信，取消加倍直接领取当前奖励时按当前奖励发一次站内信。</td></tr>
-                  <tr><td>充值后领取-单笔充值</td><td>首页展示单笔充值活动弹窗，点击 Depositar Agora 进入充值页；未充值点击返回时回到该提示页。满足单笔充值条件后展示 RECEBER，点击领取成功才生成优惠站内信。</td></tr>
-                  <tr><td>充值后领取-累计充值</td><td>首页展示累计充值活动弹窗，首次点击 Desistir 不直接放弃，而是展示累计充值确认提示；只有在确认提示中点击 Desistir 才结束该优惠并同步后台订单状态为放弃。</td></tr>
+                  <tr><td>充值后领取-单笔充值</td><td>首页展示单笔充值活动弹窗，点击 Depositar Agora 进入充值页；未充值点击返回时回到该提示页。满足单笔充值条件后展示领取结果页，显示对应优惠彩金，点击 Reivindicar Bônus 后才生成优惠站内信、帐变和稽核记录。</td></tr>
+                  <tr><td>充值后领取-累计充值</td><td>首页展示累计充值活动弹窗，首次点击 Desistir 不直接放弃，而是展示累计充值确认提示；只有在确认提示中点击 Desistir 才结束该优惠并同步后台订单状态为放弃。满足累计充值条件后同样展示领取结果页，点击领取后才生成站内信、帐变和稽核记录。</td></tr>
+                  <tr><td>充值后领取-领取结果页</td><td>所有需要充值后的人工优惠（含充值后领取与需要充值触发的加倍奖励）最终统一展示该弹窗；金额为后台返回的实际优惠彩金。玩家点击 Reivindicar Bônus 后才完成成功领取、帐变和稽核记录流转；未点击领取按钮时保持待领取，下次登录或刷新首页继续展示。</td></tr>
                   <tr><td>刷新/登录-待处理优惠队列</td><td>模拟存在多条未完成优惠：先展示创建时间最早的弹窗领取加倍优惠；弹窗领取未点击 Continue reivindicando，或充值后领取未点击 Desistir 时，优惠保持并在下次登录/刷新首页继续展示，处理完当前优惠后再展示下一条。</td></tr>
                 </tbody>
               </table>
@@ -3766,6 +4048,9 @@
   const clientRewardOverlay = root.querySelector("#clientRewardOverlay");
   const clientMultiplierOverlay = root.querySelector("#clientMultiplierOverlay");
   const clientRechargeRewardOverlay = root.querySelector("#clientRechargeRewardOverlay");
+  const clientRechargeResultOverlay = root.querySelector("#clientRechargeResultOverlay");
+  const clientRechargeResultAmount = root.querySelector("#clientRechargeResultAmount");
+  const clientRechargeResultClaim = root.querySelector("#clientRechargeResultClaim");
   const clientCumulativeConfirmOverlay = root.querySelector("#clientCumulativeConfirmOverlay");
   const clientRechargeRuleCopy = root.querySelector("#clientRechargeRuleCopy");
   const clientRechargeRewardAmount = root.querySelector("#clientRechargeRewardAmount");
@@ -3792,6 +4077,7 @@
   let clientPendingQueueMode = false;
   let clientDepositSource = "normal";
   let clientRechargeMode = "single";
+  let clientRechargeResultMessageType = "offer";
   let toastTimer = 0;
 
   const multiplierRatePresets = {
@@ -3870,6 +4156,7 @@
     if (clientRewardOverlay) clientRewardOverlay.classList.add("hidden");
     if (clientMultiplierOverlay) clientMultiplierOverlay.classList.add("hidden");
     if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
+    if (clientRechargeResultOverlay) clientRechargeResultOverlay.classList.add("hidden");
     if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
   };
 
@@ -3920,6 +4207,14 @@
     if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.remove("hidden");
   };
 
+  const showRechargeClaimResult = (type = "recharge") => {
+    clientDepositSource = "normal";
+    clientRechargeResultMessageType = type === "multiplier" ? "multiplierOffer" : "offer";
+    if (clientRechargeResultAmount) clientRechargeResultAmount.textContent = type === "multiplier" ? "R$ 200,00" : "R$ 100,00";
+    showClientView("clientHomeView");
+    if (clientRechargeResultOverlay) clientRechargeResultOverlay.classList.remove("hidden");
+  };
+
   const showPendingQueueDemo = () => {
     setClientMessage("offer");
     showClientReward(true, "amountRandom", "ready", true);
@@ -3958,6 +4253,9 @@
     } else if (scenario === "cumulativeRechargeReward") {
       setClientMessage("offer");
       showRechargeReward(false, "cumulative");
+    } else if (scenario === "rechargeClaimResult") {
+      setClientMessage("offer");
+      showRechargeClaimResult("recharge");
     } else if (scenario === "pendingQueue") {
       showPendingQueueDemo();
     } else if (scenario === "depositPage") {
@@ -4074,6 +4372,15 @@
     });
   }
 
+  if (clientRechargeResultClaim) {
+    clientRechargeResultClaim.addEventListener("click", () => {
+      if (clientRechargeResultOverlay) clientRechargeResultOverlay.classList.add("hidden");
+      setClientMessage(clientRechargeResultMessageType);
+      showToast("领取成功，已生成优惠站内信、帐变和稽核记录", "success");
+      showClientView("clientHomeView");
+    });
+  }
+
   const clientDepositBack = root.querySelector("#clientDepositBack");
   if (clientDepositBack) {
     clientDepositBack.addEventListener("click", () => {
@@ -4106,11 +4413,11 @@
         return;
       }
       if (clientDepositSource === "multiplier") {
-        setClientMessage("multiplierOffer");
-        showToast("充值成功，已生成加倍优惠站内信", "success");
+        showToast("充值成功，请在领取结果页确认加倍彩金", "success");
+        showRechargeClaimResult("multiplier");
       } else if (clientDepositSource === "rechargeReward") {
-        showToast(clientRechargeMode === "cumulative" ? "累计充值条件已满足，请点击领取优惠" : "单笔充值条件已满足，请点击领取优惠");
-        showClientReward(false);
+        showToast(clientRechargeMode === "cumulative" ? "累计充值条件已满足，请在领取结果页确认优惠" : "单笔充值条件已满足，请在领取结果页确认优惠", "success");
+        showRechargeClaimResult("recharge");
       } else {
         showToast("充值成功", "success");
       }
