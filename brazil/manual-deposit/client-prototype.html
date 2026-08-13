@@ -2796,6 +2796,390 @@
       cursor: pointer;
     }
 
+    .client-withdraw-scroll,
+    .client-audit-detail-scroll {
+      height: calc(100% - 58px);
+      overflow: auto;
+      padding: 16px 14px 28px;
+    }
+
+    .client-header-icon {
+      justify-self: center;
+      border: 0;
+      background: transparent;
+      color: #f1f1ee;
+      font-size: 23px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .withdraw-balance {
+      margin: 10px 0 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .withdraw-balance strong { color: #f1ff29; margin-left: 8px; }
+
+    .withdraw-pix {
+      width: 138px;
+      height: 50px;
+      border: 0;
+      border-radius: 7px;
+      background: #f1ff29;
+      color: #151515;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .withdraw-section {
+      border-top: 1px solid #4c473f;
+      padding-top: 11px;
+      margin-top: 0;
+    }
+
+    .withdraw-section h4 {
+      margin: 0 0 10px;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .withdraw-presets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .withdraw-presets button {
+      height: 50px;
+      border: 0;
+      border-radius: 7px;
+      background: #3a352f;
+      color: #a7a199;
+      font-size: 16px;
+    }
+
+    .withdraw-input {
+      width: 100%;
+      height: 50px;
+      margin: 28px 0 26px;
+      border: 0;
+      border-radius: 7px;
+      background: #242321;
+      color: #aba59c;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .withdraw-methods { display: flex; gap: 14px; margin: 14px 0 22px; }
+    .withdraw-methods button {
+      width: 100px;
+      height: 42px;
+      border: 1px solid #57524b;
+      border-radius: 7px;
+      background: transparent;
+      color: #9c968e;
+      font-size: 16px;
+    }
+
+    .withdraw-field { margin: 0 0 25px; border-bottom: 1px solid #4c473f; padding-bottom: 13px; }
+    .withdraw-field label { display: block; color: #9b958d; margin-bottom: 9px; font-size: 14px; }
+    .withdraw-field span { color: #77726b; font-size: 16px; }
+    .withdraw-submit {
+      display: block;
+      width: 88%;
+      height: 51px;
+      margin: 62px auto 0;
+      border: 0;
+      border-radius: 9px;
+      background: #f1ff29;
+      color: #1c1b16;
+      font-size: 18px;
+      font-weight: 800;
+      box-shadow: 0 8px 25px rgba(241,255,41,.22);
+    }
+
+    .client-audit-scroll {
+      height: calc(100% - 116px);
+      overflow: auto;
+      padding: 16px 14px 28px;
+    }
+
+    .audit-panel.hidden { display: none; }
+
+    .audit-tabs {
+      height: 58px;
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      align-items: end;
+      padding: 0 14px;
+      border-bottom: 1px solid #4c473f;
+      background: #35302a;
+    }
+
+    .audit-tab {
+      position: relative;
+      height: 58px;
+      border: 0;
+      background: transparent;
+      color: #9b958d;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .audit-tab.active { color: #fff; }
+    .audit-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 0;
+      height: 2px;
+      background: #f1ff29;
+    }
+
+    .audit-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 4px 0 13px;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .audit-summary strong { color: #ffb72a; }
+    .audit-filter {
+      width: 150px;
+      height: 42px;
+      border: 1px solid #57524b;
+      border-radius: 6px;
+      background: #242321;
+      color: #fff;
+      padding: 0 10px;
+      font-size: 15px;
+    }
+
+    .audit-list { display: grid; gap: 11px; }
+    .audit-item {
+      width: 100%;
+      min-height: 86px;
+      border: 0;
+      border-radius: 8px;
+      padding: 13px 12px;
+      background: #242321;
+      color: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .audit-item-top, .audit-item-bottom { display: flex; justify-content: space-between; gap: 10px; }
+    .audit-item-top { font-size: 16px; }
+    .audit-item-bottom { margin-top: 13px; color: #98938b; font-size: 13px; }
+    .audit-status.pending { color: #ff5146; }
+    .audit-status.done { color: #27dfa2; }
+
+    .withdraw-record-empty {
+      margin-top: 24px;
+      border-radius: 8px;
+      padding: 18px;
+      background: #242321;
+      color: #9b958d;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .audit-detail-card {
+      border-radius: 8px;
+      background: #242321;
+      padding: 0 16px;
+    }
+
+    .audit-detail-row {
+      min-height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #504a42;
+      color: #99938b;
+      font-size: 15px;
+    }
+
+    .audit-detail-row:last-child { border-bottom: 0; }
+    .audit-detail-row span:last-child { color: #fff; text-align: right; }
+    .audit-detail-row .audit-pending { color: #ff5146; }
+
+    .client-report-scroll {
+      height: calc(100% - 58px);
+      overflow: auto;
+      background: #151515;
+      padding-bottom: 0;
+    }
+
+    .report-top-tabs {
+      height: 52px;
+      display: flex;
+      align-items: flex-end;
+      gap: 18px;
+      padding: 0 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      border-bottom: 1px solid #3f3b35;
+      color: #aaa59e;
+      font-size: 13px;
+    }
+
+    .report-top-tab {
+      position: relative;
+      flex: 0 0 auto;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: inherit;
+      font-size: inherit;
+      cursor: pointer;
+    }
+
+    .report-top-tab.active { color: #f1ff29; }
+    .report-top-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: #f1ff29;
+    }
+
+    .report-filter-bar {
+      position: relative;
+      display: flex;
+      gap: 8px;
+      padding: 12px 20px 8px;
+      background: #151515;
+      z-index: 2;
+    }
+
+    .report-filter-btn {
+      height: 34px;
+      border: 1px solid #8e8a82;
+      border-radius: 11px;
+      padding: 0 10px;
+      background: #201f1d;
+      color: #f7f7f4;
+      font-size: 14px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .report-filter-btn .caret {
+      display: inline-block;
+      margin-left: 8px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 7px solid #8e8a82;
+      vertical-align: middle;
+    }
+
+    .report-filter-btn.is-open .caret {
+      border-top: 0;
+      border-bottom: 7px solid #8e8a82;
+    }
+
+    .report-filter-menu {
+      display: none;
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 53px;
+      padding: 8px;
+      gap: 7px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      background: #242321;
+      box-shadow: 0 8px 18px rgba(0,0,0,.38);
+      border-radius: 0 0 5px 5px;
+    }
+
+    .report-filter-menu.open { display: grid; }
+    .report-filter-option {
+      min-height: 50px;
+      border: 1px solid #8e8a82;
+      border-radius: 7px;
+      padding: 7px 5px;
+      background: #242321;
+      color: #9e9990;
+      font-size: 13px;
+      line-height: 16px;
+      cursor: pointer;
+    }
+
+    .report-filter-option.active {
+      border-color: #f1ff29;
+      background: #f1ff29;
+      color: #242321;
+      font-weight: 700;
+    }
+
+    .report-list {
+      min-height: 520px;
+      padding: 4px 20px 12px;
+    }
+
+    .report-record {
+      display: block;
+      width: 100%;
+      min-height: 81px;
+      margin-bottom: 12px;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #242321;
+      color: #fff;
+      text-align: left;
+    }
+
+    .report-record-top, .report-record-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .report-record-top { font-size: 16px; }
+    .report-record-top .positive { color: #29e0a0; }
+    .report-record-top .negative { color: #ff5146; }
+    .report-record-bottom { margin-top: 10px; color: #928d86; font-size: 13px; }
+    .report-record-order { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 205px; }
+    .report-copy { color: #b4afa7; font-size: 18px; }
+
+    .report-empty {
+      display: none;
+      padding: 28px 12px;
+      color: #938e86;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .report-total {
+      display: grid;
+      gap: 18px;
+      padding: 18px 18px 22px;
+      border-top: 1px solid #2f2d2a;
+      background: linear-gradient(90deg, #211f1d, #151515);
+    }
+
+    .report-total-row { display: flex; justify-content: space-between; color: #fff; font-size: 15px; }
+    .report-total-row .deposit { color: #29e0a0; }
+    .report-total-row .withdraw { color: #ff5146; }
+    .report-total-row .reward { color: #ffae27; }
+
     .message-tabs {
       height: 58px;
       display: grid;
@@ -3711,7 +4095,7 @@
       <div>
         <div class="client-kicker">MANUAL DEPOSIT · CLIENT FLOW</div>
         <h1>客户端交互原型</h1>
-        <p>用于评审玩家侧首页、站内信、弹窗领取、加倍奖励、充值后领取与领取结果页。页面聚焦流程演示，不代表后台真实菜单入口。</p>
+        <p>用于评审玩家侧首页、站内信、弹窗领取、加倍奖励、充值后领取、领取结果页与稽核记录查询。页面聚焦流程演示，不代表后台真实菜单入口。</p>
       </div>
       <nav class="client-standalone-links" aria-label="相关文件">
         <a href="./backend-prototype.html">后台交互 HTML</a>
@@ -3746,6 +4130,10 @@
                 <div class="client-scenario-group">恢复与队列</div>
                 <button class="client-scenario" type="button" data-client-scenario="pendingQueue">刷新/登录-待处理优惠队列</button>
                 <button class="client-scenario" type="button" data-client-scenario="depositPage">充值页面</button>
+                <div class="client-scenario-group">稽核记录</div>
+                <button class="client-scenario" type="button" data-client-scenario="auditRecords">稽核记录查询</button>
+                <div class="client-scenario-group">报表明细</div>
+                <button class="client-scenario" type="button" data-client-scenario="reportDetails">报表明细查询</button>
               </div>
               <div class="client-note">
                 <ul class="client-rule-list">
@@ -3754,6 +4142,8 @@
                   <li>充值后领取满足条件后统一展示领取结果页；玩家点击 Reivindicar Bônus 后才发站内信，并写入帐变和稽核记录。</li>
                   <li>领取结果页未点击领取时，该优惠继续保持待领取状态，刷新首页或下次登录仍展示，直到成功领取。</li>
                   <li>累计充值首次点击 Desistir 只展示确认提示；二次点击 Desistir 才视为放弃。</li>
+                  <li><strong>稽核记录查询：</strong>从 Saque（提现）页右上角记录图标进入，切换至 Registros de Auditoria（稽核记录）后可查看对应 Detalhes da Auditoria（稽核详情）。</li>
+                  <li><strong>报表明细查询：</strong>点击首页 Perfil 中的 Relatórios（报表）进入账户变更明细；默认展示 Hoje（今日）、Todos Tipos（全部类型）、Todos Detalhes（全部明细）数据，可展开筛选并同步更新列表及底部总存款、总提款、已领取优惠总额。</li>
                 </ul>
               </div>
             </aside>
@@ -3806,7 +4196,7 @@
                     <button class="client-nav-item active" type="button" data-client-open="clientHomeView"><span class="client-nav-icon">⌂</span><span>Início</span></button>
                     <button class="client-nav-item" type="button"><span class="client-nav-icon">🎁</span><span>Promoção</span></button>
                     <button class="client-nav-item" type="button"><span class="client-nav-icon">♚</span><span>convidar</span></button>
-                    <button class="client-nav-item" type="button" data-client-open="clientDepositView"><span class="client-nav-icon">▰</span><span>Saque</span></button>
+                    <button class="client-nav-item" type="button" data-client-open="clientWithdrawView"><span class="client-nav-icon">▰</span><span>Saque</span></button>
                     <button class="client-nav-item" type="button" data-client-open="clientProfileView"><span class="client-nav-icon">●</span><span>Perfil</span></button>
                   </div>
                 </section>
@@ -3823,7 +4213,7 @@
                         <button class="client-mail-btn" type="button" data-client-open="clientMessagesView">✉<span class="client-badge" id="clientProfileBadge">8</span></button>
                       </div>
                       <div class="profile-actions">
-                        <button class="profile-action" type="button">Saque</button>
+                        <button class="profile-action" type="button" data-client-open="clientWithdrawView">Saque</button>
                         <button class="profile-action deposit" type="button" data-client-open="clientDepositView">Depósito</button>
                       </div>
                     </div>
@@ -3832,7 +4222,7 @@
                       <div class="vip-progress"><span></span></div>
                     </div>
                     <div class="profile-menu">
-                      <div class="profile-menu-row"><span>▤</span><span>Relatórios</span><span>›</span></div>
+                      <button class="profile-menu-row profile-menu-button" type="button" data-client-open="clientReportView"><span>▤</span><span>Relatórios</span><span>›</span></button>
                       <div class="profile-menu-row"><span>◎</span><span>Convidar</span><span>›</span></div>
                       <div class="profile-menu-row"><span>$</span><span>Código de Resgate</span><span>›</span></div>
                       <div class="profile-menu-row"><span>?</span><span>Suporte</span><span>›</span></div>
@@ -3844,7 +4234,7 @@
                     <button class="client-nav-item" type="button" data-client-open="clientHomeView"><span class="client-nav-icon">⌂</span><span>Início</span></button>
                     <button class="client-nav-item" type="button"><span class="client-nav-icon">🎁</span><span>Promoção</span></button>
                     <button class="client-nav-item" type="button"><span class="client-nav-icon">♚</span><span>convidar</span></button>
-                    <button class="client-nav-item" type="button" data-client-open="clientDepositView"><span class="client-nav-icon">▰</span><span>Saque</span></button>
+                    <button class="client-nav-item" type="button" data-client-open="clientWithdrawView"><span class="client-nav-icon">▰</span><span>Saque</span></button>
                     <button class="client-nav-item active" type="button"><span class="client-nav-icon">●</span><span>Perfil</span></button>
                   </div>
                 </section>
@@ -3897,6 +4287,130 @@
                   <div class="detail-body">
                     <h2 id="clientDetailTitle">Notificação de Depósito Bem-sucedida</h2>
                     <p id="clientDetailBody">Seu depósito foi bem-sucedido, 1,01 foi creditado em sua conta,dos quais 0,01 é o valor do desconto de depósito</p>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientReportView">
+                  <div class="client-header">
+                    <button class="client-back" type="button" data-client-open="clientProfileView">‹</button>
+                    <span>Relatórios</span>
+                    <span></span>
+                  </div>
+                  <div class="client-report-scroll">
+                    <nav class="report-top-tabs" aria-label="Relatórios">
+                      <button class="report-top-tab active" type="button">Detalhes Da Conta</button>
+                      <button class="report-top-tab" type="button">Recordes De Apostas</button>
+                      <button class="report-top-tab" type="button">Aposta Esportiva</button>
+                      <button class="report-top-tab" type="button">Relatórios</button>
+                    </nav>
+                    <div class="report-filter-bar" id="clientReportFilters">
+                      <button class="report-filter-btn" type="button" data-report-filter="date"><span id="reportDateLabel">Hoje</span><i class="caret"></i></button>
+                      <button class="report-filter-btn" type="button" data-report-filter="type"><span id="reportTypeLabel">Todos Tipos</span><i class="caret"></i></button>
+                      <button class="report-filter-btn" type="button" data-report-filter="detail"><span id="reportDetailLabel">Todos Detalhes</span><i class="caret"></i></button>
+                      <div class="report-filter-menu" data-report-menu="date">
+                        <button class="report-filter-option active" type="button" data-report-date="Hoje">Hoje</button>
+                        <button class="report-filter-option" type="button" data-report-date="Últimos 3 Dias">Últimos 3 Dias</button>
+                        <button class="report-filter-option" type="button" data-report-date="Últimos 5 Dias">Últimos 5 Dias</button>
+                        <button class="report-filter-option" type="button" data-report-date="Últimos 7 Dias">Últimos 7 Dias</button>
+                      </div>
+                      <div class="report-filter-menu" data-report-menu="type">
+                        <button class="report-filter-option active" type="button" data-report-type="all">Todos Tipos</button>
+                        <button class="report-filter-option" type="button" data-report-type="deposit">Depósito de<br>Membro</button>
+                        <button class="report-filter-option" type="button" data-report-type="withdraw">Saque</button>
+                        <button class="report-filter-option" type="button" data-report-type="events">Eventos</button>
+                        <button class="report-filter-option" type="button" data-report-type="funds">Troca de<br>fundos</button>
+                        <button class="report-filter-option" type="button" data-report-type="safe">Cofre box</button>
+                        <button class="report-filter-option" type="button" data-report-type="commission">Comissão</button>
+                        <button class="report-filter-option" type="button" data-report-type="tasks">Tarefas</button>
+                      </div>
+                      <div class="report-filter-menu" data-report-menu="detail">
+                        <button class="report-filter-option active" type="button" data-report-detail="Todos Detalhes">Todos<br>Detalhes</button>
+                      </div>
+                    </div>
+                    <div class="report-list" id="clientReportList"></div>
+                    <div class="report-empty" id="clientReportEmpty">Nenhum registro encontrado.</div>
+                    <div class="report-total">
+                      <div class="report-total-row"><span>Depósito Total:</span><strong class="deposit" id="reportDepositTotal">1,00</strong></div>
+                      <div class="report-total-row"><span>Retirada Total:</span><strong class="withdraw" id="reportWithdrawTotal">1,00</strong></div>
+                      <div class="report-total-row"><span>Total de Descontos Recebidos:</span><strong class="reward" id="reportRewardTotal">2,50</strong></div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientWithdrawView">
+                  <div class="client-header">
+                    <button class="client-back" type="button" data-client-open="clientProfileView">‹</button>
+                    <span>Saque</span>
+                    <button class="client-header-icon" type="button" data-client-open="clientAuditRecordsView" data-audit-open="withdraw" aria-label="Abrir registros">▧</button>
+                  </div>
+                  <div class="client-withdraw-scroll">
+                    <div class="withdraw-balance">Conta Saldo <strong>R$ 500,67</strong></div>
+                    <button class="withdraw-pix" type="button">PIX</button>
+                    <div class="withdraw-section">
+                      <h4>Valor do Saque</h4>
+                      <div class="withdraw-presets">
+                        <button type="button">20,00</button><button type="button">50,00</button><button type="button">100,00</button>
+                        <button type="button">1.000,00</button><button type="button">5.000,00</button><button type="button">10.000,00</button>
+                        <button type="button">30.000,00</button><button type="button">50.000,00</button>
+                      </div>
+                      <input class="withdraw-input" value="20,00 - 50.000,00" aria-label="Valor do Saque" readonly>
+                    </div>
+                    <div class="withdraw-section">
+                      <h4>Método de Retirada</h4>
+                      <div class="withdraw-methods"><button type="button">CPF</button><button type="button">PHONE</button></div>
+                      <div class="withdraw-field"><label>Nome</label><span>Por favor, insira seu nome</span></div>
+                      <div class="withdraw-field"><label>CPF ID</label><span>Por favor, insira o CPF</span></div>
+                      <button class="withdraw-submit" type="button">Retirar Agora</button>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientAuditRecordsView">
+                  <div class="client-header">
+                    <button class="client-back" type="button" data-client-open="clientWithdrawView">‹</button>
+                    <span>Registros</span>
+                    <span></span>
+                  </div>
+                  <div class="audit-tabs" aria-label="Registros">
+                    <button class="audit-tab active" type="button" data-audit-tab="withdraw">Registro de Saques</button>
+                    <button class="audit-tab" type="button" data-audit-tab="audit">Registros de Auditoria</button>
+                  </div>
+                  <div class="client-audit-scroll">
+                    <section class="audit-panel" data-audit-panel="withdraw">
+                      <div class="withdraw-record-empty">Nenhum registro de saque disponível.</div>
+                    </section>
+                    <section class="audit-panel hidden" data-audit-panel="audit">
+                      <div class="audit-summary"><span>Valor a ser auditado: <strong>5,50</strong></span><select class="audit-filter" aria-label="Filtro"><option>Todos</option></select></div>
+                      <div class="audit-list">
+                        <button class="audit-item" type="button" data-client-open="clientAuditDetailView"><span class="audit-item-top"><span>Ofertas promocionais</span><span>2,00</span></span><span class="audit-item-bottom"><span>2026-08-13 03:20:24</span><span class="audit-status pending">Não iniciado</span></span></button>
+                        <button class="audit-item" type="button" data-client-open="clientAuditDetailView"><span class="audit-item-top"><span>Depósito de Membro</span><span>1,00</span></span><span class="audit-item-bottom"><span>2026-08-13 03:19:51</span><span class="audit-status pending">Não iniciado</span></span></button>
+                        <button class="audit-item" type="button" data-client-open="clientAuditDetailView"><span class="audit-item-top"><span>Ofertas promocionais</span><span>0,50</span></span><span class="audit-item-bottom"><span>2026-08-13 03:19:51</span><span class="audit-status pending">Não iniciado</span></span></button>
+                        <button class="audit-item" type="button" data-client-open="clientAuditDetailView"><span class="audit-item-top"><span>Ofertas promocionais</span><span>1,00</span></span><span class="audit-item-bottom"><span>2026-08-13 02:44:48</span><span class="audit-status pending">Não iniciado</span></span></button>
+                        <button class="audit-item" type="button" data-client-open="clientAuditDetailView"><span class="audit-item-top"><span>Ofertas promocionais</span><span>0,00</span></span><span class="audit-item-bottom"><span>2026-08-10 09:13:22</span><span class="audit-status done">Concluído</span></span></button>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+
+                <section class="client-view hidden" id="clientAuditDetailView">
+                  <div class="client-header">
+                    <button class="client-back" type="button" data-client-open="clientAuditRecordsView" data-audit-open="audit">‹</button>
+                    <span>Detalhes da Auditoria</span>
+                    <span></span>
+                  </div>
+                  <div class="client-audit-detail-scroll">
+                    <div class="audit-detail-card">
+                      <div class="audit-detail-row"><span>Tipo de Transação</span><span>Ofertas promocionais</span></div>
+                      <div class="audit-detail-row"><span>Nome do Evento</span><span>-</span></div>
+                      <div class="audit-detail-row"><span>Status da Auditoria</span><span class="audit-pending">Não iniciado</span></div>
+                      <div class="audit-detail-row"><span>Valor da Transação</span><span>1,00</span></div>
+                      <div class="audit-detail-row"><span>Multiplicador de Auditoria</span><span>2</span></div>
+                      <div class="audit-detail-row"><span>Valor da Auditoria</span><span>2,00</span></div>
+                      <div class="audit-detail-row"><span>Valor não Auditado</span><span>2,00</span></div>
+                      <div class="audit-detail-row"><span>Valor Auditado</span><span>0,00</span></div>
+                      <div class="audit-detail-row"><span>Tempo de Criação</span><span>2026-08-13 03:20:24</span></div>
+                      <div class="audit-detail-row"><span>Tempo de Conclusão</span><span>-</span></div>
+                    </div>
                   </div>
                 </section>
 
@@ -4030,6 +4544,9 @@
                   <tr><td>充值后领取-累计充值</td><td>首页展示累计充值活动弹窗，首次点击 Desistir 不直接放弃，而是展示累计充值确认提示；只有在确认提示中点击 Desistir 才结束该优惠并同步后台订单状态为放弃。满足累计充值条件后同样展示领取结果页，点击领取后才生成站内信、帐变和稽核记录。</td></tr>
                   <tr><td>充值后领取-领取结果页</td><td>所有需要充值后的人工优惠（含充值后领取与需要充值触发的加倍奖励）最终统一展示该弹窗；金额为后台返回的实际优惠彩金。玩家点击 Reivindicar Bônus 后才完成成功领取、帐变和稽核记录流转；未点击领取按钮时保持待领取，下次登录或刷新首页继续展示。</td></tr>
                   <tr><td>刷新/登录-待处理优惠队列</td><td>模拟存在多条未完成优惠：先展示创建时间最早的弹窗领取加倍优惠；弹窗领取未点击 Continue reivindicando，或充值后领取未点击 Desistir 时，优惠保持并在下次登录/刷新首页继续展示，处理完当前优惠后再展示下一条。</td></tr>
+                  <tr><td>稽核记录查询（独立交互页面）</td><td><strong>路径：</strong>点击 Saque（提现）进入提现页，点击右上角记录图标进入记录中心；默认展示 Registro de Saques（提现记录），点击 Registros de Auditoria（稽核记录）切换至稽核列表；点击任一记录打开 Detalhes da Auditoria（稽核详情）。</td></tr>
+                  <tr><td>稽核记录中文翻译</td><td><strong>列表：</strong>Valor a ser auditado＝待稽核金额，Todos＝全部，Ofertas promocionais＝优惠活动，Depósito de Membro＝会员存款，Não iniciado＝未开始，Concluído＝已完成。<br><strong>详情：</strong>Tipo de Transação＝交易类型，Nome do Evento＝活动名称，Status da Auditoria＝稽核状态，Valor da Transação＝交易金额，Multiplicador de Auditoria＝稽核倍数，Valor da Auditoria＝稽核金额，Valor não Auditado＝未稽核金额，Valor Auditado＝已稽核金额，Tempo de Criação＝创建时间，Tempo de Conclusão＝完成时间。</td></tr>
+                  <tr><td>报表明细查询</td><td><strong>路径：</strong>点击 Perfil（个人中心）中的 Relatórios（报表）进入 Detalhes Da Conta（账户明细）。<strong>默认条件：</strong>Hoje（今日）/ Todos Tipos（全部类型）/ Todos Detalhes（全部明细）。日期可选择 Últimos 3 Dias、Últimos 5 Dias、Últimos 7 Dias；类型可选择 Depósito de Membro（会员存款）、Saque（提款）、Eventos（活动）等。切换类型后，账户明细列表与底部 Depósito Total（总存款）、Retirada Total（总提款）、Total de Descontos Recebidos（已领取优惠总额）按筛选结果同步更新。</td></tr>
                 </tbody>
               </table>
             </aside>
@@ -4071,6 +4588,18 @@
   const clientMessageBadge = root.querySelector("#clientMessageBadge");
   const clientProfileBadge = root.querySelector("#clientProfileBadge");
   const clientDepositAmount = root.querySelector("#clientDepositAmount");
+  const auditTabs = root.querySelectorAll("[data-audit-tab]");
+  const auditPanels = root.querySelectorAll("[data-audit-panel]");
+  const reportFilterButtons = root.querySelectorAll("[data-report-filter]");
+  const reportFilterMenus = root.querySelectorAll("[data-report-menu]");
+  const reportList = root.querySelector("#clientReportList");
+  const reportEmpty = root.querySelector("#clientReportEmpty");
+  const reportDateLabel = root.querySelector("#reportDateLabel");
+  const reportTypeLabel = root.querySelector("#reportTypeLabel");
+  const reportDetailLabel = root.querySelector("#reportDetailLabel");
+  const reportDepositTotal = root.querySelector("#reportDepositTotal");
+  const reportWithdrawTotal = root.querySelector("#reportWithdrawTotal");
+  const reportRewardTotal = root.querySelector("#reportRewardTotal");
   let clientRewardHasMultiplier = false;
   let clientRewardStep = "ready";
   let clientMultiplierMode = "simple";
@@ -4158,6 +4687,41 @@
     if (clientRechargeRewardOverlay) clientRechargeRewardOverlay.classList.add("hidden");
     if (clientRechargeResultOverlay) clientRechargeResultOverlay.classList.add("hidden");
     if (clientCumulativeConfirmOverlay) clientCumulativeConfirmOverlay.classList.add("hidden");
+  };
+
+  const setAuditTab = (tab = "withdraw") => {
+    auditTabs.forEach((button) => button.classList.toggle("active", button.dataset.auditTab === tab));
+    auditPanels.forEach((panel) => panel.classList.toggle("hidden", panel.dataset.auditPanel !== tab));
+  };
+
+  const reportRecords = [
+    { type: "events", title: "Ofertas Manuais", amount: "+1,00", tone: "positive", time: "2026-08-13 03:20:23", order: "CJ17866020236741392153", deposit: 0, withdraw: 0, reward: 1 },
+    { type: "withdraw", title: "Retirada de Manual", amount: "-1,00", tone: "negative", time: "2026-08-13 03:20:03", order: "TX17866020038586782008", deposit: 0, withdraw: 1, reward: 0 },
+    { type: "events", title: "Ofertas de Depósito Manual", amount: "+0,50", tone: "positive", time: "2026-08-13 03:19:51", order: "CZ17866019916185878941", deposit: 0, withdraw: 0, reward: .5 },
+    { type: "deposit", title: "Depósito Manual", amount: "+1,00", tone: "positive", time: "2026-08-13 03:19:51", order: "CZ17866019916185878941", deposit: 1, withdraw: 0, reward: 0 },
+    { type: "events", title: "Ofertas Manuais", amount: "+1,00", tone: "positive", time: "2026-08-13 02:44:48", order: "CJ17865998881867218524", deposit: 0, withdraw: 0, reward: 1 }
+  ];
+  const reportTypeLabels = { all: "Todos Tipos", deposit: "Depósito de Membro", withdraw: "Saque", events: "Eventos", funds: "Troca de fundos", safe: "Cofre box", commission: "Comissão", tasks: "Tarefas" };
+  let reportType = "all";
+  let reportDate = "Hoje";
+  let reportDetail = "Todos Detalhes";
+  const formatReportAmount = (value) => value.toFixed(2).replace(".", ",");
+  const closeReportMenus = () => {
+    reportFilterMenus.forEach((menu) => menu.classList.remove("open"));
+    reportFilterButtons.forEach((button) => button.classList.remove("is-open"));
+  };
+  const renderReport = () => {
+    if (!reportList) return;
+    const records = reportType === "all" ? reportRecords : reportRecords.filter((record) => record.type === reportType);
+    reportList.innerHTML = records.map((record) => '<article class="report-record"><div class="report-record-top"><span>' + record.title + '</span><strong class="' + record.tone + '">' + record.amount + '</strong></div><div class="report-record-bottom"><span>' + record.time + '</span><span class="report-record-order">' + record.order + ' <i class="report-copy">▢</i></span></div></article>').join("");
+    if (reportEmpty) reportEmpty.style.display = records.length ? "none" : "block";
+    const totals = records.reduce((sum, record) => ({ deposit: sum.deposit + record.deposit, withdraw: sum.withdraw + record.withdraw, reward: sum.reward + record.reward }), { deposit: 0, withdraw: 0, reward: 0 });
+    if (reportDepositTotal) reportDepositTotal.textContent = formatReportAmount(totals.deposit);
+    if (reportWithdrawTotal) reportWithdrawTotal.textContent = formatReportAmount(totals.withdraw);
+    if (reportRewardTotal) reportRewardTotal.textContent = formatReportAmount(totals.reward);
+    if (reportDateLabel) reportDateLabel.textContent = reportDate;
+    if (reportTypeLabel) reportTypeLabel.textContent = reportTypeLabels[reportType];
+    if (reportDetailLabel) reportDetailLabel.textContent = reportDetail;
   };
 
   const setClientMultiplierMode = (mode) => {
@@ -4261,6 +4825,15 @@
     } else if (scenario === "depositPage") {
       clientDepositSource = "normal";
       showClientView("clientDepositView");
+    } else if (scenario === "auditRecords") {
+      setAuditTab("audit");
+      showClientView("clientAuditRecordsView");
+    } else if (scenario === "reportDetails") {
+      reportType = "all";
+      reportDate = "Hoje";
+      reportDetail = "Todos Detalhes";
+      renderReport();
+      showClientView("clientReportView");
     } else {
       clientDepositSource = "normal";
       showClientView("clientHomeView");
@@ -4274,9 +4847,42 @@
   root.querySelectorAll("[data-client-open]").forEach((button) => {
     button.addEventListener("click", () => {
       if (button.dataset.clientOpen === "clientDepositView") clientDepositSource = "normal";
+      if (button.dataset.clientOpen === "clientAuditRecordsView") setAuditTab(button.dataset.auditOpen || "withdraw");
+      if (button.dataset.clientOpen === "clientReportView") { closeReportMenus(); renderReport(); }
       showClientView(button.dataset.clientOpen);
     });
   });
+
+  auditTabs.forEach((button) => {
+    button.addEventListener("click", () => setAuditTab(button.dataset.auditTab));
+  });
+
+  reportFilterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.dataset.reportFilter;
+      const wasOpen = root.querySelector('[data-report-menu="' + target + '"]')?.classList.contains("open");
+      closeReportMenus();
+      if (!wasOpen) {
+        root.querySelector('[data-report-menu="' + target + '"]')?.classList.add("open");
+        button.classList.add("is-open");
+      }
+    });
+  });
+  root.querySelectorAll("[data-report-date]").forEach((button) => button.addEventListener("click", () => {
+    reportDate = button.dataset.reportDate;
+    root.querySelectorAll("[data-report-date]").forEach((item) => item.classList.toggle("active", item === button));
+    closeReportMenus(); renderReport();
+  }));
+  root.querySelectorAll("[data-report-type]").forEach((button) => button.addEventListener("click", () => {
+    reportType = button.dataset.reportType;
+    root.querySelectorAll("[data-report-type]").forEach((item) => item.classList.toggle("active", item === button));
+    closeReportMenus(); renderReport();
+  }));
+  root.querySelectorAll("[data-report-detail]").forEach((button) => button.addEventListener("click", () => {
+    reportDetail = button.dataset.reportDetail;
+    root.querySelectorAll("[data-report-detail]").forEach((item) => item.classList.toggle("active", item === button));
+    closeReportMenus(); renderReport();
+  }));
 
   root.querySelectorAll("[data-client-detail]").forEach((card) => {
     card.addEventListener("click", () => {
@@ -4425,6 +5031,7 @@
   }
 
   setClientMessage("deposit");
+  renderReport();
   showClientView("clientHomeView");
 })();
 </script>
