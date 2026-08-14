@@ -5861,6 +5861,11 @@
       const batchSaveBtn = root.querySelector("#batchSaveBtn");
       if (batchSaveBtn) {
         batchSaveBtn.addEventListener("click", () => {
+          const selectedBatchLevels = root.querySelectorAll("#batchPanel input.mini-check:checked");
+          if (!selectedBatchLevels.length) {
+            showToast("请输入会员层级");
+            return;
+          }
           const errorMessage = validateAmountInput(root.querySelector("#batchAmount"), backendAmountLimits.batchReward, "批量人工优惠单笔金额");
           if (errorMessage) {
             showToast(errorMessage);
