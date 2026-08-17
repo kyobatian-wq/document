@@ -1389,6 +1389,12 @@
       color: #ff9900;
     }
 
+    .batch-link.disabled {
+      color: #a8b0bc;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
     .reward-record-panel {
       width: calc(100vw - 248px);
       max-width: 1780px;
@@ -4090,7 +4096,7 @@
                       <td class="status-pending">准备</td>
                       <td>-</td>
                       <td>Cuculus888</td>
-                      <td><span class="batch-link success" data-modal-open="executeConfirmModal">开始执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span></td>
+                      <td><span class="batch-link success" data-modal-open="executeConfirmModal">开始执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link disabled" aria-disabled="true">导出数据</span></td>
                     </tr>
                     <tr data-batch-status="已完成">
                       <td>2026-07-21 00:04:03</td>
@@ -4138,7 +4144,7 @@
                       <td class="progress-purple">运行中</td>
                       <td>1</td>
                       <td>Cuculus888</td>
-                      <td><span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link warning" data-modal-open="pauseConfirmModal">暂停</span><span class="batch-link">导出数据</span></td>
+                      <td><span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link warning" data-modal-open="pauseConfirmModal">暂停</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link disabled" aria-disabled="true">导出数据</span></td>
                     </tr>
                     <tr data-batch-status="暂停">
                       <td>2026-07-21 04:56:26</td>
@@ -4150,7 +4156,7 @@
                       <td class="status-pending">暂停</td>
                       <td>1</td>
                       <td>Cuculus888</td>
-                      <td><span class="batch-link success" data-modal-open="continueConfirmModal">继续执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span></td>
+                      <td><span class="batch-link success" data-modal-open="continueConfirmModal">继续执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link disabled" aria-disabled="true">导出数据</span></td>
                     </tr>
                     <tr data-batch-status="导入中">
                       <td>2026-07-21 04:54:48</td>
@@ -4162,7 +4168,7 @@
                       <td class="progress-purple">导入中</td>
                       <td>-</td>
                       <td>Cuculus888</td>
-                      <td><span class="batch-link">导出数据</span></td>
+                      <td><span class="batch-link disabled" aria-disabled="true">导出数据</span></td>
                     </tr>
                     <tr data-batch-status="导入失败">
                       <td>2026-07-21 04:53:19</td>
@@ -4174,7 +4180,7 @@
                       <td class="status-danger">导入失败</td>
                       <td>-</td>
                       <td>Cuculus888</td>
-                      <td><span class="batch-link">导出数据</span></td>
+                      <td><span class="batch-link disabled" aria-disabled="true">导出数据</span></td>
                     </tr>
                     <tr data-batch-status="作废">
                       <td>2026-07-21 04:50:59</td>
@@ -4182,7 +4188,7 @@
                       <td>批量导入</td>
                       <td><a href="#" data-modal-open="batchProgressModal">点击查看</a></td>
                       <td><a href="#" data-modal-open="rewardConfigModal">点击查看</a></td>
-                      <td class="progress-purple">0/0</td>
+                      <td class="progress-purple">544/2086</td>
                       <td class="status-danger">作废</td>
                       <td>0</td>
                       <td>Cuculus888</td>
@@ -5164,7 +5170,7 @@
                 <th>打码量</th>
                 <th>领取状态</th>
                 <th>领取时间</th>
-                <th>状态</th>
+                <th>子单执行状态</th>
                 <th>APP端备注</th>
                 <th>后台备注</th>
               </tr>
@@ -5979,12 +5985,13 @@
       const setBatchRowActions = (row, status) => {
         if (!row || !row.cells[9]) return;
         const actions = {
-          "准备": '<span class="batch-link success" data-modal-open="executeConfirmModal">开始执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span>',
-          "运行中": '<span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link warning" data-modal-open="pauseConfirmModal">暂停</span><span class="batch-link">导出数据</span>',
-          "暂停": '<span class="batch-link success" data-modal-open="continueConfirmModal">继续执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span>',
-          "已完成": '<span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span>'
+          "准备": '<span class="batch-link success" data-modal-open="executeConfirmModal">开始执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link disabled" aria-disabled="true">导出数据</span>',
+          "运行中": '<span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link warning" data-modal-open="pauseConfirmModal">暂停</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link disabled" aria-disabled="true">导出数据</span>',
+          "暂停": '<span class="batch-link success" data-modal-open="continueConfirmModal">继续执行</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link disabled" aria-disabled="true">导出数据</span>',
+          "已完成": '<span class="batch-link" data-modal-open="batchProgressModal">查看进度</span><span class="batch-link danger" data-modal-open="voidConfirmModal">作废</span><span class="batch-link">导出数据</span>',
+          "作废": '<span class="batch-link">导出数据</span>'
         };
-        row.cells[9].innerHTML = actions[status] || '<span class="batch-link">导出数据</span>';
+        row.cells[9].innerHTML = actions[status] || '<span class="batch-link disabled" aria-disabled="true">导出数据</span>';
       };
 
       const setBatchRowStatus = (row, status, progressText) => {
@@ -6015,7 +6022,8 @@
       };
 
       const markBatchRowVoided = (row) => {
-        setBatchRowStatus(row, "作废", "0/0");
+        const currentProgress = row && row.cells[5] ? row.cells[5].textContent : "0/0";
+        setBatchRowStatus(row, "作废", currentProgress);
       };
 
       const templateRateMap = {
