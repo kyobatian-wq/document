@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>提现管理-提现等级配置原型</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: #2f3a45;
+      font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: #eef2f5;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 168px 1fr;
+    }
+
+    .sidebar {
+      background: #001f35;
+      color: #aebccd;
+      overflow: hidden;
+    }
+
+    .brand {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+    }
+
+    .brand-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      color: #ffd15a;
+      background: linear-gradient(135deg, #161b22, #513200);
+      font-size: 11px;
+      letter-spacing: 0;
+    }
+
+    .nav-section {
+      padding: 6px 0;
+    }
+
+    .nav-item,
+    .submenu-item {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 11px;
+      white-space: nowrap;
+    }
+
+    .nav-icon {
+      width: 14px;
+      text-align: center;
+      opacity: .85;
+      font-size: 13px;
+    }
+
+    .nav-item .chevron {
+      margin-left: auto;
+      font-size: 12px;
+    }
+
+    .nav-item.expanded {
+      color: #fff;
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .submenu-item {
+      padding-left: 30px;
+      color: #b7c5d5;
+      background: #0b2b45;
+    }
+
+    .submenu-item.active {
+      color: #fff;
+      font-weight: 600;
+      background: #1470c8;
+    }
+
+    .main {
+      min-width: 980px;
+      overflow: auto;
+    }
+
+    .topbar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px 0 10px;
+      background: #fff;
+      border-bottom: 1px solid #e7e9ee;
+    }
+
+    .crumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #8b96a3;
+    }
+
+    .hamburger {
+      color: #25313f;
+      font-size: 18px;
+    }
+
+    .right-tools {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #637083;
+      font-size: 12px;
+    }
+
+    .notice {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .notice-badge {
+      position: absolute;
+      top: -9px;
+      right: -10px;
+      min-width: 20px;
+      height: 18px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: #ff4d4f;
+      color: #fff;
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .tabbar {
+      height: 32px;
+      display: flex;
+      align-items: end;
+      gap: 2px;
+      padding-left: 72px;
+      background: #fff;
+      border-bottom: 1px solid #e8ebf0;
+    }
+
+    .page-tab {
+      height: 25px;
+      min-width: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 12px;
+      border: 1px solid #e1e5ea;
+      border-bottom: 0;
+      border-radius: 2px 2px 0 0;
+      color: #687483;
+      background: #fbfcfd;
+      font-size: 12px;
+    }
+
+    .page-tab.active {
+      color: #fff;
+      background: #1470c8;
+      border-color: #1470c8;
+    }
+
+    .content {
+      margin: 14px 12px 0;
+      padding: 12px 12px 24px;
+      min-height: calc(100vh - 84px);
+      background: #fff;
+    }
+
+    .config-tabs {
+      height: 48px;
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid #eef0f3;
+      margin-bottom: 12px;
+    }
+
+    .config-tab {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      border: 1px solid #e6eaf0;
+      border-bottom: 0;
+      color: #333f4d;
+      background: #fff;
+      margin-right: 2px;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .config-tab.active {
+      color: #1780ee;
+      font-weight: 600;
+    }
+
+    .mode-row {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 2px;
+      color: #344052;
+    }
+
+    .mode-label {
+      color: #6f7a87;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #d7e6f8;
+      border-radius: 3px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .mode-option {
+      min-width: 132px;
+      height: 32px;
+      border: 0;
+      border-right: 1px solid #d7e6f8;
+      background: #fff;
+      color: #415064;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .mode-option:last-child {
+      border-right: 0;
+    }
+
+    .mode-option.active {
+      color: #fff;
+      background: #1677d2;
+      font-weight: 600;
+    }
+
+    .mode-option:not(.active):hover {
+      color: #1677d2;
+      background: #f4f9ff;
+    }
+
+    .mode-status {
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      border: 1px solid #d9eafa;
+      border-radius: 2px;
+      color: #35617f;
+      background: #f4faff;
+      font-size: 12px;
+    }
+
+    .effective-note {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 2px;
+      padding: 7px 10px;
+      border: 1px solid #d9eafa;
+      border-radius: 3px;
+      color: #35617f;
+      background: #f4faff;
+    }
+
+    .use-button {
+      height: 30px;
+      min-width: 112px;
+      border: 1px solid #1677d2;
+      border-radius: 3px;
+      color: #fff;
+      background: #1677d2;
+      font: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .use-button:hover {
+      background: #0d69bd;
+    }
+
+    .use-button:disabled {
+      border-color: #d7dce3;
+      color: #99a3af;
+      background: #f4f6f8;
+      cursor: not-allowed;
+    }
+
+    .table-head {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #2f3a45;
+      gap: 13px;
+    }
+
+    .tool-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-grid;
+      place-items: center;
+      color: #2f3a45;
+      font-size: 17px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 1px solid #edf0f4;
+      color: #2c3b4c;
+      background: #fff;
+    }
+
+    .data-table th,
+    .data-table td {
+      height: 38px;
+      padding: 0 12px;
+      text-align: center;
+      border-right: 1px solid #edf0f4;
+      border-bottom: 1px solid #edf0f4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .data-table th {
+      height: 40px;
+      color: #27313e;
+      background: #fafafa;
+      font-weight: 600;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .data-table tbody tr:hover {
+      background: #f4f9ff;
+    }
+
+    .col-small {
+      width: 170px;
+    }
+
+    .col-mid {
+      width: 235px;
+    }
+
+    .col-wide {
+      width: 330px;
+    }
+
+    .edit-mark {
+      margin-left: 4px;
+      color: #4d5865;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .cell-edit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .cell-edit input {
+      width: min(240px, 68%);
+      height: 23px;
+      border: 1px solid #4da3ff;
+      border-radius: 2px;
+      text-align: center;
+      color: #2d3a48;
+      outline: 0;
+      box-shadow: 0 0 0 1px rgba(77, 163, 255, .16);
+      background: #fff;
+    }
+
+    .row-action {
+      border: 0;
+      background: transparent;
+      color: #485564;
+      font-size: 19px;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .row-action:hover {
+      color: #1677ff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .hint-line {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      color: #7e8997;
+      font-size: 12px;
+    }
+
+    .prd-section {
+      margin-top: 26px;
+      border: 1px solid #e6eaf0;
+      background: #fff;
+    }
+
+    .prd-title {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border-bottom: 1px solid #e6eaf0;
+      color: #27313e;
+      background: #fafafa;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .prd-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+    }
+
+    .prd-block {
+      min-height: 130px;
+      padding: 14px 16px 16px;
+      border-right: 1px solid #edf0f4;
+      border-bottom: 1px solid #edf0f4;
+    }
+
+    .prd-block:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .prd-block h3 {
+      margin: 0 0 10px;
+      color: #2d3a48;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .prd-block ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #4d5b6c;
+    }
+
+    .prd-block li {
+      margin: 5px 0;
+    }
+
+    .prd-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      color: #4d5b6c;
+    }
+
+    .prd-table th,
+    .prd-table td {
+      height: 32px;
+      padding: 0 10px;
+      text-align: left;
+      border: 1px solid #edf0f4;
+      background: #fff;
+    }
+
+    .prd-table th {
+      color: #2d3a48;
+      background: #fafafa;
+      font-weight: 600;
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(16, 28, 40, .34);
+      z-index: 20;
+    }
+
+    .modal-mask.hidden {
+      display: none;
+    }
+
+    .confirm-modal {
+      width: 420px;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .18);
+      overflow: hidden;
+    }
+
+    .confirm-title {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      border-bottom: 1px solid #edf0f4;
+      font-weight: 600;
+      color: #27313e;
+    }
+
+    .confirm-body {
+      padding: 22px 18px;
+      color: #445266;
+      line-height: 1.8;
+    }
+
+    .confirm-actions {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 0 18px;
+      border-top: 1px solid #edf0f4;
+      background: #fafafa;
+    }
+
+    .plain-button,
+    .primary-button {
+      height: 30px;
+      min-width: 76px;
+      border-radius: 3px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .plain-button {
+      border: 1px solid #d7dce3;
+      color: #394759;
+      background: #fff;
+    }
+
+    .primary-button {
+      border: 1px solid #1677d2;
+      color: #fff;
+      background: #1677d2;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-badge">DD</span>
+        <span>DD.GG</span>
+      </div>
+      <div class="nav-section">
+        <div class="nav-item"><span class="nav-icon">◎</span><span>平台概况</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">⚙</span><span>系统管理</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">♜</span><span>商户游戏管理</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">♙</span><span>会员管理</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">Ⓢ</span><span>商户财务管理</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▣</span><span>报表查询</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▥</span><span>代理中心(无限极差)</span><span class="chevron">⌄</span></div>
+        <div class="nav-item expanded"><span class="nav-icon">▤</span><span>商户财务配置</span><span class="chevron">⌃</span></div>
+        <div class="submenu-item">支付管理</div>
+        <div class="submenu-item">支付方式管理</div>
+        <div class="submenu-item">充值返现设置</div>
+        <div class="submenu-item">代付商户管理</div>
+        <div class="submenu-item active">提现管理</div>
+        <div class="nav-item"><span class="nav-icon">✉</span><span>消息管理</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">⊞</span><span>福利中心</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">⚙</span><span>运营相关</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">⌯</span><span>推广渠道管理</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">◇</span><span>游戏策略配置</span><span class="chevron">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▱</span><span>返水管理</span><span class="chevron">⌄</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="crumb">
+          <span class="hamburger">≡</span>
+          <span>商户财务配置 ˅ / 提现管理</span>
+        </div>
+        <div class="right-tools">
+          <span>2026-08-18 02:44:05 (巴西雷亚尔：UTC-3)</span>
+          <span>bxcuclus1</span>
+          <span>⇩</span>
+          <span class="notice">♢<span class="notice-badge">26</span></span>
+          <span>▣</span>
+          <span>●</span>
+        </div>
+      </header>
+
+      <div class="tabbar">
+        <div class="page-tab">VIP管理</div>
+        <div class="page-tab active">提现管理 ×</div>
+      </div>
+
+      <section class="content">
+        <nav class="config-tabs" aria-label="提现管理配置页签">
+          <div class="config-tab">提现通道配置</div>
+          <div class="config-tab">提现条件配置</div>
+          <div class="config-tab active">提现等级配置</div>
+          <div class="config-tab">其他提现配置</div>
+        </nav>
+
+        <div class="mode-row" aria-label="提现等级配置方式">
+          <span class="mode-label">配置方式：</span>
+          <div class="segmented-control" role="radiogroup" aria-label="当前生效配置维度">
+            <button class="mode-option active" type="button" data-view-mode="vip" role="radio" aria-checked="true">按用户等级</button>
+            <button class="mode-option" type="button" data-view-mode="layer" role="radio" aria-checked="false">按用户层级</button>
+          </div>
+          <span id="modeStatus" class="mode-status">当前使用：等级配置</span>
+        </div>
+
+        <div class="effective-note">
+          <span id="effectiveText">当前提现限制按 VIP 等级生效，用户层级配置不参与判断。</span>
+          <button id="useConfigButton" class="use-button" type="button" disabled>使用等级配置</button>
+        </div>
+
+        <div class="table-head">
+          <span class="tool-icon" title="刷新">↻</span>
+          <span class="tool-icon" title="表格密度">↕</span>
+          <span class="tool-icon" title="设置">⚙</span>
+        </div>
+
+        <section id="vipPanel">
+          <table class="data-table">
+            <colgroup>
+              <col class="col-small">
+              <col class="col-mid">
+              <col class="col-mid">
+              <col class="col-wide">
+              <col class="col-wide">
+              <col class="col-mid">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>等级</th>
+                <th>单日提款总次数<span class="edit-mark" title="编辑列">▧</span></th>
+                <th>单日最高提款总额<span class="edit-mark" title="编辑列">▧</span></th>
+                <th>银行卡单次提款最低限额<span class="edit-mark" title="编辑列">▧</span></th>
+                <th>银行卡单次提款最高限额<span class="edit-mark" title="编辑列">▧</span></th>
+                <th>大额提款标记金额<span class="edit-mark" title="编辑列">▧</span></th>
+              </tr>
+            </thead>
+            <tbody id="vipRows"></tbody>
+          </table>
+        </section>
+
+        <section id="layerPanel" class="hidden">
+          <div class="hint-line">每日提款限制：</div>
+          <table class="data-table">
+            <colgroup>
+              <col class="col-small">
+              <col class="col-mid">
+              <col class="col-mid">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>会员层级</th>
+                <th>单日提款总次数<span class="edit-mark" title="编辑列">▧</span></th>
+                <th>单日最高提款总额<span class="edit-mark" title="编辑列">▧</span></th>
+              </tr>
+            </thead>
+            <tbody id="layerRows"></tbody>
+          </table>
+        </section>
+
+        <section class="prd-section" aria-label="PRD说明">
+          <div class="prd-title">PRD：提现管理-提现等级配置优化迭代</div>
+          <div class="prd-body">
+            <div class="prd-block">
+              <h3>一、需求背景</h3>
+              <ul>
+                <li>提现管理-提现等级配置需支持按用户等级与按用户层级两种配置方式。</li>
+                <li>系统同一时间仅允许一套配置生效，避免等级规则与层级规则同时参与提现限制判断。</li>
+                <li>层级配置列表需与等级配置列表保持字段命名、字段排序和表格样式一致。</li>
+              </ul>
+            </div>
+            <div class="prd-block">
+              <h3>二、页面入口</h3>
+              <ul>
+                <li>入口位置：商户财务配置 / 提现管理 / 提现等级配置。</li>
+                <li>在提现等级配置页签顶部新增配置方式切换：按用户等级、按用户层级。</li>
+                <li>默认展示当前系统已选用配置对应的列表；原型默认当前使用等级配置。</li>
+              </ul>
+            </div>
+            <div class="prd-block">
+              <h3>三、配置使用规则</h3>
+              <ul>
+                <li>按用户等级页面展示等级配置列表，按钮文案为“使用等级配置”。</li>
+                <li>按用户层级页面展示层级配置列表，按钮文案为“使用层级配置”。</li>
+                <li>若当前页面对应配置已被系统使用，则右侧使用按钮置灰且不可点击。</li>
+                <li>若当前页面对应配置未被系统使用，则右侧使用按钮可点击，用于切换系统生效配置。</li>
+              </ul>
+            </div>
+            <div class="prd-block">
+              <h3>四、切换确认规则</h3>
+              <ul>
+                <li>当前系统已选用层级配置时，点击“使用等级配置”，弹窗提示：当前系统已选用层级配置，请确认是否改为等级配置。</li>
+                <li>当前系统已选用等级配置时，点击“使用层级配置”，弹窗提示：当前系统已选用等级配置，请确认是否改为层级配置。</li>
+                <li>弹窗按钮：取消、确认修改。</li>
+                <li>点击确认修改后，系统生效配置更新为当前页面对应配置，并刷新顶部当前使用状态。</li>
+              </ul>
+            </div>
+            <div class="prd-block">
+              <h3>五、列表字段规则</h3>
+              <table class="prd-table">
+                <thead>
+                  <tr>
+                    <th>配置方式</th>
+                    <th>列表字段</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>按用户等级</td>
+                    <td>等级、单日提款总次数、单日最高提款总额、银行卡单次提款最低限额、银行卡单次提款最高限额、大额提款标记金额</td>
+                  </tr>
+                  <tr>
+                    <td>按用户层级</td>
+                    <td>会员层级、单日提款总次数、单日最高提款总额</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="prd-block">
+              <h3>六、字段编辑与保存</h3>
+              <ul>
+                <li>列表字段内容可独立输入和保存，不与“使用等级配置/使用层级配置”按钮绑定。</li>
+                <li>“使用等级配置/使用层级配置”按钮仅用于改变系统当前采用的配置维度。</li>
+                <li>字段编辑保存后的校验规则、金额精度、次数上限范围由后端现有规则承接；若需新增限制，待确认。</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="confirmMask" class="modal-mask hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="confirm-modal">
+      <div id="confirmTitle" class="confirm-title">确认使用配置</div>
+      <div id="confirmBody" class="confirm-body"></div>
+      <div class="confirm-actions">
+        <button id="cancelSwitch" class="plain-button" type="button">取消</button>
+        <button id="confirmSwitch" class="primary-button" type="button">确认修改</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const vipData = [
+      ["VIP0", "3", "300", "15", "300", "0"],
+      ["VIP1", "100", "4888", "48", "48810", "10000"],
+      ["VIP2", "100", "5000000", "0", "5000000", "20000"],
+      ["VIP3", "100", "100000000", "0", "100000000", "0"],
+      ["VIP4", "5", "30000", "10", "200000", "0"],
+      ["VIP5", "100", "1000000", "0", "100000", "0"],
+      ["VIP6", "100", "1000000", "0", "100000", "0"],
+      ["VIP7", "100", "1000000", "0", "100000", "0"],
+      ["VIP8", "100", "1000000", "0", "100000", "0"],
+      ["VIP9", "100", "1000000", "0", "100000", "0"],
+      ["VIP10", "100", "1000000", "0", "100000", "0"],
+      ["VIP11", "0", "0", "0", "0", "0"],
+      ["VIP12", "0", "0", "0", "0", "0"],
+      ["VIP13", "0", "0", "0", "0", "0"],
+      ["VIP14", "0", "0", "0", "0", "0"],
+      ["VIP15", "0", "0", "0", "0", "0"],
+      ["VIP16", "0", "0", "0", "0", "0"],
+      ["VIP17", "0", "0", "0", "0", "0"],
+      ["VIP18", "0", "0", "0", "0", "0"]
+    ];
+
+    const layerData = [
+      ["默认层级", "1", "10000.00"],
+      ["黑名单", "1", "1.00"],
+      ["无优惠", "1", "1.00"],
+      ["10雷", "99", "5000000.00"],
+      ["不出款", "1", "1.00"],
+      ["刷子套利", "1", "1.00"],
+      ["无宝箱层级", "1", "1.00"],
+      ["测试账号", "2", "20.00"],
+      ["20雷", "99", "5000000.00"],
+      ["50雷", "99", "5000000.00"],
+      ["100雷", "99", "5000000.00"],
+      ["200雷", "99", "5000000.00"],
+      ["500雷", "99", "5000000.00"],
+      ["1000雷", "99", "5000000.00"],
+      ["5000雷", "99", "5000000.00"],
+      ["10000雷", "99", "5000000.00"],
+      ["50000雷", "99", "5000000.00"],
+      ["无佣金", "0", "0.00"]
+    ];
+
+    const effectiveCopy = {
+      vip: {
+        text: "当前提现限制按 VIP 等级生效，用户层级配置不参与判断。",
+        button: "使用等级配置",
+        name: "等级配置",
+        target: "等级配置",
+        current: "等级配置"
+      },
+      layer: {
+        text: "当前提现限制按用户层级生效，VIP 等级配置不参与判断。",
+        button: "使用层级配置",
+        name: "层级配置",
+        target: "层级配置",
+        current: "层级配置"
+      }
+    };
+
+    let viewMode = "vip";
+    let activeConfig = "vip";
+    let pendingMode = "";
+
+    function makeCell(value, editable) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      if (editable) {
+        td.dataset.value = value;
+        td.addEventListener("dblclick", () => startEdit(td));
+      }
+      return td;
+    }
+
+    function renderRows(targetId, data, editableFromColumn) {
+      const tbody = document.getElementById(targetId);
+      tbody.innerHTML = "";
+      data.forEach((row) => {
+        const tr = document.createElement("tr");
+        row.forEach((value, index) => {
+          tr.appendChild(makeCell(value, index >= editableFromColumn));
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function startEdit(td) {
+      if (td.querySelector("input")) return;
+
+      const original = td.dataset.value || td.textContent.trim();
+      td.innerHTML = "";
+
+      const wrap = document.createElement("span");
+      wrap.className = "cell-edit";
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.value = original;
+      input.step = "0.01";
+
+      const save = document.createElement("button");
+      save.className = "row-action";
+      save.type = "button";
+      save.title = "确认";
+      save.textContent = "✓";
+
+      const cancel = document.createElement("button");
+      cancel.className = "row-action";
+      cancel.type = "button";
+      cancel.title = "取消";
+      cancel.textContent = "×";
+
+      save.addEventListener("click", () => {
+        const nextValue = input.value.trim() || "0";
+        td.dataset.value = nextValue;
+        td.textContent = nextValue;
+      });
+
+      cancel.addEventListener("click", () => {
+        td.textContent = original;
+      });
+
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") save.click();
+        if (event.key === "Escape") cancel.click();
+      });
+
+      wrap.append(input, save, cancel);
+      td.appendChild(wrap);
+      input.focus();
+      input.select();
+    }
+
+    document.querySelectorAll(".edit-mark").forEach((mark) => {
+      mark.addEventListener("click", (event) => {
+        const th = event.currentTarget.closest("th");
+        const columnIndex = Array.from(th.parentElement.children).indexOf(th);
+        const panel = th.closest("section");
+        const firstCell = panel.querySelector(`tbody tr td:nth-child(${columnIndex + 1})`);
+        if (firstCell) startEdit(firstCell);
+      });
+    });
+
+    function updateView(mode) {
+      viewMode = mode;
+      pendingMode = "";
+      document.getElementById("vipPanel").classList.toggle("hidden", mode !== "vip");
+      document.getElementById("layerPanel").classList.toggle("hidden", mode !== "layer");
+
+      document.querySelectorAll(".mode-option").forEach((button) => {
+        const active = button.dataset.viewMode === mode;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-checked", String(active));
+      });
+
+      updateUsageArea();
+    }
+
+    function updateUsageArea() {
+      const isCurrentActive = viewMode === activeConfig;
+      const button = document.getElementById("useConfigButton");
+      document.getElementById("effectiveText").textContent = effectiveCopy[activeConfig].text;
+      document.getElementById("modeStatus").textContent = `当前使用：${effectiveCopy[activeConfig].name}`;
+      button.textContent = effectiveCopy[viewMode].button;
+      button.disabled = isCurrentActive;
+      button.title = isCurrentActive ? `系统已使用${effectiveCopy[viewMode].name}` : `点击后改为使用${effectiveCopy[viewMode].name}`;
+    }
+
+    function openConfirm(mode) {
+      pendingMode = mode;
+      document.getElementById("confirmBody").textContent = `当前系统已选用${effectiveCopy[activeConfig].current}，请确认是否改为${effectiveCopy[mode].target}。`;
+      document.getElementById("confirmMask").classList.remove("hidden");
+    }
+
+    function closeConfirm() {
+      pendingMode = "";
+      document.getElementById("confirmMask").classList.add("hidden");
+    }
+
+    document.querySelectorAll(".mode-option").forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextMode = button.dataset.viewMode;
+        if (nextMode === viewMode) return;
+        updateView(nextMode);
+      });
+    });
+
+    document.getElementById("cancelSwitch").addEventListener("click", closeConfirm);
+    document.getElementById("confirmSwitch").addEventListener("click", () => {
+      if (pendingMode) {
+        activeConfig = pendingMode;
+        updateUsageArea();
+      }
+      closeConfirm();
+    });
+
+    document.getElementById("useConfigButton").addEventListener("click", () => {
+      if (viewMode === activeConfig) return;
+      openConfirm(viewMode);
+    });
+
+    renderRows("vipRows", vipData, 1);
+    renderRows("layerRows", layerData, 1);
+    updateUsageArea();
+  </script>
+</body>
+</html>
