@@ -3,988 +3,1314 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>提现管理-提现等级配置原型</title>
+  <title>DD.GG 营销配置原型</title>
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --blue: #1677d2;
+      --blue-2: #0f6ec8;
+      --nav: #001f36;
+      --nav-2: #0b2b43;
+      --line: #e8eaee;
+      --soft: #f4f6f9;
+      --text: #263442;
+      --muted: #7a8794;
+      --danger: #ff2d2d;
+      --gold: #ffd456;
     }
 
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      color: #2f3a45;
-      font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-      background: #eef2f5;
-    }
-
-    .app {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 168px 1fr;
-    }
-
-    .sidebar {
-      background: #001f35;
-      color: #aebccd;
-      overflow: hidden;
-    }
-
-    .brand {
-      height: 48px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 12px;
-      color: #fff;
-      font-weight: 700;
-      font-size: 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, .06);
-    }
-
-    .brand-badge {
-      width: 30px;
-      height: 30px;
-      border-radius: 6px;
-      display: grid;
-      place-items: center;
-      color: #ffd15a;
-      background: linear-gradient(135deg, #161b22, #513200);
-      font-size: 11px;
-      letter-spacing: 0;
-    }
-
-    .nav-section {
-      padding: 6px 0;
-    }
-
-    .nav-item,
-    .submenu-item {
-      height: 40px;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 0 11px;
-      white-space: nowrap;
-    }
-
-    .nav-icon {
-      width: 14px;
-      text-align: center;
-      opacity: .85;
-      font-size: 13px;
-    }
-
-    .nav-item .chevron {
-      margin-left: auto;
-      font-size: 12px;
-    }
-
-    .nav-item.expanded {
-      color: #fff;
-      background: rgba(255, 255, 255, .04);
-    }
-
-    .submenu-item {
-      padding-left: 30px;
-      color: #b7c5d5;
-      background: #0b2b45;
-    }
-
-    .submenu-item.active {
-      color: #fff;
-      font-weight: 600;
-      background: #1470c8;
-    }
-
-    .main {
-      min-width: 980px;
-      overflow: auto;
-    }
-
-    .topbar {
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 12px 0 10px;
-      background: #fff;
-      border-bottom: 1px solid #e7e9ee;
-    }
-
-    .crumb {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #8b96a3;
-    }
-
-    .hamburger {
-      color: #25313f;
-      font-size: 18px;
-    }
-
-    .right-tools {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      color: #637083;
-      font-size: 12px;
-    }
-
-    .notice {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .notice-badge {
-      position: absolute;
-      top: -9px;
-      right: -10px;
-      min-width: 20px;
-      height: 18px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      background: #ff4d4f;
-      color: #fff;
-      font-size: 11px;
-      line-height: 1;
-    }
-
-    .tabbar {
-      height: 32px;
-      display: flex;
-      align-items: end;
-      gap: 2px;
-      padding-left: 72px;
-      background: #fff;
-      border-bottom: 1px solid #e8ebf0;
-    }
-
-    .page-tab {
-      height: 25px;
-      min-width: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 12px;
-      border: 1px solid #e1e5ea;
-      border-bottom: 0;
-      border-radius: 2px 2px 0 0;
-      color: #687483;
-      background: #fbfcfd;
-      font-size: 12px;
-    }
-
-    .page-tab.active {
-      color: #fff;
-      background: #1470c8;
-      border-color: #1470c8;
-    }
-
-    .content {
-      margin: 14px 12px 0;
-      padding: 12px 12px 24px;
-      min-height: calc(100vh - 84px);
-      background: #fff;
-    }
-
-    .config-tabs {
-      height: 48px;
-      display: flex;
-      align-items: flex-end;
-      border-bottom: 1px solid #eef0f3;
-      margin-bottom: 12px;
-    }
-
-    .config-tab {
-      height: 34px;
-      display: flex;
-      align-items: center;
-      padding: 0 15px;
-      border: 1px solid #e6eaf0;
-      border-bottom: 0;
-      color: #333f4d;
-      background: #fff;
-      margin-right: 2px;
-      border-radius: 2px 2px 0 0;
-    }
-
-    .config-tab.active {
-      color: #1780ee;
-      font-weight: 600;
-    }
-
-    .mode-row {
-      min-height: 50px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 2px;
-      color: #344052;
-    }
-
-    .mode-label {
-      color: #6f7a87;
-    }
-
-    .segmented-control {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid #d7e6f8;
-      border-radius: 3px;
-      overflow: hidden;
-      background: #fff;
-    }
-
-    .mode-option {
-      min-width: 132px;
-      height: 32px;
-      border: 0;
-      border-right: 1px solid #d7e6f8;
-      background: #fff;
-      color: #415064;
-      cursor: pointer;
-      font: inherit;
-    }
-
-    .mode-option:last-child {
-      border-right: 0;
-    }
-
-    .mode-option.active {
-      color: #fff;
-      background: #1677d2;
-      font-weight: 600;
-    }
-
-    .mode-option:not(.active):hover {
-      color: #1677d2;
-      background: #f4f9ff;
-    }
-
-    .mode-status {
-      height: 20px;
-      display: inline-flex;
-      align-items: center;
-      padding: 0 8px;
-      border: 1px solid #d9eafa;
-      border-radius: 2px;
-      color: #35617f;
-      background: #f4faff;
-      font-size: 12px;
-    }
-
-    .effective-note {
-      min-height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 2px;
-      padding: 7px 10px;
-      border: 1px solid #d9eafa;
-      border-radius: 3px;
-      color: #35617f;
-      background: #f4faff;
-    }
-
-    .use-button {
-      height: 30px;
-      min-width: 112px;
-      border: 1px solid #1677d2;
-      border-radius: 3px;
-      color: #fff;
-      background: #1677d2;
-      font: inherit;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .use-button:hover {
-      background: #0d69bd;
-    }
-
-    .use-button:disabled {
-      border-color: #d7dce3;
-      color: #99a3af;
-      background: #f4f6f8;
-      cursor: not-allowed;
-    }
-
-    .table-head {
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      color: #2f3a45;
-      gap: 13px;
-    }
-
-    .tool-icon {
-      width: 16px;
-      height: 16px;
-      display: inline-grid;
-      place-items: center;
-      color: #2f3a45;
-      font-size: 17px;
-    }
-
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      border: 1px solid #edf0f4;
-      color: #2c3b4c;
-      background: #fff;
-    }
-
-    .data-table th,
-    .data-table td {
-      height: 38px;
-      padding: 0 12px;
-      text-align: center;
-      border-right: 1px solid #edf0f4;
-      border-bottom: 1px solid #edf0f4;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .data-table th {
-      height: 40px;
-      color: #27313e;
-      background: #fafafa;
-      font-weight: 600;
-    }
-
-    .data-table tbody tr:nth-child(even) {
-      background: #fafafa;
-    }
-
-    .data-table tbody tr:hover {
-      background: #f4f9ff;
-    }
-
-    .col-small {
-      width: 170px;
-    }
-
-    .col-mid {
-      width: 235px;
-    }
-
-    .col-wide {
-      width: 330px;
-    }
-
-    .edit-mark {
-      margin-left: 4px;
-      color: #4d5865;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .cell-edit {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .cell-edit input {
-      width: min(240px, 68%);
-      height: 23px;
-      border: 1px solid #4da3ff;
-      border-radius: 2px;
-      text-align: center;
-      color: #2d3a48;
-      outline: 0;
-      box-shadow: 0 0 0 1px rgba(77, 163, 255, .16);
-      background: #fff;
-    }
-
-    .row-action {
-      border: 0;
-      background: transparent;
-      color: #485564;
-      font-size: 19px;
-      line-height: 1;
-      padding: 0;
-      cursor: pointer;
-    }
-
-    .row-action:hover {
-      color: #1677ff;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .hint-line {
-      height: 30px;
-      display: flex;
-      align-items: center;
-      color: #7e8997;
-      font-size: 12px;
-    }
-
-    .prd-section {
-      margin-top: 26px;
-      border: 1px solid #e6eaf0;
-      background: #fff;
-    }
-
-    .prd-title {
-      height: 42px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      border-bottom: 1px solid #e6eaf0;
-      color: #27313e;
-      background: #fafafa;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      background: #eef2f6;
       font-size: 14px;
+    }
+
+    .switcher {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .switcher button {
+      height: 34px;
+      padding: 0 18px;
+      border: 1px solid #cfd8e3;
+      border-radius: 4px;
+      background: #fff;
+      color: #425466;
+      cursor: pointer;
       font-weight: 600;
     }
 
-    .prd-body {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0;
+    .switcher button.active {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
     }
 
-    .prd-block {
-      min-height: 130px;
-      padding: 14px 16px 16px;
-      border-right: 1px solid #edf0f4;
-      border-bottom: 1px solid #edf0f4;
+    .screen { display: none; min-height: calc(100vh - 55px); }
+    .screen.active { display: block; }
+
+    .prd {
+      min-height: calc(100vh - 55px);
+      padding: 28px;
+      background: #f3f6fa;
     }
 
-    .prd-block:nth-child(2n) {
-      border-right: 0;
+    .prd-doc {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 34px 38px;
+      background: #fff;
+      border: 1px solid #dfe5ed;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(35,48,64,.06);
     }
 
-    .prd-block h3 {
-      margin: 0 0 10px;
-      color: #2d3a48;
+    .prd h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.35;
+      color: #172230;
+    }
+
+    .prd .meta {
+      margin-bottom: 24px;
+      color: #697586;
       font-size: 13px;
-      font-weight: 600;
     }
 
-    .prd-block ul {
-      margin: 0;
-      padding-left: 18px;
-      color: #4d5b6c;
+    .prd h2 {
+      margin: 26px 0 12px;
+      padding-left: 10px;
+      border-left: 4px solid var(--blue);
+      font-size: 18px;
+      line-height: 1.3;
+      color: #172230;
     }
 
-    .prd-block li {
-      margin: 5px 0;
+    .prd p {
+      margin: 8px 0;
+      line-height: 1.8;
+      color: #344253;
     }
+
+    .prd ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      line-height: 1.8;
+      color: #344253;
+    }
+
+    .prd li { margin: 2px 0; }
 
     .prd-table {
       width: 100%;
+      margin-top: 10px;
       border-collapse: collapse;
-      margin-top: 8px;
-      color: #4d5b6c;
+      table-layout: fixed;
+      font-size: 13px;
     }
 
     .prd-table th,
     .prd-table td {
-      height: 32px;
-      padding: 0 10px;
+      height: auto;
+      padding: 12px 14px;
       text-align: left;
-      border: 1px solid #edf0f4;
+      vertical-align: top;
+      border: 1px solid #e4e9f0;
       background: #fff;
+      line-height: 1.7;
     }
 
     .prd-table th {
-      color: #2d3a48;
-      background: #fafafa;
+      background: #f7f9fc;
+      color: #1f2f3d;
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 3px;
+      background: #eaf4ff;
+      color: #1268b3;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .admin {
+      display: grid;
+      grid-template-columns: 208px 1fr;
+      min-width: 1280px;
+      background: #eef2f6;
+    }
+
+    .side {
+      min-height: calc(100vh - 55px);
+      background: var(--nav);
+      color: #b8c7d6;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 58px;
+      padding: 0 14px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
+      background:
+        radial-gradient(circle at 68% 34%, #ffdd57 0 11%, transparent 12%),
+        linear-gradient(135deg, #27231c 0%, #a14218 45%, #120f0c 100%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.22);
+    }
+
+    .nav-item, .nav-sub {
+      display: flex;
+      align-items: center;
+      height: 46px;
+      padding: 0 18px;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .nav-item { font-weight: 600; color: #cdd8e5; }
+    .nav-item.open { background: var(--nav); color: #fff; }
+    .nav-sub { padding-left: 38px; background: var(--nav-2); font-size: 13px; }
+    .nav-sub.active { background: var(--blue-2); color: #fff; }
+    .nav-dot { width: 14px; text-align: center; opacity: .9; }
+    .chev { margin-left: auto; color: #7d92a7; }
+
+    .main { min-width: 0; }
+    .topbar {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      color: #7b8792;
+    }
+
+    .crumb { display: flex; align-items: center; gap: 14px; }
+    .hamb { color: #333; font-size: 20px; }
+    .userline { display: flex; align-items: center; gap: 18px; font-size: 13px; }
+    .badge { background: #ff4d4f; color: #fff; border-radius: 12px; padding: 1px 7px; font-size: 12px; }
+    .avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg,#5bc18c,#e1b457); }
+
+    .tabs {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 32px 24px 0;
+      background: #fff;
+    }
+
+    .tab {
+      height: 42px;
+      min-width: 118px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-bottom-color: #d7dde5;
+      color: #333;
+      background: #fff;
       font-weight: 600;
     }
 
-    .modal-mask {
-      position: fixed;
-      inset: 0;
+    .tab.active { color: var(--blue); border-bottom-color: #fff; }
+
+    .content {
+      margin: 0 18px 28px;
+      padding: 16px 20px 28px;
+      background: #fff;
+      min-height: 720px;
+    }
+
+    .tenant {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      margin: -62px 0 22px;
+      height: 40px;
+      font-weight: 600;
+    }
+
+    .select-lite {
+      width: 110px;
+      height: 34px;
+      border: 1px solid #d8dee6;
+      border-radius: 5px;
+      color: #56616d;
+      padding: 0 12px;
+      background: #fff;
+    }
+
+    .admin-body {
+      display: grid;
+      grid-template-columns: 122px 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .subtabs {
+      border: 1px solid #d8dde5;
+      border-bottom: 0;
+      background: #f9fafc;
+    }
+
+    .subtabs div {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #d8dde5;
+      color: #38495a;
+      font-weight: 600;
+      background: #fbfcfd;
+    }
+
+    .subtabs .active {
+      color: var(--blue);
+      background: #fff;
+      box-shadow: inset 3px 0 0 #ff284c;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .filters { display: flex; gap: 14px; align-items: center; }
+    .field { display: flex; align-items: center; gap: 8px; color: #495969; font-weight: 600; }
+    .field input {
+      width: 250px;
+      height: 34px;
+      border: 1px solid #d8dee6;
+      border-radius: 2px;
+      padding: 0 12px;
+    }
+
+    .btn {
+      height: 34px;
+      padding: 0 17px;
+      border: 1px solid var(--blue);
+      border-radius: 2px;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn.ghost {
+      border-color: #d8dee6;
+      color: #475569;
+      background: #fff;
+    }
+
+    .icons { display: inline-flex; gap: 12px; color: #4e5d6c; font-size: 18px; margin-left: 12px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 1px solid #edf0f4;
+    }
+
+    th, td {
+      height: 64px;
+      border: 1px solid #edf0f4;
+      text-align: center;
+      vertical-align: middle;
+      background: #fff;
+    }
+
+    th {
+      height: 46px;
+      background: #fafafa;
+      font-weight: 700;
+      color: #1f2f3d;
+    }
+
+    tr:nth-child(even) td { background: #fcfcfd; }
+    .seq { width: 70px; }
+    .name { width: 35%; }
+    .imgcol { width: 28%; }
+    .datecol { width: 22%; }
+    .opcol { width: 90px; }
+
+    .banner-thumb {
+      width: 84px;
+      height: 52px;
+      margin: auto;
+      border-radius: 2px;
+      overflow: hidden;
       display: grid;
       place-items: center;
-      background: rgba(16, 28, 40, .34);
-      z-index: 20;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+      color: #fff;
+      font-weight: 900;
+      text-align: left;
+      line-height: 1.05;
+      font-size: 10px;
+      text-transform: uppercase;
     }
 
-    .modal-mask.hidden {
-      display: none;
-    }
+    .b1 { background: radial-gradient(circle at 82% 55%, #ffe17a 0 12%, transparent 13%), linear-gradient(130deg,#5a1609 0%,#d28b15 52%,#1d120b 100%); }
+    .b2 { background: radial-gradient(circle at 80% 50%, #fff2a0 0 11%, transparent 12%), linear-gradient(130deg,#171717 0%,#b20f18 46%,#efb80f 100%); }
+    .b3 { background: radial-gradient(circle at 80% 50%, #ffe47a 0 13%, transparent 14%), linear-gradient(130deg,#2b0b08 0%,#9b1a25 48%,#36240e 100%); }
 
-    .confirm-modal {
-      width: 420px;
-      border-radius: 4px;
-      background: #fff;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, .18);
-      overflow: hidden;
-    }
-
-    .confirm-title {
-      height: 46px;
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
-      border-bottom: 1px solid #edf0f4;
-      font-weight: 600;
-      color: #27313e;
-    }
-
-    .confirm-body {
-      padding: 22px 18px;
-      color: #445266;
-      line-height: 1.8;
-    }
-
-    .confirm-actions {
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      padding: 0 18px;
-      border-top: 1px solid #edf0f4;
-      background: #fafafa;
-    }
-
-    .plain-button,
-    .primary-button {
-      height: 30px;
-      min-width: 76px;
-      border-radius: 3px;
-      font: inherit;
+    .act {
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      font-size: 18px;
       cursor: pointer;
     }
 
-    .plain-button {
-      border: 1px solid #d7dce3;
-      color: #394759;
-      background: #fff;
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 14px;
+      color: #52606d;
+      align-items: center;
     }
 
-    .primary-button {
-      border: 1px solid #1677d2;
+    .page-num {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
       color: #fff;
-      background: #1677d2;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    .modal-zone {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.48);
+    }
+
+    .modal-zone.open { display: flex; }
+
+    .modal-card {
+      width: 660px;
+      border: 1px solid #dfe4ea;
+      border-radius: 6px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 18px 48px rgba(0,0,0,.28);
+    }
+
+    .modal-head {
+      height: 48px;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #edf0f4;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .modal-form { padding: 22px 32px 28px; }
+    .row { display: flex; align-items: center; min-height: 46px; gap: 12px; }
+    .label { width: 82px; text-align: right; font-weight: 600; color: #303d4a; }
+    .input, .select {
+      height: 36px;
+      width: 290px;
+      border: 1px solid #d5dbe3;
+      border-radius: 5px;
+      padding: 0 12px;
+      background: #fff;
+      color: #2f3c49;
+    }
+
+    .upload-line { align-items: flex-start; padding-top: 8px; }
+    .upload { display: flex; align-items: center; gap: 8px; }
+    .upload .banner-thumb { width: 74px; height: 46px; margin: 0; }
+    .hint { color: var(--danger); font-weight: 600; margin-top: 7px; white-space: nowrap; }
+    .radio-line { gap: 14px; padding-top: 12px; }
+    .radio { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; color: #3c4652; }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #cbd4dd;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+    }
+    .dot.on { border-color: var(--blue); }
+    .dot.on::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+    .confirm { display: flex; justify-content: center; padding-top: 20px; }
+    .close-modal { border: 0; background: transparent; font-size: 22px; color: #7b8490; cursor: pointer; }
+    .jump-panel { display: none; }
+    .jump-panel.active { display: flex; }
+
+    .client {
+      min-height: calc(100vh - 55px);
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background: linear-gradient(180deg, #151515 0%, #080808 100%);
+    }
+
+    .phone {
+      width: 500px;
+      height: 1184px;
+      max-height: calc(100vh - 88px);
+      border-radius: 2px;
+      background: #1d1b1a;
+      color: #fff;
+      box-shadow: 0 24px 70px rgba(0,0,0,.45);
+      overflow: auto;
+      border: 1px solid #111;
+      position: relative;
+    }
+
+    .client-top {
+      height: 60px;
+      display: grid;
+      grid-template-columns: 44px 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      background: #1d1b1a;
+    }
+
+    .menu-btn {
+      width: 42px;
+      height: 38px;
+      border-radius: 6px;
+      background: #272522;
+      display: grid;
+      place-items: center;
+      color: #b7aa93;
+      font-size: 24px;
+    }
+
+    .kk-logo {
+      font-size: 28px;
+      font-weight: 900;
+      color: #f6f1e4;
+      font-style: italic;
+      letter-spacing: 0;
+      text-shadow: 2px 2px 0 #7a3619;
+      white-space: nowrap;
+    }
+
+    .kk-logo strong { color: #ffc239; }
+    .kk-logo small {
+      display: inline-block;
+      margin-left: 2px;
+      padding: 1px 3px;
+      border-radius: 7px;
+      background: #ffd028;
+      color: #541e06;
+      font-size: 13px;
+      font-style: normal;
+      text-shadow: none;
+    }
+
+    .balance {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #fff3d5;
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .coin {
+      width: 28px;
+      height: 18px;
+      border-radius: 9px;
+      background: linear-gradient(135deg,#ffffff,#8d9dff 45%,#f7c34d);
+      transform: rotate(-8deg);
+    }
+
+    .deposit-btn {
+      height: 34px;
+      min-width: 82px;
+      border: 1px solid #e0ee18;
+      border-top: 0;
+      border-radius: 0 0 9px 9px;
+      display: grid;
+      place-items: center;
+      color: #e8ff1f;
+      font-weight: 900;
+      background: #272216;
+      font-size: 13px;
+    }
+
+    .client-stage {
+      padding: 18px 8px 0;
+      background: #1d1b1a;
+    }
+
+    .main-banner {
+      height: 220px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e1a72d;
+      background:
+        radial-gradient(circle at 78% 45%, rgba(255,230,110,.88) 0 11%, transparent 12%),
+        radial-gradient(circle at 68% 35%, rgba(99,217,255,.72) 0 9%, transparent 10%),
+        linear-gradient(100deg,#2a160d 0%,#7a3f17 45%,#e7b551 70%,#563014 100%);
+      padding: 28px 24px;
+      position: relative;
+    }
+
+    .main-banner::after {
+      content: "50%";
+      position: absolute;
+      right: 20px;
+      bottom: 0;
+      color: #ffba35;
+      font-size: 66px;
+      line-height: .85;
+      font-weight: 900;
+      text-shadow: 2px 3px 0 #7b3210;
+    }
+
+    .cashback {
+      max-width: 260px;
+      color: #fff;
+      text-transform: uppercase;
+      font-weight: 900;
+      text-shadow: 2px 2px 0 #8a1e1b;
+    }
+
+    .cashback .big {
+      display: block;
+      color: #ffd04d;
+      font-size: 58px;
+      line-height: .86;
+      text-shadow: 2px 3px 0 #7b3210;
+    }
+
+    .cashback .copy {
+      display: block;
+      margin-top: 6px;
+      font-size: 27px;
+      line-height: 1.05;
+    }
+
+    .cashback .strip {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 5px 9px;
+      border-radius: 13px;
+      background: #fff2b3;
+      color: #a42512;
+      text-shadow: none;
+      font-size: 13px;
+    }
+
+    .marketing-row {
+      margin-top: 0;
+      padding: 16px 7px 12px;
+      border: 4px solid #ff073f;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: #171514;
+    }
+
+    .mini-promo {
+      height: 90px;
+      border-radius: 7px;
+      border: 1px solid #c67a17;
+      overflow: hidden;
+      padding: 8px 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #2a1208;
+      text-transform: uppercase;
+    }
+
+    .mini-promo::after {
+      content: "";
+      position: absolute;
+      right: -5px;
+      bottom: -6px;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: radial-gradient(circle,#ffe088 0 30%,#b87913 31% 54%,transparent 55%);
+    }
+
+    .mini-promo.agent { background: linear-gradient(135deg,#743111,#f3b331 54%,#27120a); }
+    .mini-promo.invite { background: linear-gradient(135deg,#3b1309,#d22b1f 52%,#f6bc2c); }
+    .mini-promo.login { background: linear-gradient(135deg,#fff0c4,#b12520 42%,#2a1108); }
+
+    .mini-title {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      font-size: 17px;
+      line-height: 1.05;
+      font-weight: 900;
+      text-shadow: 1px 2px 0 #8d1714;
+    }
+
+    .mini-title mark {
+      display: inline-block;
+      padding: 0 3px;
+      border-radius: 8px;
+      background: #fff3bb;
+      color: #b31918;
+    }
+
+    .mini-title strong {
+      display: block;
+      color: #ffd446;
+      font-size: 29px;
+      line-height: .95;
+    }
+
+    .notice {
+      height: 42px;
+      display: grid;
+      grid-template-columns: 1fr 58px;
+      gap: 10px;
+      margin-top: 0;
+      color: #bdb4a8;
+      font-size: 16px;
+    }
+
+    .notice-left, .notice-search {
+      border-radius: 0 0 6px 6px;
+      background: #24211f;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 8px;
+    }
+
+    .notice-search {
+      justify-content: center;
+      color: #edf51c;
+      font-size: 30px;
+      padding: 0;
+    }
+
+    .category-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding: 26px 24px 14px;
+      background: #1d1b1a;
+    }
+
+    .cat {
+      height: 84px;
+      border: 1px solid #4d4b47;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      color: #a9a39b;
+      background: #1f1e1d;
+      font-size: 15px;
+      gap: 3px;
+    }
+
+    .cat.active { color: #fff; background: #36302a; }
+    .cat-ico { font-size: 32px; line-height: 1; }
+
+    .game-section {
+      margin: 12px 14px 78px;
+      border-radius: 12px 12px 0 0;
+      background: #24211f;
+      overflow: hidden;
+    }
+
+    .game-head {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      background: linear-gradient(135deg,#1e1b18,#34311c 58%,#193021);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .game-count {
+      padding: 3px 12px;
+      border: 1px solid #00d97c;
+      border-radius: 16px;
+      color: #00e486;
+      font-size: 14px;
+      margin-left: 8px;
+    }
+
+    .arrows { display: flex; gap: 9px; color: #fff; }
+    .arrows span {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #5d6258;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 18px 18px 22px;
+    }
+
+    .game-card {
+      aspect-ratio: 1 / 1.28;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg,#ff4c26,#ffc338);
+      box-shadow: inset 0 -18px 22px rgba(0,0,0,.24);
+      display: flex;
+      align-items: end;
+      padding: 8px;
+      font-size: 18px;
+      line-height: .92;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #ffe16a;
+      text-shadow: 1px 2px 0 #9b3012;
+    }
+
+    .game-card:nth-child(2) { background: linear-gradient(135deg,#d51cff,#ff8a2e); }
+    .game-card:nth-child(3) { background: linear-gradient(135deg,#20c8ff,#f46cb9); }
+    .game-card:nth-child(4) { background: linear-gradient(135deg,#ffb873,#c9271e); }
+    .game-card:nth-child(5) { background: linear-gradient(135deg,#9c3516,#ffce4a); }
+    .game-card:nth-child(6) { background: linear-gradient(135deg,#da2a18,#f4b332); }
+    .game-card:nth-child(7) { background: linear-gradient(135deg,#41d161,#9a42ff); }
+    .game-card:nth-child(8) { background: linear-gradient(135deg,#f1b541,#7d210b); }
+
+    .float-ad {
+      position: absolute;
+      right: 18px;
+      top: 650px;
+      width: 94px;
+      height: 250px;
+      border-radius: 10px;
+      background: linear-gradient(180deg,#f3b526,#8d1c11 42%,#f4c43a);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 1px 2px 0 #8a1b13;
+      transform: rotate(-3deg);
+      z-index: 3;
+    }
+
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      height: 72px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid #2b2723;
+      background: #24211f;
+      z-index: 5;
+    }
+
+    .bottom-nav div {
+      display: grid;
+      place-items: center;
+      color: #a9a39b;
+      font-size: 13px;
+      padding-top: 6px;
+    }
+
+    .bottom-nav .active { color: #e9ee27; }
+    .nav-ico { font-size: 24px; line-height: 1; }
+
+    @media (max-width: 900px) {
+      .admin { min-width: 900px; }
+      .modal-zone { grid-template-columns: 1fr; }
+      .phone { width: min(430px, 100%); }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <span class="brand-badge">DD</span>
-        <span>DD.GG</span>
-      </div>
-      <div class="nav-section">
-        <div class="nav-item"><span class="nav-icon">◎</span><span>平台概况</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">⚙</span><span>系统管理</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">♜</span><span>商户游戏管理</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">♙</span><span>会员管理</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">Ⓢ</span><span>商户财务管理</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">▣</span><span>报表查询</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">▥</span><span>代理中心(无限极差)</span><span class="chevron">⌄</span></div>
-        <div class="nav-item expanded"><span class="nav-icon">▤</span><span>商户财务配置</span><span class="chevron">⌃</span></div>
-        <div class="submenu-item">支付管理</div>
-        <div class="submenu-item">支付方式管理</div>
-        <div class="submenu-item">充值返现设置</div>
-        <div class="submenu-item">代付商户管理</div>
-        <div class="submenu-item active">提现管理</div>
-        <div class="nav-item"><span class="nav-icon">✉</span><span>消息管理</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">⊞</span><span>福利中心</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">⚙</span><span>运营相关</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">⌯</span><span>推广渠道管理</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">◇</span><span>游戏策略配置</span><span class="chevron">⌄</span></div>
-        <div class="nav-item"><span class="nav-icon">▱</span><span>返水管理</span><span class="chevron">⌄</span></div>
-      </div>
-    </aside>
+  <div class="switcher">
+    <button class="active" data-target="admin-screen">后台原型</button>
+    <button data-target="client-screen">客户端原型</button>
+    <button data-target="prd-screen">PRD说明</button>
+  </div>
 
-    <main class="main">
-      <header class="topbar">
-        <div class="crumb">
-          <span class="hamburger">≡</span>
-          <span>商户财务配置 ˅ / 提现管理</span>
-        </div>
-        <div class="right-tools">
-          <span>2026-08-18 02:44:05 (巴西雷亚尔：UTC-3)</span>
-          <span>bxcuclus1</span>
-          <span>⇩</span>
-          <span class="notice">♢<span class="notice-badge">26</span></span>
-          <span>▣</span>
-          <span>●</span>
-        </div>
-      </header>
+  <section class="screen active" id="admin-screen">
+    <div class="admin">
+      <aside class="side">
+        <div class="brand"><span class="brand-logo"></span><span>DD.GG</span></div>
+        <div class="nav-item"><span class="nav-dot">◉</span>平台概况<span class="chev">⌄</span></div>
+        <div class="nav-item open"><span class="nav-dot">⚙</span>系统管理<span class="chev">⌃</span></div>
+        <div class="nav-sub">角色管理</div>
+        <div class="nav-sub">账号管理</div>
+        <div class="nav-sub active">系统设置</div>
+        <div class="nav-sub">登录日志</div>
+        <div class="nav-sub">谷歌令牌</div>
+        <div class="nav-sub">域名管理(新)</div>
+        <div class="nav-sub">安全设置</div>
+        <div class="nav-sub">子账号操作日志(新)</div>
+        <div class="nav-item"><span class="nav-dot">▦</span>商户游戏管理<span class="chev">⌄</span></div>
+        <div class="nav-item"><span class="nav-dot">♙</span>会员管理<span class="chev">⌄</span></div>
+        <div class="nav-item"><span class="nav-dot">Ⓢ</span>商户财务管理<span class="chev">⌄</span></div>
+        <div class="nav-item"><span class="nav-dot">▣</span>报表查询<span class="chev">⌄</span></div>
+        <div class="nav-item"><span class="nav-dot">☷</span>代理中心(无限极差)<span class="chev">⌄</span></div>
+        <div class="nav-item"><span class="nav-dot">✉</span>消息管理<span class="chev">⌄</span></div>
+        <div class="nav-item"><span class="nav-dot">▦</span>福利中心<span class="chev">⌄</span></div>
+      </aside>
 
-      <div class="tabbar">
-        <div class="page-tab">VIP管理</div>
-        <div class="page-tab active">提现管理 ×</div>
-      </div>
-
-      <section class="content">
-        <nav class="config-tabs" aria-label="提现管理配置页签">
-          <div class="config-tab">提现通道配置</div>
-          <div class="config-tab">提现条件配置</div>
-          <div class="config-tab active">提现等级配置</div>
-          <div class="config-tab">其他提现配置</div>
-        </nav>
-
-        <div class="mode-row" aria-label="提现等级配置方式">
-          <span class="mode-label">配置方式：</span>
-          <div class="segmented-control" role="radiogroup" aria-label="当前生效配置维度">
-            <button class="mode-option active" type="button" data-view-mode="vip" role="radio" aria-checked="true">按用户等级</button>
-            <button class="mode-option" type="button" data-view-mode="layer" role="radio" aria-checked="false">按用户层级</button>
+      <main class="main">
+        <div class="topbar">
+          <div class="crumb"><span class="hamb">☰</span><span>系统管理</span><span>/</span><span>系统设置</span></div>
+          <div class="userline">
+            <span>2026-08-19 00:10:44 (巴西雷亚尔：UTC-3)</span>
+            <span>bxcuculus1</span>
+            <span>⇩</span>
+            <span class="badge">26</span>
+            <span>▣</span>
+            <span class="avatar"></span>
           </div>
-          <span id="modeStatus" class="mode-status">当前使用：等级配置</span>
         </div>
 
-        <div class="effective-note">
-          <span id="effectiveText">当前提现限制按 VIP 等级生效，用户层级配置不参与判断。</span>
-          <button id="useConfigButton" class="use-button" type="button" disabled>使用等级配置</button>
+        <div class="tabs">
+          <div class="tab">站点配置</div>
+          <div class="tab active">站点显示配置</div>
+          <div class="tab">登录注册配置</div>
+          <div class="tab">公共资源配置</div>
         </div>
 
-        <div class="table-head">
-          <span class="tool-icon" title="刷新">↻</span>
-          <span class="tool-icon" title="表格密度">↕</span>
-          <span class="tool-icon" title="设置">⚙</span>
-        </div>
+        <div class="content">
+          <div class="tenant">
+            <span>地区：</span><select class="select-lite"><option>巴西</option></select>
+            <span>商户：</span><select class="select-lite"><option>762</option></select>
+          </div>
 
-        <section id="vipPanel">
-          <table class="data-table">
-            <colgroup>
-              <col class="col-small">
-              <col class="col-mid">
-              <col class="col-mid">
-              <col class="col-wide">
-              <col class="col-wide">
-              <col class="col-mid">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>等级</th>
-                <th>单日提款总次数<span class="edit-mark" title="编辑列">▧</span></th>
-                <th>单日最高提款总额<span class="edit-mark" title="编辑列">▧</span></th>
-                <th>银行卡单次提款最低限额<span class="edit-mark" title="编辑列">▧</span></th>
-                <th>银行卡单次提款最高限额<span class="edit-mark" title="编辑列">▧</span></th>
-                <th>大额提款标记金额<span class="edit-mark" title="编辑列">▧</span></th>
-              </tr>
-            </thead>
-            <tbody id="vipRows"></tbody>
-          </table>
-        </section>
+          <div class="admin-body">
+            <div class="subtabs">
+              <div>轮播图</div>
+              <div class="active">营销配置</div>
+              <div>跑马灯</div>
+            </div>
 
-        <section id="layerPanel" class="hidden">
-          <div class="hint-line">每日提款限制：</div>
-          <table class="data-table">
-            <colgroup>
-              <col class="col-small">
-              <col class="col-mid">
-              <col class="col-mid">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>会员层级</th>
-                <th>单日提款总次数<span class="edit-mark" title="编辑列">▧</span></th>
-                <th>单日最高提款总额<span class="edit-mark" title="编辑列">▧</span></th>
-              </tr>
-            </thead>
-            <tbody id="layerRows"></tbody>
-          </table>
-        </section>
-
-        <section class="prd-section" aria-label="PRD说明">
-          <div class="prd-title">PRD：提现管理-提现等级配置优化迭代</div>
-          <div class="prd-body">
-            <div class="prd-block">
-              <h3>一、需求背景</h3>
-              <ul>
-                <li>提现管理-提现等级配置需支持按用户等级与按用户层级两种配置方式。</li>
-                <li>系统同一时间仅允许一套配置生效，避免等级规则与层级规则同时参与提现限制判断。</li>
-                <li>层级配置列表需与等级配置列表保持字段命名、字段排序和表格样式一致。</li>
-              </ul>
-            </div>
-            <div class="prd-block">
-              <h3>二、页面入口</h3>
-              <ul>
-                <li>入口位置：商户财务配置 / 提现管理 / 提现等级配置。</li>
-                <li>在提现等级配置页签顶部新增配置方式切换：按用户等级、按用户层级。</li>
-                <li>默认展示当前系统已选用配置对应的列表；原型默认当前使用等级配置。</li>
-              </ul>
-            </div>
-            <div class="prd-block">
-              <h3>三、配置使用规则</h3>
-              <ul>
-                <li>按用户等级页面展示等级配置列表，按钮文案为“使用等级配置”。</li>
-                <li>按用户层级页面展示层级配置列表，按钮文案为“使用层级配置”。</li>
-                <li>若当前页面对应配置已被系统使用，则右侧使用按钮置灰且不可点击。</li>
-                <li>若当前页面对应配置未被系统使用，则右侧使用按钮可点击，用于切换系统生效配置。</li>
-              </ul>
-            </div>
-            <div class="prd-block">
-              <h3>四、切换确认规则</h3>
-              <ul>
-                <li>当前系统已选用层级配置时，点击“使用等级配置”，弹窗提示：当前系统已选用层级配置，请确认是否改为等级配置。</li>
-                <li>当前系统已选用等级配置时，点击“使用层级配置”，弹窗提示：当前系统已选用等级配置，请确认是否改为层级配置。</li>
-                <li>弹窗按钮：取消、确认修改。</li>
-                <li>点击确认修改后，系统生效配置更新为当前页面对应配置，并刷新顶部当前使用状态。</li>
-              </ul>
-            </div>
-            <div class="prd-block">
-              <h3>五、列表字段规则</h3>
-              <table class="prd-table">
+            <div>
+              <table>
                 <thead>
                   <tr>
-                    <th>配置方式</th>
-                    <th>列表字段</th>
+                    <th class="seq">序号</th>
+                    <th class="name">名称</th>
+                    <th class="imgcol">图片</th>
+                    <th class="datecol">最后操作时间</th>
+                    <th>最后操作人</th>
+                    <th class="opcol">操作</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>按用户等级</td>
-                    <td>等级、单日提款总次数、单日最高提款总额、银行卡单次提款最低限额、银行卡单次提款最高限额、大额提款标记金额</td>
+                    <td>1</td>
+                    <td>Comissão do Agente</td>
+                    <td><div class="banner-thumb b1">Comissão da<br>Agência<br>até 50%</div></td>
+                    <td>2025-10-30 15:12:06</td>
+                    <td>super762</td>
+                    <td><button class="act edit-btn" data-title="Comissão do Agente" data-image="b1" data-jump="inline">✎</button></td>
                   </tr>
                   <tr>
-                    <td>按用户层级</td>
-                    <td>会员层级、单日提款总次数、单日最高提款总额</td>
+                    <td>2</td>
+                    <td>Indique amigos para receber um bônus</td>
+                    <td><div class="banner-thumb b2">Convide<br>e receba<br>R$65!</div></td>
+                    <td>2026-06-09 07:25:58</td>
+                    <td>super762</td>
+                    <td><button class="act edit-btn" data-title="Indique amigos para receber um bônus" data-image="b2" data-jump="external">✎</button></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Ganhe um bônus de R$678!</td>
+                    <td><div class="banner-thumb b3">Bônus de<br>login<br>R$678</div></td>
+                    <td>2025-10-30 12:24:38</td>
+                    <td>super762</td>
+                    <td><button class="act edit-btn" data-title="Ganhe um bônus de R$678!" data-image="b3" data-jump="none">✎</button></td>
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div class="prd-block">
-              <h3>六、字段编辑与保存</h3>
-              <ul>
-                <li>列表字段内容可独立输入和保存，不与“使用等级配置/使用层级配置”按钮绑定。</li>
-                <li>“使用等级配置/使用层级配置”按钮仅用于改变系统当前采用的配置维度。</li>
-                <li>字段编辑保存后的校验规则、金额精度、次数上限范围由后端现有规则承接；若需新增限制，待确认。</li>
-              </ul>
+
+              <div class="pagination">
+                <span>共 3 条数据</span><span class="page-num">1</span><select class="select-lite"><option>50 条/页</option></select>
+              </div>
+
+              <div class="modal-zone" id="editModal">
+                <div class="modal-card">
+                  <div class="modal-head"><span id="modalTitle">编辑</span><button class="close-modal" type="button">×</button></div>
+                  <div class="modal-form">
+                    <div class="row"><span class="label">名称：</span><input class="input" id="modalName" value="Comissão do Agente"></div>
+                    <div class="row upload-line">
+                      <span class="label">图片：</span>
+                      <div>
+                        <div class="upload"><div class="banner-thumb b1" id="modalImage">Comissão da<br>Agência<br>até 50%</div><button class="btn">上传图片</button></div>
+                        <div class="hint">支持JPG/PNG/SVG格式的图片（建议尺寸：224 x 140）</div>
+                      </div>
+                    </div>
+                    <div class="row radio-line">
+                      <span class="label">跳转方式：</span>
+                      <label class="radio"><input type="radio" name="jumpType" value="inline">内联链接</label>
+                      <label class="radio"><input type="radio" name="jumpType" value="external">跳转至链接</label>
+                      <label class="radio"><input type="radio" name="jumpType" value="none">不做跳转</label>
+                    </div>
+                    <div class="row jump-panel" data-panel="inline"><span class="label">活动名称：</span><select class="select"><option>充值页</option><option>提现页</option><option>推广中心页</option><option selected>活动页</option><option>VIP页</option><option>兑换码页</option><option>首页</option></select></div>
+                    <div class="row jump-panel" data-panel="external"><span class="label">跳转链接：</span><input class="input" placeholder="请输入"></div>
+                    <div class="confirm"><button class="btn">确定</button></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </section>
-      </section>
-    </main>
-  </div>
+        </div>
+      </main>
+    </div>
+  </section>
 
-  <div id="confirmMask" class="modal-mask hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
-    <div class="confirm-modal">
-      <div id="confirmTitle" class="confirm-title">确认使用配置</div>
-      <div id="confirmBody" class="confirm-body"></div>
-      <div class="confirm-actions">
-        <button id="cancelSwitch" class="plain-button" type="button">取消</button>
-        <button id="confirmSwitch" class="primary-button" type="button">确认修改</button>
+  <section class="screen" id="client-screen">
+    <div class="client">
+      <div class="phone">
+        <div class="client-top">
+          <div class="menu-btn">≡</div>
+          <div class="kk-logo">KK<strong>678</strong><small>.com</small></div>
+          <div class="balance"><span class="coin"></span><span>R$ 507,67</span></div>
+          <div class="deposit-btn">Depósito</div>
+        </div>
+        <div class="client-stage">
+          <div class="main-banner">
+            <div class="cashback">
+              <span class="big">50%</span>
+              <span class="copy">de cashback nas perdas</span>
+              <span class="strip">Com recompensas diárias e semanais!</span>
+            </div>
+          </div>
+
+          <div class="marketing-row">
+            <div class="mini-promo agent">
+              <div class="mini-title"><mark>Comissão da</mark><br>Agência<br>até <strong>50%</strong></div>
+            </div>
+            <div class="mini-promo invite">
+              <div class="mini-title"><mark>Convide 1 pessoa</mark><br>Bônus<br><strong>R$ 65!</strong></div>
+            </div>
+            <div class="mini-promo login">
+              <div class="mini-title"><mark>Bônus de Login</mark><br>Bônus máximo:<br><strong>R$ 678</strong></div>
+            </div>
+          </div>
+
+          <div class="notice">
+            <div class="notice-left">📣 <span>2</span></div>
+            <div class="notice-search">⌕</div>
+          </div>
+
+          <div class="category-tabs">
+            <div class="cat active"><span class="cat-ico">🔥</span><span>Popular</span></div>
+            <div class="cat"><span class="cat-ico">PG</span><span>PG</span></div>
+            <div class="cat"><span class="cat-ico">β</span><span>Betby</span></div>
+            <div class="cat"><span class="cat-ico">▶</span><span>PP</span></div>
+            <div class="cat"><span class="cat-ico">JDB</span><span>JDB</span></div>
+          </div>
+
+          <div class="game-section">
+            <div class="game-head">
+              <div>🔥 Popular <span class="game-count">100</span></div>
+              <div class="arrows"><span>←</span><span>→</span></div>
+            </div>
+            <div class="game-grid">
+              <div class="game-card">Fortune<br>Tiger</div>
+              <div class="game-card">Fortune<br>Snake</div>
+              <div class="game-card">Fortune<br>Rabbit</div>
+              <div class="game-card">Pinata<br>Wins</div>
+              <div class="game-card">Fortune<br>Ox</div>
+              <div class="game-card">Double<br>Fortune</div>
+              <div class="game-card">Fortune<br>Dragon</div>
+              <div class="game-card">Wild<br>Bounty</div>
+            </div>
+          </div>
+
+          <div class="float-ad">1 pessoa<br>ganhe<br>R$56<br><br>00:44:38</div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="active"><span class="nav-ico">⌂</span><span>Início</span></div>
+          <div><span class="nav-ico">🎁</span><span>Promoção</span></div>
+          <div><span class="nav-ico">👥</span><span>convidar</span></div>
+          <div><span class="nav-ico">💳</span><span>Saque</span></div>
+          <div><span class="nav-ico">👤</span><span>Perfil</span></div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <section class="screen" id="prd-screen">
+    <div class="prd">
+      <article class="prd-doc">
+        <h1>DD.GG 后台营销配置 PRD说明</h1>
+        <div class="meta">版本：V1.0　适用范围：DD.GG 后台「系统设置 / 站点显示配置」与客户端首页营销展示区域</div>
+
+        <h2>一、需求背景</h2>
+        <p>为支持客户端首页固定营销位内容维护，DD.GG 后台需在「站点显示配置」中新增「营销配置」模块。运营可维护营销位名称、图片与点击跳转方式，客户端首页在主轮播图下方固定展示 3 个营销入口。</p>
+
+        <h2>二、需求范围</h2>
+        <ul>
+          <li>后台仅新增「营销配置」模块，不涉及其他站点显示配置项的新增或改造。</li>
+          <li>营销配置为固定 3 条内容展示，不支持新增、删除、筛选查询。</li>
+          <li>每条营销内容支持编辑，编辑弹窗由列表「操作」按钮触发。</li>
+          <li>客户端首页展示区域固定为 3 个营销卡片，位置在首页主 banner 下方。</li>
+        </ul>
+
+        <h2>三、后台入口</h2>
+        <table class="prd-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">项目</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>菜单路径</td>
+              <td>系统管理 / 系统设置 / 站点显示配置 / 营销配置</td>
+            </tr>
+            <tr>
+              <td>同级模块</td>
+              <td>保留原有「轮播图」「跑马灯」，新增「营销配置」。本次不增加竞品后台中的其他配置模块。</td>
+            </tr>
+            <tr>
+              <td>地区与商户</td>
+              <td>沿用当前系统设置页顶部的地区、商户选择逻辑。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>四、后台列表规则</h2>
+        <table class="prd-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">字段</th>
+              <th style="width: 28%;">说明</th>
+              <th>规则</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>序号</td>
+              <td>展示营销位顺序</td>
+              <td>固定展示 1、2、3；客户端按该顺序从左到右展示。</td>
+            </tr>
+            <tr>
+              <td>名称</td>
+              <td>营销内容名称</td>
+              <td>用于后台识别与客户端卡片对应，不作为查询条件。</td>
+            </tr>
+            <tr>
+              <td>图片</td>
+              <td>营销位展示图</td>
+              <td>支持 JPG/PNG/SVG 格式；建议尺寸 224 x 140。</td>
+            </tr>
+            <tr>
+              <td>最后操作时间</td>
+              <td>最近一次保存时间</td>
+              <td>编辑并保存后更新。</td>
+            </tr>
+            <tr>
+              <td>最后操作人</td>
+              <td>最近一次保存操作账号</td>
+              <td>编辑并保存后更新为当前后台操作人。</td>
+            </tr>
+            <tr>
+              <td>操作</td>
+              <td>编辑入口</td>
+              <td>点击编辑图标后弹出编辑弹窗。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>五、编辑弹窗</h2>
+        <table class="prd-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">字段</th>
+              <th style="width: 22%;">类型</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>名称</td>
+              <td>输入框</td>
+              <td>编辑营销内容名称。</td>
+            </tr>
+            <tr>
+              <td>图片</td>
+              <td>上传组件</td>
+              <td>展示当前图片缩略图，支持重新上传；格式支持 JPG/PNG/SVG，建议尺寸 224 x 140。</td>
+            </tr>
+            <tr>
+              <td>跳转方式</td>
+              <td>单选项</td>
+              <td>支持「内联链接」「跳转至链接」「不做跳转」三种方式。</td>
+            </tr>
+            <tr>
+              <td>活动名称</td>
+              <td>下拉框</td>
+              <td>当跳转方式为「内联链接」时展示。选项：充值页、提现页、推广中心页、活动页、VIP页、兑换码页、首页。</td>
+            </tr>
+            <tr>
+              <td>跳转链接</td>
+              <td>输入框</td>
+              <td>当跳转方式为「跳转至链接」时展示，用于配置外部或指定 URL。</td>
+            </tr>
+            <tr>
+              <td>确定</td>
+              <td>按钮</td>
+              <td>保存当前营销配置；保存后关闭弹窗并刷新列表中的最后操作时间、最后操作人。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>六、跳转规则</h2>
+        <table class="prd-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">跳转方式</th>
+              <th>客户端点击效果</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">内联链接</span></td>
+              <td>点击营销卡片后，在客户端内跳转到后台选择的页面，例如充值页、活动页、VIP页等。</td>
+            </tr>
+            <tr>
+              <td><span class="tag">跳转至链接</span></td>
+              <td>点击营销卡片后，按配置的跳转链接打开对应页面。</td>
+            </tr>
+            <tr>
+              <td><span class="tag">不做跳转</span></td>
+              <td>点击营销卡片无跳转行为，仅作为展示图使用。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>七、客户端展示规则</h2>
+        <ul>
+          <li>展示位置：首页主 banner 下方，公告栏上方。</li>
+          <li>展示数量：固定 3 个营销卡片。</li>
+          <li>展示顺序：按后台列表序号 1、2、3 从左到右展示。</li>
+          <li>展示内容：使用后台配置的图片；点击行为按后台配置的跳转方式执行。</li>
+          <li>当图片加载失败时的兜底样式、是否需要默认图：待确认。</li>
+        </ul>
+
+        <h2>八、已确认规则</h2>
+        <ul>
+          <li>名称字段客户端展示规则：按竞品所示，本期客户端不展示名称，仅展示营销图片内容。</li>
+          <li>图片上传限制：单图文件大小不超过 5M。</li>
+          <li>跳转至链接规则：本期不做扩充，不新增外部域名白名单等额外校验能力。</li>
+          <li>编辑保存记录：编辑保存后需在数据库记录最后操作人、最后操作时间。</li>
+        </ul>
+      </article>
+    </div>
+  </section>
 
   <script>
-    const vipData = [
-      ["VIP0", "3", "300", "15", "300", "0"],
-      ["VIP1", "100", "4888", "48", "48810", "10000"],
-      ["VIP2", "100", "5000000", "0", "5000000", "20000"],
-      ["VIP3", "100", "100000000", "0", "100000000", "0"],
-      ["VIP4", "5", "30000", "10", "200000", "0"],
-      ["VIP5", "100", "1000000", "0", "100000", "0"],
-      ["VIP6", "100", "1000000", "0", "100000", "0"],
-      ["VIP7", "100", "1000000", "0", "100000", "0"],
-      ["VIP8", "100", "1000000", "0", "100000", "0"],
-      ["VIP9", "100", "1000000", "0", "100000", "0"],
-      ["VIP10", "100", "1000000", "0", "100000", "0"],
-      ["VIP11", "0", "0", "0", "0", "0"],
-      ["VIP12", "0", "0", "0", "0", "0"],
-      ["VIP13", "0", "0", "0", "0", "0"],
-      ["VIP14", "0", "0", "0", "0", "0"],
-      ["VIP15", "0", "0", "0", "0", "0"],
-      ["VIP16", "0", "0", "0", "0", "0"],
-      ["VIP17", "0", "0", "0", "0", "0"],
-      ["VIP18", "0", "0", "0", "0", "0"]
-    ];
-
-    const layerData = [
-      ["默认层级", "1", "10000.00"],
-      ["黑名单", "1", "1.00"],
-      ["无优惠", "1", "1.00"],
-      ["10雷", "99", "5000000.00"],
-      ["不出款", "1", "1.00"],
-      ["刷子套利", "1", "1.00"],
-      ["无宝箱层级", "1", "1.00"],
-      ["测试账号", "2", "20.00"],
-      ["20雷", "99", "5000000.00"],
-      ["50雷", "99", "5000000.00"],
-      ["100雷", "99", "5000000.00"],
-      ["200雷", "99", "5000000.00"],
-      ["500雷", "99", "5000000.00"],
-      ["1000雷", "99", "5000000.00"],
-      ["5000雷", "99", "5000000.00"],
-      ["10000雷", "99", "5000000.00"],
-      ["50000雷", "99", "5000000.00"],
-      ["无佣金", "0", "0.00"]
-    ];
-
-    const effectiveCopy = {
-      vip: {
-        text: "当前提现限制按 VIP 等级生效，用户层级配置不参与判断。",
-        button: "使用等级配置",
-        name: "等级配置",
-        target: "等级配置",
-        current: "等级配置"
-      },
-      layer: {
-        text: "当前提现限制按用户层级生效，VIP 等级配置不参与判断。",
-        button: "使用层级配置",
-        name: "层级配置",
-        target: "层级配置",
-        current: "层级配置"
-      }
+    const buttons = document.querySelectorAll(".switcher button");
+    const screens = document.querySelectorAll(".screen");
+    const modal = document.getElementById("editModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalName = document.getElementById("modalName");
+    const modalImage = document.getElementById("modalImage");
+    const jumpRadios = document.querySelectorAll('input[name="jumpType"]');
+    const imageText = {
+      b1: "Comissão da<br>Agência<br>até 50%",
+      b2: "Convide<br>e receba<br>R$65!",
+      b3: "Bônus de<br>login<br>R$678"
     };
 
-    let viewMode = "vip";
-    let activeConfig = "vip";
-    let pendingMode = "";
-
-    function makeCell(value, editable) {
-      const td = document.createElement("td");
-      td.textContent = value;
-      if (editable) {
-        td.dataset.value = value;
-        td.addEventListener("dblclick", () => startEdit(td));
-      }
-      return td;
-    }
-
-    function renderRows(targetId, data, editableFromColumn) {
-      const tbody = document.getElementById(targetId);
-      tbody.innerHTML = "";
-      data.forEach((row) => {
-        const tr = document.createElement("tr");
-        row.forEach((value, index) => {
-          tr.appendChild(makeCell(value, index >= editableFromColumn));
-        });
-        tbody.appendChild(tr);
+    function syncJumpPanels(value) {
+      document.querySelectorAll(".jump-panel").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.panel === value);
       });
     }
 
-    function startEdit(td) {
-      if (td.querySelector("input")) return;
-
-      const original = td.dataset.value || td.textContent.trim();
-      td.innerHTML = "";
-
-      const wrap = document.createElement("span");
-      wrap.className = "cell-edit";
-
-      const input = document.createElement("input");
-      input.type = "number";
-      input.value = original;
-      input.step = "0.01";
-
-      const save = document.createElement("button");
-      save.className = "row-action";
-      save.type = "button";
-      save.title = "确认";
-      save.textContent = "✓";
-
-      const cancel = document.createElement("button");
-      cancel.className = "row-action";
-      cancel.type = "button";
-      cancel.title = "取消";
-      cancel.textContent = "×";
-
-      save.addEventListener("click", () => {
-        const nextValue = input.value.trim() || "0";
-        td.dataset.value = nextValue;
-        td.textContent = nextValue;
+    function openEditModal(button) {
+      const jumpType = button.dataset.jump;
+      modalTitle.textContent = "编辑";
+      modalName.value = button.dataset.title;
+      modalImage.className = `banner-thumb ${button.dataset.image}`;
+      modalImage.innerHTML = imageText[button.dataset.image];
+      jumpRadios.forEach((radio) => {
+        radio.checked = radio.value === jumpType;
       });
-
-      cancel.addEventListener("click", () => {
-        td.textContent = original;
-      });
-
-      input.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") save.click();
-        if (event.key === "Escape") cancel.click();
-      });
-
-      wrap.append(input, save, cancel);
-      td.appendChild(wrap);
-      input.focus();
-      input.select();
+      syncJumpPanels(jumpType);
+      modal.classList.add("open");
     }
 
-    document.querySelectorAll(".edit-mark").forEach((mark) => {
-      mark.addEventListener("click", (event) => {
-        const th = event.currentTarget.closest("th");
-        const columnIndex = Array.from(th.parentElement.children).indexOf(th);
-        const panel = th.closest("section");
-        const firstCell = panel.querySelector(`tbody tr td:nth-child(${columnIndex + 1})`);
-        if (firstCell) startEdit(firstCell);
-      });
-    });
-
-    function updateView(mode) {
-      viewMode = mode;
-      pendingMode = "";
-      document.getElementById("vipPanel").classList.toggle("hidden", mode !== "vip");
-      document.getElementById("layerPanel").classList.toggle("hidden", mode !== "layer");
-
-      document.querySelectorAll(".mode-option").forEach((button) => {
-        const active = button.dataset.viewMode === mode;
-        button.classList.toggle("active", active);
-        button.setAttribute("aria-checked", String(active));
-      });
-
-      updateUsageArea();
+    function closeEditModal() {
+      modal.classList.remove("open");
     }
 
-    function updateUsageArea() {
-      const isCurrentActive = viewMode === activeConfig;
-      const button = document.getElementById("useConfigButton");
-      document.getElementById("effectiveText").textContent = effectiveCopy[activeConfig].text;
-      document.getElementById("modeStatus").textContent = `当前使用：${effectiveCopy[activeConfig].name}`;
-      button.textContent = effectiveCopy[viewMode].button;
-      button.disabled = isCurrentActive;
-      button.title = isCurrentActive ? `系统已使用${effectiveCopy[viewMode].name}` : `点击后改为使用${effectiveCopy[viewMode].name}`;
-    }
-
-    function openConfirm(mode) {
-      pendingMode = mode;
-      document.getElementById("confirmBody").textContent = `当前系统已选用${effectiveCopy[activeConfig].current}，请确认是否改为${effectiveCopy[mode].target}。`;
-      document.getElementById("confirmMask").classList.remove("hidden");
-    }
-
-    function closeConfirm() {
-      pendingMode = "";
-      document.getElementById("confirmMask").classList.add("hidden");
-    }
-
-    document.querySelectorAll(".mode-option").forEach((button) => {
+    buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        const nextMode = button.dataset.viewMode;
-        if (nextMode === viewMode) return;
-        updateView(nextMode);
+        buttons.forEach((item) => item.classList.remove("active"));
+        screens.forEach((screen) => screen.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.target).classList.add("active");
       });
     });
 
-    document.getElementById("cancelSwitch").addEventListener("click", closeConfirm);
-    document.getElementById("confirmSwitch").addEventListener("click", () => {
-      if (pendingMode) {
-        activeConfig = pendingMode;
-        updateUsageArea();
-      }
-      closeConfirm();
+    document.querySelectorAll(".edit-btn").forEach((button) => {
+      button.addEventListener("click", () => openEditModal(button));
     });
 
-    document.getElementById("useConfigButton").addEventListener("click", () => {
-      if (viewMode === activeConfig) return;
-      openConfirm(viewMode);
+    jumpRadios.forEach((radio) => {
+      radio.addEventListener("change", () => syncJumpPanels(radio.value));
     });
 
-    renderRows("vipRows", vipData, 1);
-    renderRows("layerRows", layerData, 1);
-    updateUsageArea();
+    document.querySelector(".close-modal").addEventListener("click", closeEditModal);
+    modal.querySelector(".confirm .btn").addEventListener("click", closeEditModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeEditModal();
+    });
   </script>
 </body>
 </html>
