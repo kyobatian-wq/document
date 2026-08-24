@@ -736,50 +736,6 @@
       display: block;
     }
 
-    .log-panel {
-      display: none;
-      margin-top: 14px;
-      border: 1px solid #ebeef5;
-      background: #fff;
-    }
-
-    .log-panel.show {
-      display: block;
-    }
-
-    .log-title {
-      height: 38px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      border-bottom: 1px solid #ebeef5;
-      color: #303133;
-      font-weight: 700;
-    }
-
-    .log-list {
-      max-height: 132px;
-      overflow: auto;
-    }
-
-    .log-item {
-      min-height: 36px;
-      display: grid;
-      grid-template-columns: 170px 120px 1fr 160px;
-      align-items: center;
-      gap: 12px;
-      padding: 0 14px;
-      border-bottom: 1px solid #f2f4f7;
-      color: #606266;
-      font-size: 13px;
-    }
-
-    .log-empty {
-      padding: 12px 14px;
-      color: #909399;
-      font-size: 13px;
-    }
-
     .confirm-mask {
       position: fixed;
       inset: 0;
@@ -1071,11 +1027,6 @@
           </table>
         </div>
 
-        <div class="log-panel" id="logPanel">
-          <div class="log-title">操作日志</div>
-          <div class="log-list" id="logList"></div>
-        </div>
-
         <section class="prd-section" id="prdSection">
           <h2 class="prd-title">PRD说明：巴西站 IP白名单</h2>
           <p class="prd-desc">本需求新增后台IP白名单和APP端IP白名单，用于限制指定来源IP访问对应系统能力。后台IP白名单用于限制后台登录/访问；APP端IP白名单用于限制玩家访问客户端。当前原型按竞品页面结构还原，并结合已确认业务口径补充交互与规则说明。</p>
@@ -1108,7 +1059,7 @@
                 </tr>
                 <tr>
                   <td>删除规则</td>
-                  <td>删除为停用/软删除，不做物理删除；需要记录操作日志。</td>
+                  <td>删除为停用/软删除，不做物理删除；后端记录操作日志，后台页面不展示。</td>
                 </tr>
                 <tr>
                   <td>编辑规则</td>
@@ -1170,7 +1121,7 @@
                 <tr>
                   <td>删除</td>
                   <td>单条删除、批量删除</td>
-                  <td>点击删除需二次确认；确认后执行停用/软删除并记录操作日志。</td>
+                  <td>点击删除需二次确认；确认后执行停用/软删除，后端记录操作日志，后台页面不展示。</td>
                 </tr>
               </tbody>
             </table>
@@ -1210,7 +1161,7 @@
                 <tr>
                   <td>删除</td>
                   <td>单条删除</td>
-                  <td>点击删除需二次确认；确认后执行停用/软删除并记录操作日志。APP端当前不展示批量删除。</td>
+                  <td>点击删除需二次确认；确认后执行停用/软删除，后端记录操作日志，后台页面不展示。APP端当前不展示批量删除。</td>
                 </tr>
               </tbody>
             </table>
@@ -1278,7 +1229,7 @@
                   <td><span class="prd-tag">停用/软删除</span></td>
                   <td>不展示</td>
                   <td>无前台操作</td>
-                  <td>删除确认后进入停用/软删除状态，需保留后台数据和操作日志。</td>
+                  <td>删除确认后进入停用/软删除状态，需保留后台数据；操作日志由后端记录，后台页面不展示。</td>
                 </tr>
               </tbody>
             </table>
@@ -1419,8 +1370,6 @@
     const filterRow = document.getElementById("filterRow");
     const appLimitTip = document.getElementById("appLimitTip");
     const batchDeleteBtn = document.getElementById("batchDeleteBtn");
-    const logPanel = document.getElementById("logPanel");
-    const logList = document.getElementById("logList");
     const tableCols = document.getElementById("tableCols");
     const tableHead = document.getElementById("tableHead");
     const tableBody = document.getElementById("tableBody");
@@ -1445,7 +1394,6 @@
     const backendTypeLine = document.getElementById("backendTypeLine");
     const toast = document.getElementById("toast");
     const deleteConfirmMask = document.getElementById("deleteConfirmMask");
-    const operationLogs = [];
 
     function visibleRows(rows = datasets[currentTab]) {
       return rows.filter(row => row.status !== "disabled");
@@ -1463,27 +1411,6 @@
         index !== skipIndex &&
         row.ip.toLowerCase() === value.toLowerCase()
       );
-    }
-
-    function addOperationLog(action, row) {
-      operationLogs.unshift({
-        time: "2026-08-23 23:59:12",
-        operator: "Cuculus888",
-        action,
-        detail: `${currentTab === "app" ? "APP端" : "后台"}IP白名单：${row.ip}`
-      });
-      renderOperationLogs();
-    }
-
-    function renderOperationLogs() {
-      logList.innerHTML = operationLogs.length ? operationLogs.map(log => `
-        <div class="log-item">
-          <span>${log.time}</span>
-          <span>${log.operator}</span>
-          <span>${log.detail}</span>
-          <span>${log.action}</span>
-        </div>
-      `).join("") : "<div class=\"log-empty\">暂无操作日志</div>";
     }
 
     function renderTableHead() {
@@ -1596,7 +1523,6 @@
       filterRow.classList.toggle("app-mode", isApp);
       appLimitTip.classList.toggle("show", isApp);
       batchDeleteBtn.style.display = isApp ? "none" : "inline-block";
-      logPanel.classList.add("show");
       document.querySelectorAll(".backend-filter").forEach(item => {
         item.style.display = isApp ? "none" : "flex";
       });
@@ -1813,11 +1739,9 @@
 
       if (editingIndex === null) {
         datasets[currentTab].unshift(row);
-        addOperationLog("新增", row);
         showToast("新增成功");
       } else {
         datasets[currentTab][editingIndex] = { ...datasets[currentTab][editingIndex], ip: row.ip, remark: row.remark, operator: row.operator, time: row.time };
-        addOperationLog("编辑", datasets[currentTab][editingIndex]);
         showToast("编辑成功");
       }
       closeModal();
@@ -1844,7 +1768,6 @@
       } else {
         openDeleteConfirm(() => {
           datasets[currentTab][rowIndex] = { ...datasets[currentTab][rowIndex], status: "disabled", operator: "Cuculus888", time: "2026-08-23 23:59:12" };
-          addOperationLog("停用/软删除", datasets[currentTab][rowIndex]);
           showToast("已停用");
           renderTable();
         });
@@ -1870,7 +1793,6 @@
       openDeleteConfirm(() => {
         selectedIndexes.forEach(index => {
           datasets[currentTab][index] = { ...datasets[currentTab][index], status: "disabled", operator: "Cuculus888", time: "2026-08-23 23:59:12" };
-          addOperationLog("批量停用/软删除", datasets[currentTab][index]);
         });
         showToast("批量停用成功");
         renderTable();
@@ -1895,7 +1817,6 @@
     });
 
     updatePageMode();
-    renderOperationLogs();
     renderTable();
   </script>
 </body>
