@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>巴西 - IP白名单</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: #303133;
+      background: #f5f7fa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .app {
+      min-width: 1280px;
+      min-height: 100vh;
+      display: flex;
+      background: #fff;
+    }
+
+    .sidebar {
+      width: 208px;
+      min-height: 100vh;
+      color: #b9c7d6;
+      background: #001a2b;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 18px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, .05);
+    }
+
+    .brand-mark {
+      width: 26px;
+      height: 18px;
+      border-radius: 3px;
+      background: linear-gradient(135deg, #0e76d3 0 46%, #e0444e 47% 74%, #243a8f 75%);
+      transform: skew(-12deg);
+    }
+
+    .nav {
+      flex: 1;
+      padding: 8px 0;
+      overflow: hidden;
+    }
+
+    .nav-item,
+    .nav-sub {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 44px;
+      padding: 0 18px;
+      color: #b9c7d6;
+      white-space: nowrap;
+    }
+
+    .nav-sub {
+      height: 39px;
+      padding-left: 38px;
+      color: #d2dce6;
+    }
+
+    .nav-item.active-group {
+      color: #fff;
+      background: #08283e;
+    }
+
+    .nav-sub.selected {
+      color: #fff;
+      background: #0b6fc7;
+    }
+
+    .nav-sub.dim {
+      color: #8fa2b4;
+    }
+
+    .nav-icon {
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid currentColor;
+      border-radius: 2px;
+      font-size: 10px;
+    }
+
+    .nav-arrow {
+      margin-left: auto;
+      font-size: 12px;
+      color: #7f93a5;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 9px;
+      color: #fff;
+      background: #e73535;
+      font-size: 11px;
+      line-height: 18px;
+      text-align: center;
+    }
+
+    .version {
+      padding: 0 18px 9px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      background: #fff;
+    }
+
+    .topbar {
+      height: 45px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #edf0f5;
+      background: #fff;
+    }
+
+    .hamburger {
+      width: 44px;
+      text-align: center;
+      color: #333;
+      font-size: 21px;
+    }
+
+    .breadcrumb {
+      color: #6b7a90;
+      font-size: 14px;
+    }
+
+    .breadcrumb .blue {
+      color: #1b72c9;
+      font-weight: 600;
+    }
+
+    .top-meta {
+      margin-left: auto;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-right: 14px;
+      color: #333;
+      font-size: 13px;
+    }
+
+    .signal {
+      color: #d7a025;
+      font-size: 12px;
+    }
+
+    .flag {
+      width: 30px;
+      height: 22px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #009b3a 0 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fedd00;
+      font-size: 11px;
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #42b883, #75a7ff);
+    }
+
+    .page-tab-bar {
+      height: 45px;
+      display: flex;
+      align-items: flex-start;
+      padding-left: 8px;
+      border-bottom: 1px solid #edf0f5;
+      background: #fff;
+    }
+
+    .page-tab {
+      margin-top: 6px;
+      height: 32px;
+      min-width: 80px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: 3px 3px 0 0;
+      color: #1f2d3d;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .page-tab.active {
+      color: #fff;
+      background: #0b6fc7;
+    }
+
+    .content {
+      padding: 26px 18px 0;
+      background: #fff;
+    }
+
+    .tabs {
+      height: 42px;
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      border-bottom: 1px solid #edf0f5;
+      margin-bottom: 34px;
+    }
+
+    .module-tab {
+      height: 42px;
+      min-width: 106px;
+      padding: 0 18px;
+      border: 1px solid #e5e8ef;
+      border-bottom: 0;
+      color: #303133;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .module-tab.active {
+      color: #0b6fc7;
+      font-weight: 600;
+      border-top: 2px solid #0b6fc7;
+      background: #fff;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: 260px 280px 280px 300px 280px 300px;
+      align-items: center;
+      gap: 20px 32px;
+      margin-bottom: 10px;
+    }
+
+    .filter-row.app-mode {
+      grid-template-columns: 280px 340px 300px 300px 150px;
+      margin-bottom: 16px;
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .field label {
+      width: 70px;
+      flex-shrink: 0;
+      color: #303133;
+      text-align: right;
+    }
+
+    .control,
+    .select-control,
+    .textarea-control {
+      width: 100%;
+      height: 32px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      color: #303133;
+      background: #fff;
+      padding: 0 12px;
+      outline: 0;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .control:focus,
+    .select-control:focus,
+    .textarea-control:focus {
+      border-color: #0b8be8;
+      box-shadow: 0 0 0 1px rgba(11, 139, 232, .2);
+    }
+
+    .control::placeholder,
+    .textarea-control::placeholder {
+      color: #c0c4cc;
+    }
+
+    .select-wrap,
+    .combo-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .select-wrap::after {
+      content: "";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-right: 1px solid #bfc5d1;
+      border-bottom: 1px solid #bfc5d1;
+      transform: translateY(-70%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .select-control {
+      appearance: none;
+      padding-right: 32px;
+    }
+
+    .btn {
+      height: 32px;
+      min-width: 54px;
+      padding: 0 14px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      color: #606266;
+      background: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      color: #fff;
+      border-color: #0b6fc7;
+      background: #0b6fc7;
+    }
+
+    .btn.danger {
+      color: #fff;
+      border-color: #0b5eb8;
+      background: #075db7;
+    }
+
+    .toolbar {
+      height: 60px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .app-limit-tip {
+      display: none;
+      margin: 4px 0 12px 18px;
+      color: #909399;
+    }
+
+    .app-limit-tip.show {
+      display: block;
+    }
+
+    .table-wrap {
+      border-top: 1px solid #ebeef5;
+      border-left: 1px solid #ebeef5;
+      min-height: calc(100vh - 330px);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      height: 50px;
+      padding: 0 12px;
+      border-right: 1px solid #ebeef5;
+      border-bottom: 1px solid #ebeef5;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    th {
+      height: 48px;
+      color: #303133;
+      font-weight: 700;
+      background: #fff;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fbfbfc;
+    }
+
+    tbody tr.selected {
+      background: rgba(0, 137, 160, .22);
+    }
+
+    .check-cell {
+      width: 48px;
+    }
+
+    input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      accent-color: #0b6fc7;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #0b6fc7;
+      cursor: pointer;
+    }
+
+    .action-icon {
+      border: 0;
+      background: transparent;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      cursor: pointer;
+      color: #4b95c8;
+      font-size: 16px;
+    }
+
+    .action-icon.delete {
+      color: #e49aa2;
+    }
+
+    .pager {
+      position: fixed;
+      left: 230px;
+      bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #303133;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .page-num {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #0b6fc7;
+      border-radius: 5px;
+      color: #0b6fc7;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page-size {
+      height: 28px;
+      padding: 0 24px 0 8px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      color: #606266;
+      background: #fff;
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 98px;
+      background: rgba(0, 0, 0, .42);
+      z-index: 20;
+    }
+
+    .modal-mask.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 600px;
+      min-height: 665px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .18);
+      overflow: visible;
+    }
+
+    .modal-head {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      border-bottom: 1px solid #ebeef5;
+      color: #303133;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 24px;
+      height: 24px;
+      border: 0;
+      background: transparent;
+      color: #909399;
+      cursor: pointer;
+      font-size: 28px;
+      line-height: 20px;
+    }
+
+    .modal-body {
+      padding: 22px 0 0;
+    }
+
+    .form-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 56px;
+      padding-left: 114px;
+      padding-right: 122px;
+    }
+
+    .form-row.textarea-row {
+      align-items: flex-start;
+      min-height: 108px;
+      padding-top: 7px;
+    }
+
+    .form-label {
+      width: 76px;
+      margin-right: 12px;
+      text-align: right;
+      color: #303133;
+      flex-shrink: 0;
+    }
+
+    .required-mark {
+      color: #f56c6c;
+      margin-right: 4px;
+    }
+
+    .form-control-area {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .form-control-area .control,
+    .form-control-area .select-control,
+    .form-control-area .textarea-control {
+      width: 100%;
+    }
+
+    .textarea-control {
+      height: 98px;
+      resize: none;
+      padding: 10px 12px;
+      line-height: 20px;
+    }
+
+    .counter {
+      position: absolute;
+      right: 0;
+      bottom: -21px;
+      color: #909399;
+    }
+
+    .radio-line {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .radio-line label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .combo-input {
+      padding-right: 34px;
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 0;
+      right: 8px;
+      width: 28px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c0c4cc;
+      pointer-events: none;
+      font-size: 16px;
+    }
+
+    .combo-menu {
+      position: absolute;
+      top: 38px;
+      left: 0;
+      right: 0;
+      max-height: 292px;
+      padding: 6px 0;
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .12);
+      overflow-y: auto;
+      z-index: 40;
+      display: none;
+    }
+
+    .combo-menu.show {
+      display: block;
+    }
+
+    .combo-option {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: #303133;
+      cursor: pointer;
+    }
+
+    .combo-option:hover,
+    .combo-option.active {
+      color: #303133;
+      background: #d9f4fb;
+      font-weight: 600;
+    }
+
+    .modal-foot {
+      display: flex;
+      justify-content: center;
+      padding-top: 38px;
+    }
+
+    .modal-foot .btn {
+      height: 34px;
+      min-width: 58px;
+    }
+
+    .control:disabled,
+    .select-control:disabled,
+    .textarea-control:disabled {
+      color: #b1b3b8;
+      background: #f5f7fa;
+      cursor: not-allowed;
+    }
+
+    .radio-line.disabled label {
+      color: #c0c4cc;
+      cursor: not-allowed;
+    }
+
+    .radio-line.disabled input {
+      cursor: not-allowed;
+    }
+
+    .clear-dot {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      color: #fff;
+      background: #c0c4cc;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 16px;
+      cursor: pointer;
+    }
+
+    .edit-mode .clear-dot {
+      display: flex;
+    }
+
+    .toast {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 210px;
+      padding: 10px 18px;
+      border-radius: 4px;
+      color: #0f5132;
+      background: #d1e7dd;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .12);
+      display: none;
+      z-index: 60;
+      text-align: center;
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    .log-panel {
+      display: none;
+      margin-top: 14px;
+      border: 1px solid #ebeef5;
+      background: #fff;
+    }
+
+    .log-panel.show {
+      display: block;
+    }
+
+    .log-title {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border-bottom: 1px solid #ebeef5;
+      color: #303133;
+      font-weight: 700;
+    }
+
+    .log-list {
+      max-height: 132px;
+      overflow: auto;
+    }
+
+    .log-item {
+      min-height: 36px;
+      display: grid;
+      grid-template-columns: 170px 120px 1fr 160px;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      border-bottom: 1px solid #f2f4f7;
+      color: #606266;
+      font-size: 13px;
+    }
+
+    .log-empty {
+      padding: 12px 14px;
+      color: #909399;
+      font-size: 13px;
+    }
+
+    .confirm-mask {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 92px;
+      background: rgba(0, 0, 0, .42);
+      z-index: 50;
+    }
+
+    .confirm-mask.show {
+      display: flex;
+    }
+
+    .confirm-dialog {
+      width: 520px;
+      min-height: 145px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .18);
+      padding: 25px 30px 28px;
+    }
+
+    .confirm-content {
+      display: flex;
+      gap: 14px;
+    }
+
+    .confirm-icon {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      border-radius: 50%;
+      color: #fff;
+      background: #f3c23c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .confirm-title {
+      color: #303133;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 26px;
+    }
+
+    .confirm-message {
+      margin-top: 14px;
+      color: #909399;
+      font-size: 15px;
+    }
+
+    .confirm-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .confirm-actions .btn {
+      height: 38px;
+      min-width: 72px;
+      font-size: 16px;
+    }
+
+    .prd-section {
+      margin: 22px 0 86px;
+      padding: 20px 22px 26px;
+      border: 1px solid #e5e8ef;
+      background: #fff;
+    }
+
+    .prd-title {
+      margin: 0 0 8px;
+      color: #1f2d3d;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .prd-desc {
+      margin: 0 0 18px;
+      color: #606266;
+      line-height: 1.7;
+    }
+
+    .prd-block {
+      margin-top: 18px;
+    }
+
+    .prd-block h3 {
+      margin: 0 0 10px;
+      color: #303133;
+      font-size: 16px;
+    }
+
+    .prd-block p {
+      margin: 0 0 8px;
+      color: #606266;
+      line-height: 1.7;
+    }
+
+    .prd-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+
+    .prd-table th,
+    .prd-table td {
+      height: auto;
+      min-height: 38px;
+      padding: 10px 12px;
+      border: 1px solid #ebeef5;
+      text-align: left;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      line-height: 1.6;
+    }
+
+    .prd-table th {
+      color: #303133;
+      background: #f7f9fc;
+      font-weight: 700;
+    }
+
+    .prd-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 3px;
+      color: #0b6fc7;
+      background: #edf6ff;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark"></span><span>Panda</span></div>
+      <nav class="nav">
+        <div class="nav-item"><span class="nav-icon">◇</span><span>平台概况</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item active-group"><span class="nav-icon">⚙</span><span>系统管理</span><span class="nav-arrow">⌃</span></div>
+        <div class="nav-sub dim">系统设置</div>
+        <div class="nav-sub dim">安全配置</div>
+        <div class="nav-sub dim">域名管理</div>
+        <div class="nav-sub selected">IP白名单</div>
+        <div class="nav-sub dim">指纹白名单</div>
+        <div class="nav-sub dim">子账号操作日志(新)</div>
+        <div class="nav-sub dim">子账号操作日志</div>
+        <div class="nav-sub dim">马甲包管理</div>
+        <div class="nav-item"><span class="nav-icon">▣</span><span>商户游戏管理</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">♙</span><span>会员管理</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▤</span><span>商户财务管理</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">□</span><span>报表查询</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">⌘</span><span>代理中心(无限极差)</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▭</span><span>商户财务配置</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">✉</span><span>消息管理</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">♧</span><span>福利中心</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▤</span><span>运营相关</span><span class="nav-badge">13</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▣</span><span>推广渠道管理</span><span class="nav-arrow">⌄</span></div>
+        <div class="nav-item"><span class="nav-icon">▧</span><span>子平台游戏管理</span><span class="nav-arrow">⌄</span></div>
+      </nav>
+      <div class="version">V: 2026/08/20 13:23:45</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="hamburger">≡</div>
+        <div class="breadcrumb"><span class="blue">系统管理</span> / / IP白名单</div>
+        <div class="top-meta">
+          <span class="signal">▂▃▅ 213ms</span>
+          <span class="flag">◆</span>
+          <span>巴西<br>Etc/GMT+3</span>
+          <span>2026/08/23 23:46:35</span>
+          <span>⌕</span>
+          <span>↓</span>
+          <span class="user-avatar"></span>
+          <span>Cuculus888</span>
+        </div>
+      </header>
+
+      <div class="page-tab-bar">
+        <button class="page-tab active">IP白名单 ×</button>
+        <button class="page-tab">VIP管理</button>
+      </div>
+
+      <section class="content">
+        <div class="tabs">
+          <button class="module-tab active" data-tab="backend">后台IP白名单</button>
+          <button class="module-tab" data-tab="app">APP端IP白名单</button>
+        </div>
+
+        <div class="filter-row" id="filterRow">
+          <div class="field">
+            <label>地区：</label>
+            <div class="select-wrap"><select class="select-control" id="filterRegion"><option>巴西</option></select></div>
+          </div>
+          <div class="field backend-filter">
+            <label>白名单对象：</label>
+            <div class="select-wrap">
+              <select class="select-control" id="filterTarget">
+                <option>账号</option>
+                <option>后台</option>
+              </select>
+            </div>
+          </div>
+          <div class="field backend-filter">
+            <label>白名单类型：</label>
+            <div class="select-wrap">
+              <select class="select-control" id="filterType">
+                <option>商户账号</option>
+                <option>商户后台</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>商户：</label>
+            <div class="select-wrap"><select class="select-control" id="filterMerchant"><option>762</option><option>701</option></select></div>
+          </div>
+          <div class="field backend-filter">
+            <label>账号：</label>
+            <input class="control" id="filterAccount" placeholder="请输入">
+          </div>
+          <div class="field">
+            <label>IP：</label>
+            <input class="control" id="filterIp" placeholder="请输入">
+          </div>
+          <div class="field">
+            <label>操作人：</label>
+            <input class="control" id="filterOperator" placeholder="请输入">
+          </div>
+          <div class="filter-actions">
+            <button class="btn" id="resetBtn">重置</button>
+            <button class="btn primary" id="searchBtn">查询</button>
+          </div>
+        </div>
+
+        <div class="app-limit-tip" id="appLimitTip">APP端IP白名单限制玩家访问客户端；后台IP白名单限制后台登录/访问。</div>
+
+        <div class="toolbar">
+          <button class="btn danger" id="batchDeleteBtn">批量删除</button>
+          <button class="btn primary" id="addBtn">+ 新增</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <colgroup id="tableCols">
+              <col style="width:48px">
+              <col style="width:58px">
+              <col style="width:180px">
+              <col style="width:180px">
+              <col style="width:180px">
+              <col style="width:180px">
+              <col style="width:180px">
+              <col style="width:180px">
+              <col style="width:155px">
+              <col style="width:180px">
+              <col style="width:180px">
+              <col style="width:100px">
+            </colgroup>
+            <thead id="tableHead">
+              <tr>
+                <th class="check-cell"><input type="checkbox" id="checkAll" aria-label="全选"></th>
+                <th>序号</th>
+                <th>账号</th>
+                <th>地区</th>
+                <th>商户</th>
+                <th>白名单对象</th>
+                <th>白名单类型</th>
+                <th>IP</th>
+                <th>备注</th>
+                <th>操作人</th>
+                <th>操作时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="log-panel" id="logPanel">
+          <div class="log-title">操作日志</div>
+          <div class="log-list" id="logList"></div>
+        </div>
+
+        <section class="prd-section" id="prdSection">
+          <h2 class="prd-title">PRD说明：巴西站 IP白名单</h2>
+          <p class="prd-desc">本需求新增后台IP白名单和APP端IP白名单，用于限制指定来源IP访问对应系统能力。后台IP白名单用于限制后台登录/访问；APP端IP白名单用于限制玩家访问客户端。当前原型按竞品页面结构还原，并结合已确认业务口径补充交互与规则说明。</p>
+
+          <div class="prd-block">
+            <h3>一、已确认业务规则</h3>
+            <table class="prd-table">
+              <thead>
+                <tr>
+                  <th style="width: 180px;">规则项</th>
+                  <th>已确认口径</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>功能范围</td>
+                  <td>新增「后台IP白名单」和「APP端IP白名单」两个页签。</td>
+                </tr>
+                <tr>
+                  <td>APP端数量限制</td>
+                  <td>当前不做数量限制，原竞品「最多可添加20条」不作为本期需求限制。</td>
+                </tr>
+                <tr>
+                  <td>IP格式</td>
+                  <td>支持IPv4和IPv6。</td>
+                </tr>
+                <tr>
+                  <td>相同IP判断</td>
+                  <td>同一页签内需要做相同IP判断；后台IP白名单和APP端IP白名单相互独立，允许存在相同IP。</td>
+                </tr>
+                <tr>
+                  <td>删除规则</td>
+                  <td>删除为停用/软删除，不做物理删除；需要记录操作日志。</td>
+                </tr>
+                <tr>
+                  <td>编辑规则</td>
+                  <td>保持竞品规则：编辑时归属类字段置灰，仅允许编辑IP和备注。</td>
+                </tr>
+                <tr>
+                  <td>访问限制范围</td>
+                  <td>后台IP白名单限制后台登录/访问；APP端IP白名单限制玩家访问客户端。</td>
+                </tr>
+                <tr>
+                  <td>后台拦截提示</td>
+                  <td>后台访问IP未命中白名单时，提示「非允许访问IP」。拦截日志记录在后端，后台页面不展示，仅用于后续溯源。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="prd-block">
+            <h3>二、后台IP白名单规则</h3>
+            <table class="prd-table">
+              <thead>
+                <tr>
+                  <th style="width: 160px;">模块</th>
+                  <th style="width: 180px;">字段/操作</th>
+                  <th>规则说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>查询区</td>
+                  <td>地区、白名单对象、白名单类型、商户、账号、IP、操作人</td>
+                  <td>支持按条件查询；点击「重置」清空输入条件并恢复默认选项。</td>
+                </tr>
+                <tr>
+                  <td>列表字段</td>
+                  <td>序号、账号、地区、商户、白名单对象、白名单类型、IP、备注、操作人、操作时间、操作</td>
+                  <td>列表仅展示未停用数据；已停用数据不在前台列表展示。</td>
+                </tr>
+                <tr>
+                  <td>对象映射</td>
+                  <td>账号 / 后台</td>
+                  <td>选择「账号」时，白名单类型固定为「商户账号」，需要选择关联账号；选择「后台」时，白名单类型固定为「商户后台」，不需要选择关联账号。</td>
+                </tr>
+                <tr>
+                  <td>扩展类型</td>
+                  <td>代理账号、子账号、运营后台、财务后台等</td>
+                  <td>当前不支持扩展类型。</td>
+                </tr>
+                <tr>
+                  <td>新增</td>
+                  <td>新增白名单</td>
+                  <td>填写IP、白名单对象、地区、商户、关联账号或后台类型、备注后保存；保存时校验IP格式和同页签相同IP。</td>
+                </tr>
+                <tr>
+                  <td>编辑</td>
+                  <td>编辑白名单</td>
+                  <td>白名单对象、类型、地区、商户、关联账号等归属字段置灰；允许修改IP和备注。</td>
+                </tr>
+                <tr>
+                  <td>删除</td>
+                  <td>单条删除、批量删除</td>
+                  <td>点击删除需二次确认；确认后执行停用/软删除并记录操作日志。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="prd-block">
+            <h3>三、APP端IP白名单规则</h3>
+            <table class="prd-table">
+              <thead>
+                <tr>
+                  <th style="width: 160px;">模块</th>
+                  <th style="width: 180px;">字段/操作</th>
+                  <th>规则说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>查询区</td>
+                  <td>地区、商户、IP、操作人</td>
+                  <td>APP端白名单查询条件不展示白名单对象、白名单类型、账号。</td>
+                </tr>
+                <tr>
+                  <td>列表字段</td>
+                  <td>序号、IP地址、地区、商户、备注、操作人、操作时间、操作</td>
+                  <td>列表仅展示未停用数据；当前不做最多20条限制。</td>
+                </tr>
+                <tr>
+                  <td>新增</td>
+                  <td>APP端IP白名单</td>
+                  <td>必填IP、地区、商户；备注选填，最长500字符；保存时校验IP格式和APP端页签内相同IP。</td>
+                </tr>
+                <tr>
+                  <td>编辑</td>
+                  <td>编辑APP端IP白名单</td>
+                  <td>地区、商户置灰；允许修改IP和备注。</td>
+                </tr>
+                <tr>
+                  <td>删除</td>
+                  <td>单条删除</td>
+                  <td>点击删除需二次确认；确认后执行停用/软删除并记录操作日志。APP端当前不展示批量删除。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="prd-block">
+            <h3>四、校验与异常处理</h3>
+            <table class="prd-table">
+              <thead>
+                <tr>
+                  <th style="width: 180px;">场景</th>
+                  <th style="width: 220px;">前台处理</th>
+                  <th>规则说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>IP为空</td>
+                  <td>提示「请输入IP」</td>
+                  <td>新增、编辑保存时触发。</td>
+                </tr>
+                <tr>
+                  <td>IP格式错误</td>
+                  <td>提示「仅支持IPv4或IPv6格式」</td>
+                  <td>仅支持IPv4、IPv6。</td>
+                </tr>
+                <tr>
+                  <td>同页签相同IP</td>
+                  <td>提示「当前页面已存在相同IP」</td>
+                  <td>后台页签内不允许重复；APP端页签内不允许重复；后台和APP端之间允许相同IP。</td>
+                </tr>
+                <tr>
+                  <td>删除确认</td>
+                  <td>弹窗提示「确认删除此白名单?」</td>
+                  <td>点击取消不变更数据；点击确定执行停用/软删除。</td>
+                </tr>
+                <tr>
+                  <td>后台访问拦截</td>
+                  <td>提示「非允许访问IP」</td>
+                  <td>拦截日志记录在后端，用于溯源；后台页面不展示该日志。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="prd-block">
+            <h3>五、状态与操作矩阵</h3>
+            <table class="prd-table">
+              <thead>
+                <tr>
+                  <th style="width: 150px;">数据状态</th>
+                  <th style="width: 180px;">列表展示</th>
+                  <th style="width: 180px;">可执行操作</th>
+                  <th>说明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="prd-tag">正常</span></td>
+                  <td>展示</td>
+                  <td>编辑、删除</td>
+                  <td>新增保存后默认进入正常状态。</td>
+                </tr>
+                <tr>
+                  <td><span class="prd-tag">停用/软删除</span></td>
+                  <td>不展示</td>
+                  <td>无前台操作</td>
+                  <td>删除确认后进入停用/软删除状态，需保留后台数据和操作日志。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="pager">
+    <span id="totalText">共 5 条数据</span>
+    <span class="page-num">1</span>
+    <select class="page-size"><option>50 条/页</option></select>
+  </div>
+
+  <div class="modal-mask" id="modalMask">
+    <div class="modal" id="editModal">
+      <div class="modal-head">
+        <span id="modalTitle">新增白名单</span>
+        <button class="modal-close" id="closeModal" title="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label class="form-label" id="modalIpLabel">IP：</label>
+          <div class="form-control-area">
+            <input class="control" id="modalIp" placeholder="请输入">
+            <span class="clear-dot" id="clearIp">×</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">白名单对象：</label>
+          <div class="form-control-area">
+            <div class="radio-line" id="targetRadioLine">
+              <label><input type="radio" name="target" value="账号" checked>账号</label>
+              <label><input type="radio" name="target" value="后台">后台</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row" id="accountTypeRow">
+          <label class="form-label">账号类型：</label>
+          <div class="form-control-area">
+            <div class="radio-line" id="accountTypeLine">
+              <label><input type="radio" name="accountType" value="商户账号" checked>商户账号</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row" id="backendTypeRow" style="display:none;">
+          <label class="form-label">后台类型：</label>
+          <div class="form-control-area">
+            <div class="radio-line" id="backendTypeLine">
+              <label><input type="radio" name="backendType" value="商户后台" checked>商户后台</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">地区：</label>
+          <div class="form-control-area select-wrap">
+            <select class="select-control" id="modalRegion"><option>巴西</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">商户：</label>
+          <div class="form-control-area select-wrap">
+            <select class="select-control" id="modalMerchant"><option>762</option><option>701</option></select>
+          </div>
+        </div>
+        <div class="form-row" id="linkedAccountRow">
+          <label class="form-label">关联账号：</label>
+          <div class="form-control-area combo-wrap">
+            <input class="control combo-input" id="linkedAccount" placeholder="请输入">
+            <span class="search-icon">⌕</span>
+            <div class="combo-menu" id="accountMenu"></div>
+          </div>
+        </div>
+        <div class="form-row textarea-row">
+          <label class="form-label">备注：</label>
+          <div class="form-control-area">
+            <textarea class="textarea-control" id="modalRemark" maxlength="500" placeholder="请输入"></textarea>
+            <span class="counter" id="remarkCounter">0 / 500</span>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn primary" id="confirmBtn">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-mask" id="deleteConfirmMask">
+    <div class="confirm-dialog">
+      <div class="confirm-content">
+        <div class="confirm-icon">i</div>
+        <div>
+          <div class="confirm-title">操作提示</div>
+          <div class="confirm-message">确认删除此白名单?</div>
+        </div>
+      </div>
+      <div class="confirm-actions">
+        <button class="btn" id="cancelDeleteBtn">取消</button>
+        <button class="btn primary" id="confirmDeleteBtn">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const accountOptions = ["ceshi88888", "wuming888", "axingkefu", "kyber888", "Kiko888", "Danny888", "1127BR", "panghu888"];
+
+    const datasets = {
+      backend: [
+        { account: "dayu888", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "47.91.106.67", remark: "-", operator: "dayu888", time: "2026-06-12 11:25:36" },
+        { account: "super762", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "103.197.240.123", remark: "-", operator: "jskf001", time: "2025-12-27 15:48:23" },
+        { account: "super762", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "175.100.6.165", remark: "-", operator: "jskf006", time: "2025-12-19 03:54:02" },
+        { account: "ceshi88888", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "36.37.204.192", remark: "-", operator: "dawei777", time: "2025-12-16 06:36:13" },
+        { account: "kuaishou888", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "129.148.56.233", remark: "-", operator: "admin555", time: "2025-11-11 08:53:16" }
+      ],
+      app: [
+        { region: "巴西", merchant: "762", ip: "2001:240:246a:509f:6c64:2fff:feaf:604c", remark: "-", operator: "admin555", time: "2026-08-13 12:01:59" },
+        { region: "巴西", merchant: "762", ip: "220.100.205.201", remark: "-", operator: "admin555", time: "2026-08-13 11:44:07" },
+        { region: "巴西", merchant: "762", ip: "133.159.155.160", remark: "-", operator: "admin555", time: "2026-08-13 11:40:11" },
+        { region: "巴西", merchant: "762", ip: "220.156.78.131", remark: "-", operator: "admin555", time: "2026-08-13 11:39:23" },
+        { region: "巴西", merchant: "762", ip: "161.142.155.125", remark: "-", operator: "super762", time: "2026-08-11 08:32:15" },
+        { region: "巴西", merchant: "762", ip: "136.158.27.150", remark: "测试", operator: "dayu888", time: "2026-07-17 03:31:38" },
+        { region: "巴西", merchant: "762", ip: "194.99.80.231", remark: "kenny IP", operator: "dayu888", time: "2026-07-12 23:52:33" },
+        { region: "巴西", merchant: "762", ip: "133.159.120.40", remark: "-", operator: "admin555", time: "2026-07-08 03:16:58" },
+        { region: "巴西", merchant: "762", ip: "47.91.106.67", remark: "-", operator: "dayu888", time: "2026-06-13 04:23:08" },
+        { region: "巴西", merchant: "762", ip: "8.221.166.46", remark: "-", operator: "admin555", time: "2026-06-02 11:46:34" }
+      ]
+    };
+
+    let currentTab = "backend";
+    let editingIndex = null;
+    let filteredRows = [...datasets[currentTab]];
+    let pendingDeleteAction = null;
+
+    const filterRow = document.getElementById("filterRow");
+    const appLimitTip = document.getElementById("appLimitTip");
+    const batchDeleteBtn = document.getElementById("batchDeleteBtn");
+    const logPanel = document.getElementById("logPanel");
+    const logList = document.getElementById("logList");
+    const tableCols = document.getElementById("tableCols");
+    const tableHead = document.getElementById("tableHead");
+    const tableBody = document.getElementById("tableBody");
+    const checkAll = document.getElementById("checkAll");
+    const modalMask = document.getElementById("modalMask");
+    const modal = document.getElementById("editModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalIpLabel = document.getElementById("modalIpLabel");
+    const modalIp = document.getElementById("modalIp");
+    const clearIp = document.getElementById("clearIp");
+    const modalRegion = document.getElementById("modalRegion");
+    const modalMerchant = document.getElementById("modalMerchant");
+    const linkedAccount = document.getElementById("linkedAccount");
+    const linkedAccountRow = document.getElementById("linkedAccountRow");
+    const accountMenu = document.getElementById("accountMenu");
+    const modalRemark = document.getElementById("modalRemark");
+    const remarkCounter = document.getElementById("remarkCounter");
+    const accountTypeRow = document.getElementById("accountTypeRow");
+    const backendTypeRow = document.getElementById("backendTypeRow");
+    const targetRadioLine = document.getElementById("targetRadioLine");
+    const accountTypeLine = document.getElementById("accountTypeLine");
+    const backendTypeLine = document.getElementById("backendTypeLine");
+    const toast = document.getElementById("toast");
+    const deleteConfirmMask = document.getElementById("deleteConfirmMask");
+    const operationLogs = [];
+
+    function visibleRows(rows = datasets[currentTab]) {
+      return rows.filter(row => row.status !== "disabled");
+    }
+
+    function isValidIp(value) {
+      const ipv4 = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+      const ipv6 = /^(([0-9a-fA-F]{1,4}:){2,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|::([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4})$/;
+      return ipv4.test(value) || ipv6.test(value);
+    }
+
+    function isDuplicateIp(value, skipIndex = null) {
+      return datasets[currentTab].some((row, index) =>
+        row.status !== "disabled" &&
+        index !== skipIndex &&
+        row.ip.toLowerCase() === value.toLowerCase()
+      );
+    }
+
+    function addOperationLog(action, row) {
+      operationLogs.unshift({
+        time: "2026-08-23 23:59:12",
+        operator: "Cuculus888",
+        action,
+        detail: `${currentTab === "app" ? "APP端" : "后台"}IP白名单：${row.ip}`
+      });
+      renderOperationLogs();
+    }
+
+    function renderOperationLogs() {
+      logList.innerHTML = operationLogs.length ? operationLogs.map(log => `
+        <div class="log-item">
+          <span>${log.time}</span>
+          <span>${log.operator}</span>
+          <span>${log.detail}</span>
+          <span>${log.action}</span>
+        </div>
+      `).join("") : "<div class=\"log-empty\">暂无操作日志</div>";
+    }
+
+    function renderTableHead() {
+      if (currentTab === "app") {
+        tableCols.innerHTML = `
+          <col style="width:70px">
+          <col style="width:22%">
+          <col style="width:13%">
+          <col style="width:13%">
+          <col style="width:13%">
+          <col style="width:14%">
+          <col style="width:18%">
+          <col style="width:7%">
+        `;
+        tableHead.innerHTML = `
+          <tr>
+            <th>序号</th>
+            <th>IP地址</th>
+            <th>地区</th>
+            <th>商户</th>
+            <th>备注</th>
+            <th>操作人</th>
+            <th>操作时间</th>
+            <th>操作</th>
+          </tr>
+        `;
+        return;
+      }
+
+      tableCols.innerHTML = `
+        <col style="width:48px">
+        <col style="width:58px">
+        <col style="width:180px">
+        <col style="width:180px">
+        <col style="width:180px">
+        <col style="width:180px">
+        <col style="width:180px">
+        <col style="width:180px">
+        <col style="width:155px">
+        <col style="width:180px">
+        <col style="width:180px">
+        <col style="width:100px">
+      `;
+      tableHead.innerHTML = `
+        <tr>
+          <th class="check-cell"><input type="checkbox" id="checkAll" aria-label="全选"></th>
+          <th>序号</th>
+          <th>账号</th>
+          <th>地区</th>
+          <th>商户</th>
+          <th>白名单对象</th>
+          <th>白名单类型</th>
+          <th>IP</th>
+          <th>备注</th>
+          <th>操作人</th>
+          <th>操作时间</th>
+          <th>操作</th>
+        </tr>
+      `;
+    }
+
+    function renderTable(rows = visibleRows()) {
+      filteredRows = rows;
+      renderTableHead();
+      if (currentTab === "app") {
+        tableBody.innerHTML = visibleRows(rows).map((row, index) => `
+          <tr data-index="${datasets[currentTab].indexOf(row)}">
+            <td>${index + 1}</td>
+            <td>${row.ip}</td>
+            <td>${row.region}</td>
+            <td>${row.merchant}</td>
+            <td>${row.remark || "-"}</td>
+            <td>${row.operator}</td>
+            <td>${row.time}</td>
+            <td>
+              <button class="action-icon edit" title="编辑" data-action="edit">▱</button>
+              <button class="action-icon delete" title="删除" data-action="delete">♙</button>
+            </td>
+          </tr>
+        `).join("");
+        document.getElementById("totalText").textContent = `共 ${visibleRows(rows).length} 条数据`;
+        return;
+      }
+
+      tableBody.innerHTML = visibleRows(rows).map((row, index) => `
+        <tr data-index="${datasets[currentTab].indexOf(row)}">
+          <td><input type="checkbox" class="row-check" aria-label="选择第${index + 1}行"></td>
+          <td>${index + 1}</td>
+          <td>${row.account || "-"}</td>
+          <td>${row.region}</td>
+          <td>${row.merchant}</td>
+          <td>${row.target}</td>
+          <td>${row.type}</td>
+          <td>${row.ip}</td>
+          <td>${row.remark || "-"}</td>
+          <td>${row.operator}</td>
+          <td>${row.time}</td>
+          <td>
+            <button class="action-icon edit" title="编辑" data-action="edit">▱</button>
+            <button class="action-icon delete" title="删除" data-action="delete">♙</button>
+          </td>
+        </tr>
+      `).join("");
+      document.getElementById("totalText").textContent = `共 ${visibleRows(rows).length} 条数据`;
+      document.getElementById("checkAll").checked = false;
+    }
+
+    function updatePageMode() {
+      const isApp = currentTab === "app";
+      filterRow.classList.toggle("app-mode", isApp);
+      appLimitTip.classList.toggle("show", isApp);
+      batchDeleteBtn.style.display = isApp ? "none" : "inline-block";
+      logPanel.classList.add("show");
+      document.querySelectorAll(".backend-filter").forEach(item => {
+        item.style.display = isApp ? "none" : "flex";
+      });
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 1500);
+    }
+
+    function openDeleteConfirm(action) {
+      pendingDeleteAction = action;
+      deleteConfirmMask.classList.add("show");
+    }
+
+    function closeDeleteConfirm() {
+      pendingDeleteAction = null;
+      deleteConfirmMask.classList.remove("show");
+    }
+
+    function getTargetValue() {
+      return document.querySelector("input[name='target']:checked").value;
+    }
+
+    function updateTargetView() {
+      if (currentTab === "app") {
+        accountTypeRow.style.display = "none";
+        linkedAccountRow.style.display = "none";
+        backendTypeRow.style.display = "none";
+        document.querySelector("input[name='target'][value='账号']").checked = true;
+        return;
+      }
+      const target = getTargetValue();
+      if (target === "账号") {
+        accountTypeRow.style.display = "flex";
+        linkedAccountRow.style.display = "flex";
+        backendTypeRow.style.display = "none";
+      } else {
+        accountTypeRow.style.display = "none";
+        linkedAccountRow.style.display = "none";
+        backendTypeRow.style.display = "flex";
+      }
+    }
+
+    function setFormDisabled(disabled) {
+      if (currentTab === "app") {
+        modalRegion.disabled = disabled;
+        modalMerchant.disabled = disabled;
+        modalIp.disabled = false;
+        return;
+      }
+      targetRadioLine.classList.toggle("disabled", disabled);
+      accountTypeLine.classList.toggle("disabled", disabled);
+      backendTypeLine.classList.toggle("disabled", disabled);
+      document.querySelectorAll("input[name='target'], input[name='accountType'], input[name='backendType']").forEach(input => input.disabled = disabled);
+      modalRegion.disabled = disabled;
+      modalMerchant.disabled = disabled;
+      linkedAccount.disabled = disabled;
+    }
+
+    function openModal(mode, rowIndex = null) {
+      editingIndex = rowIndex;
+      const isEdit = mode === "edit";
+      const isApp = currentTab === "app";
+      modal.classList.toggle("edit-mode", isEdit);
+      modalTitle.textContent = isApp ? (isEdit ? "编辑APP端IP白名单" : "APP端IP白名单") : (isEdit ? "编辑白名单" : "新增白名单");
+      modalIpLabel.innerHTML = isApp ? "<span class=\"required-mark\">*</span>IP：" : "IP：";
+      modalRemark.value = "";
+      modalIp.value = "";
+      linkedAccount.value = "";
+      modalRegion.value = "巴西";
+      modalMerchant.value = "762";
+      document.querySelector("input[name='target'][value='账号']").checked = true;
+      document.querySelector("input[name='accountType']").checked = true;
+      document.querySelector("input[name='backendType']").checked = true;
+
+      if (isEdit) {
+        const row = datasets[currentTab][rowIndex];
+        modalIp.value = row.ip;
+        if (!isApp) {
+          document.querySelector(`input[name='target'][value='${row.target}']`).checked = true;
+        }
+        modalRegion.value = row.region;
+        modalMerchant.value = row.merchant;
+        linkedAccount.value = row.account || "";
+        modalRemark.value = row.remark === "-" ? "" : row.remark;
+      } else if (!isApp) {
+        linkedAccount.value = "ceshi88888";
+      }
+
+      document.getElementById("targetRadioLine").closest(".form-row").style.display = isApp ? "none" : "flex";
+      document.querySelector("label[for='modalRegion']");
+      updateTargetView();
+      setFormDisabled(isEdit);
+      document.querySelector("#modalRegion").closest(".form-row").querySelector(".form-label").innerHTML = isApp ? "<span class=\"required-mark\">*</span>地区：" : "地区：";
+      document.querySelector("#modalMerchant").closest(".form-row").querySelector(".form-label").innerHTML = isApp ? "<span class=\"required-mark\">*</span>商户：" : "商户：";
+      modalRemark.placeholder = isApp ? "请输入备注" : "请输入";
+      updateCounter();
+      modalMask.classList.add("show");
+    }
+
+    function closeModal() {
+      modalMask.classList.remove("show");
+      accountMenu.classList.remove("show");
+    }
+
+    function updateCounter() {
+      remarkCounter.textContent = `${modalRemark.value.length} / 500`;
+    }
+
+    function renderAccountMenu(keyword = "") {
+      const matches = accountOptions.filter(item => item.toLowerCase().includes(keyword.toLowerCase()));
+      accountMenu.innerHTML = matches.map((item, index) => `
+        <div class="combo-option ${index === 0 ? "active" : ""}" data-value="${item}">${item}</div>
+      `).join("");
+      accountMenu.classList.add("show");
+    }
+
+    function searchRows() {
+      const account = document.getElementById("filterAccount").value.trim().toLowerCase();
+      const ip = document.getElementById("filterIp").value.trim().toLowerCase();
+      const operator = document.getElementById("filterOperator").value.trim().toLowerCase();
+      const target = document.getElementById("filterTarget").value;
+      const type = document.getElementById("filterType").value;
+      const rows = datasets[currentTab].filter(row =>
+        row.status !== "disabled" &&
+        (currentTab === "app" || !account || row.account.toLowerCase().includes(account)) &&
+        (!ip || row.ip.toLowerCase().includes(ip)) &&
+        (!operator || row.operator.toLowerCase().includes(operator)) &&
+        (currentTab === "app" || row.target === target) &&
+        (currentTab === "app" || row.type === type)
+      );
+      renderTable(rows);
+    }
+
+    document.querySelectorAll(".module-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".module-tab").forEach(item => item.classList.remove("active"));
+        tab.classList.add("active");
+        currentTab = tab.dataset.tab;
+        updatePageMode();
+        renderTable();
+      });
+    });
+
+    document.getElementById("addBtn").addEventListener("click", () => {
+      openModal("add");
+    });
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    modalMask.addEventListener("click", event => {
+      if (event.target === modalMask) closeModal();
+    });
+
+    document.querySelectorAll("input[name='target']").forEach(input => {
+      input.addEventListener("change", updateTargetView);
+    });
+
+    modalRemark.addEventListener("input", updateCounter);
+    linkedAccount.addEventListener("focus", () => renderAccountMenu(linkedAccount.value));
+    linkedAccount.addEventListener("input", () => renderAccountMenu(linkedAccount.value));
+
+    accountMenu.addEventListener("mousedown", event => {
+      const option = event.target.closest(".combo-option");
+      if (!option) return;
+      linkedAccount.value = option.dataset.value;
+      accountMenu.classList.remove("show");
+    });
+
+    document.addEventListener("mousedown", event => {
+      if (!event.target.closest(".combo-wrap")) {
+        accountMenu.classList.remove("show");
+      }
+    });
+
+    clearIp.addEventListener("click", () => {
+      modalIp.value = "";
+      modalIp.focus();
+    });
+
+    document.getElementById("confirmBtn").addEventListener("click", () => {
+      const target = getTargetValue();
+      const ipValue = modalIp.value.trim();
+      if (!ipValue) {
+        showToast("请输入IP");
+        return;
+      }
+      if (!isValidIp(ipValue)) {
+        showToast("仅支持IPv4或IPv6格式");
+        return;
+      }
+      if (isDuplicateIp(ipValue, editingIndex)) {
+        showToast("当前页面已存在相同IP");
+        return;
+      }
+      const row = currentTab === "app" ? {
+        region: modalRegion.value,
+        merchant: modalMerchant.value,
+        ip: ipValue,
+        remark: modalRemark.value || "-",
+        operator: "Cuculus888",
+        time: "2026-08-23 23:58:32"
+      } : {
+        account: target === "账号" ? (linkedAccount.value || "ceshi88888") : "-",
+        region: modalRegion.value,
+        merchant: modalMerchant.value,
+        target,
+        type: target === "账号" ? "商户账号" : "商户后台",
+        ip: ipValue,
+        remark: modalRemark.value || "-",
+        operator: "Cuculus888",
+        time: "2026-08-23 23:47:37"
+      };
+
+      if (editingIndex === null) {
+        datasets[currentTab].unshift(row);
+        addOperationLog("新增", row);
+        showToast("新增成功");
+      } else {
+        datasets[currentTab][editingIndex] = { ...datasets[currentTab][editingIndex], ip: row.ip, remark: row.remark, operator: row.operator, time: row.time };
+        addOperationLog("编辑", datasets[currentTab][editingIndex]);
+        showToast("编辑成功");
+      }
+      closeModal();
+      renderTable();
+    });
+
+    tableBody.addEventListener("change", event => {
+      if (!event.target.classList.contains("row-check")) return;
+      event.target.closest("tr").classList.toggle("selected", event.target.checked);
+      const checks = [...document.querySelectorAll(".row-check")];
+      const currentCheckAll = document.getElementById("checkAll");
+      if (currentCheckAll) {
+        currentCheckAll.checked = checks.length > 0 && checks.every(item => item.checked);
+      }
+    });
+
+    tableBody.addEventListener("click", event => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const tr = button.closest("tr");
+      const rowIndex = Number(tr.dataset.index);
+      if (button.dataset.action === "edit") {
+        openModal("edit", rowIndex);
+      } else {
+        openDeleteConfirm(() => {
+          datasets[currentTab][rowIndex] = { ...datasets[currentTab][rowIndex], status: "disabled", operator: "Cuculus888", time: "2026-08-23 23:59:12" };
+          addOperationLog("停用/软删除", datasets[currentTab][rowIndex]);
+          showToast("已停用");
+          renderTable();
+        });
+      }
+    });
+
+    tableHead.addEventListener("change", event => {
+      if (event.target.id !== "checkAll") return;
+      document.querySelectorAll(".row-check").forEach(input => {
+        input.checked = event.target.checked;
+        input.closest("tr").classList.toggle("selected", event.target.checked);
+      });
+    });
+
+    document.getElementById("batchDeleteBtn").addEventListener("click", () => {
+      const selectedIndexes = [...document.querySelectorAll(".row-check:checked")]
+        .map(input => Number(input.closest("tr").dataset.index))
+        .sort((a, b) => b - a);
+      if (!selectedIndexes.length) {
+        showToast("请选择需要删除的数据");
+        return;
+      }
+      openDeleteConfirm(() => {
+        selectedIndexes.forEach(index => {
+          datasets[currentTab][index] = { ...datasets[currentTab][index], status: "disabled", operator: "Cuculus888", time: "2026-08-23 23:59:12" };
+          addOperationLog("批量停用/软删除", datasets[currentTab][index]);
+        });
+        showToast("批量停用成功");
+        renderTable();
+      });
+    });
+
+    document.getElementById("cancelDeleteBtn").addEventListener("click", closeDeleteConfirm);
+    document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+      if (pendingDeleteAction) pendingDeleteAction();
+      closeDeleteConfirm();
+    });
+    deleteConfirmMask.addEventListener("click", event => {
+      if (event.target === deleteConfirmMask) closeDeleteConfirm();
+    });
+
+    document.getElementById("searchBtn").addEventListener("click", searchRows);
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      ["filterAccount", "filterIp", "filterOperator"].forEach(id => document.getElementById(id).value = "");
+      document.getElementById("filterTarget").value = "账号";
+      document.getElementById("filterType").value = "商户账号";
+      renderTable();
+    });
+
+    updatePageMode();
+    renderOperationLogs();
+    renderTable();
+  </script>
+</body>
+</html>
