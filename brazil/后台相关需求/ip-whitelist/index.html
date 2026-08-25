@@ -393,7 +393,6 @@
     .table-wrap {
       border-top: 1px solid #ebeef5;
       border-left: 1px solid #ebeef5;
-      min-height: calc(100vh - 330px);
       background: #fff;
     }
 
@@ -465,12 +464,11 @@
     }
 
     .pager {
-      position: fixed;
-      left: 230px;
-      bottom: 18px;
       display: flex;
       align-items: center;
       gap: 7px;
+      width: fit-content;
+      margin: 10px 0 0 0;
       color: #303133;
       background: #fff;
       font-size: 14px;
@@ -807,7 +805,7 @@
     }
 
     .prd-section {
-      margin: 22px 0 86px;
+      margin: 16px 0 48px;
       padding: 20px 22px 26px;
       border: 1px solid #e5e8ef;
       background: #fff;
@@ -1027,6 +1025,12 @@
           </table>
         </div>
 
+        <div class="pager">
+          <span id="totalText">共 5 条数据</span>
+          <span class="page-num">1</span>
+          <select class="page-size"><option>50 条/页</option></select>
+        </div>
+
         <section class="prd-section" id="prdSection">
           <h2 class="prd-title">PRD说明：巴西站 IP白名单</h2>
           <p class="prd-desc">本需求新增后台IP白名单和APP端IP白名单，用于限制指定来源IP访问对应系统能力。后台IP白名单用于限制后台登录/访问；APP端IP白名单用于限制玩家访问客户端。当前原型按竞品页面结构还原，并结合已确认业务口径补充交互与规则说明。</p>
@@ -1238,12 +1242,6 @@
         </section>
       </section>
     </main>
-  </div>
-
-  <div class="pager">
-    <span id="totalText">共 5 条数据</span>
-    <span class="page-num">1</span>
-    <select class="page-size"><option>50 条/页</option></select>
   </div>
 
   <div class="modal-mask" id="modalMask">
