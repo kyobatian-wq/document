@@ -985,7 +985,7 @@
                       <span class="label">图片：</span>
                       <div>
                         <div class="upload"><div class="banner-thumb b1" id="modalImage">Comissão da<br>Agência<br>até 50%</div><button class="btn">上传图片</button></div>
-                        <div class="hint">支持JPG/PNG/SVG格式的图片（建议尺寸：224 x 140）</div>
+                        <div class="hint">支持JPG/PNG/SVG/webp格式的图片（建议尺寸：224 x 140）</div>
                       </div>
                     </div>
                     <div class="row radio-line">
@@ -994,7 +994,40 @@
                       <label class="radio"><input type="radio" name="jumpType" value="external">跳转至链接</label>
                       <label class="radio"><input type="radio" name="jumpType" value="none">不做跳转</label>
                     </div>
-                    <div class="row jump-panel" data-panel="inline"><span class="label">活动名称：</span><select class="select"><option>充值页</option><option>提现页</option><option>推广中心页</option><option selected>活动页</option><option>VIP页</option><option>兑换码页</option><option>首页</option></select></div>
+                    <div class="row jump-panel" data-panel="inline"><span class="label">活动名称：</span><select class="select">
+                      <optgroup label="具体活动内联页">
+                        <option>充值_隔天领取首充</option>
+                        <option>助力转盘同ip2次</option>
+                        <option>每日救援金手动领过期作废</option>
+                        <option>每周救援金自动领延迟01</option>
+                        <option>每日救援金手动领取延迟01</option>
+                        <option>每日救援金延迟手动01</option>
+                        <option>周救援金延迟手动过期作废</option>
+                        <option>L连续/21天</option>
+                        <option>L连续2天/实时</option>
+                        <option>自动化测试活动数据#别删</option>
+                        <option>会员答谢测试5</option>
+                        <option>充值返利</option>
+                        <option>神秘彩金-qianshan</option>
+                        <option>神秘矿场测试</option>
+                        <option>自动化测试活动数据02#别删</option>
+                        <option>L累计/实时/保留0天自动派发</option>
+                        <option>彩金老会员隐藏</option>
+                        <option>会员答谢测试2</option>
+                        <option>会员答谢测试1</option>
+                        <option>每日救援金</option>
+                        <option>Reembolso de Depósito por Tempo Limitado</option>
+                      </optgroup>
+                      <optgroup label="客户端主模块页">
+                        <option>充值页</option>
+                        <option>提现页</option>
+                        <option>推广中心页</option>
+                        <option selected>活动页</option>
+                        <option>VIP页</option>
+                        <option>兑换码页</option>
+                        <option>首页</option>
+                      </optgroup>
+                    </select></div>
                     <div class="row jump-panel" data-panel="external"><span class="label">跳转链接：</span><input class="input" placeholder="请输入"></div>
                     <div class="confirm"><button class="btn">确定</button></div>
                   </div>
@@ -1145,7 +1178,7 @@
             <tr>
               <td>图片</td>
               <td>营销位展示图</td>
-              <td>支持 JPG/PNG/SVG 格式；建议尺寸 224 x 140。</td>
+              <td>支持 JPG/PNG/SVG/webp 格式；建议尺寸 224 x 140。</td>
             </tr>
             <tr>
               <td>最后操作时间</td>
@@ -1183,7 +1216,7 @@
             <tr>
               <td>图片</td>
               <td>上传组件</td>
-              <td>展示当前图片缩略图，支持重新上传；格式支持 JPG/PNG/SVG，建议尺寸 224 x 140。</td>
+              <td>展示当前图片缩略图，支持重新上传；格式支持 JPG/PNG/SVG/webp，建议尺寸 224 x 140。</td>
             </tr>
             <tr>
               <td>跳转方式</td>
@@ -1193,7 +1226,7 @@
             <tr>
               <td>活动名称</td>
               <td>下拉框</td>
-              <td>当跳转方式为「内联链接」时展示。选项：充值页、提现页、推广中心页、活动页、VIP页、兑换码页、首页。</td>
+              <td>当跳转方式为「内联链接」时展示。选项由「具体活动内联页」和「客户端主模块页」组成；具体活动内联页使用活动配置中的活动名称，客户端主模块页包括充值页、提现页、推广中心页、活动页、VIP页、兑换码页、首页。</td>
             </tr>
             <tr>
               <td>跳转链接</td>
@@ -1209,6 +1242,7 @@
         </table>
 
         <h2>六、跳转规则</h2>
+        <p class="prd-note">内联链接的活动下拉选项与轮播图配置保持同源，由「具体活动内联页」和「客户端主模块页」两部分组成。具体活动内联页展示活动配置中的可用活动；客户端主模块页固定置于列表底部，供营销卡片跳转至客户端主模块。</p>
         <table class="prd-table">
           <thead>
             <tr>
