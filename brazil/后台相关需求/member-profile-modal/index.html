@@ -1964,8 +1964,21 @@
       box-shadow: 0 0 0 2px rgba(64,158,255,.12);
     }
 
+    .pix-row input:disabled {
+      color: #909399;
+      background: #f5f7fa;
+      cursor: not-allowed;
+    }
+
     .pix-row input::placeholder {
       color: #c0c4cc;
+    }
+
+    .pix-disabled-note {
+      margin: 2px 0 12px 102px;
+      color: #f56c6c;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     .pix-state-bar {
@@ -3256,7 +3269,7 @@
                 <li>注册IP-IP关联 / 设备关联：打开关系查询弹窗；分别按注册IP、注册设备检索同条件会员信息并展示。</li>
                 <li>注册指纹ID：本期不做指纹ID识别，按竞品口径固定显示“无”，不提供指纹ID关联查询入口。</li>
                 <li>修改层级：打开会员层级弹窗；选择目标层级后保存，提示手动调整后会员固定到该层级不会增长。</li>
-                <li>提现账号修改：点击“提现账号-修改”打开提现账户弹窗；弹窗内展示PIX分组，字段包含真实姓名、CPF、CNPJ、EVP、手机号、邮箱，保存后回写个人资料展示；原型示例切换按钮放在外层“修改”按钮后方。</li>
+                <li>提现账号修改：点击“提现账号-修改”打开提现账户弹窗；弹窗内展示PIX分组，本期仅支持真实姓名、CPF字段编辑，CNPJ、EVP、手机号、邮箱字段保留展示但置灰不可编辑，并在弹窗中说明“以下字段本期不做”；保存后回写个人资料展示；原型示例切换按钮放在外层“修改”按钮后方。</li>
                 <li>修改手机号：本版本不支持编辑；因无对应权限，按钮置灰不可点击。</li>
                 <li>修改邮箱：本期不做；按钮置灰不可点击，不进入弹窗、不发起接口。</li>
                 <li>解绑Telegram：本期不做；按钮置灰不可点击，不进入确认弹窗、不发起解绑接口。</li>
@@ -3354,7 +3367,7 @@
                   </tr>
                   <tr>
                     <th>弹窗字段</th>
-                    <td>真实姓名用于收款人身份识别；CPF为个人税号；CNPJ为企业税号；EVP为PIX随机密钥；手机号、邮箱可作为PIX收款标识。</td>
+                    <td>真实姓名用于收款人身份识别；CPF为个人税号，本期支持编辑并保存。CNPJ为企业税号、EVP为PIX随机密钥、手机号和邮箱可作为PIX收款标识，但本期不做，弹窗内置灰展示，不允许输入和保存。</td>
                   </tr>
                 </tbody>
               </table>
@@ -3462,6 +3475,16 @@
                 <li>场馆列表来源为：商户游戏管理 - 平台管理页。</li>
                 <li>浮层按场馆展示当前局数下的输赢值；示例中第21局“输赢总览=353.6、PG=353.6、其他场馆=0”，表示该峰值来自PG场馆。</li>
                 <li>底部场馆图例默认全选；点击某个场馆后，该场馆按钮置灰，对应趋势线和浮层行同步隐藏，其他已选场馆数据保持展示；再次点击恢复高亮并重新作用于趋势图。取消勾选单个场馆后，“输赢总览”仍包含该场馆数据，不随场馆勾选状态扣减。</li>
+              </ul>
+            </div>
+
+            <div class="prd-card">
+              <div class="prd-card-title">输赢统计明细跳转</div>
+              <ul class="prd-list">
+                <li>在“会员输赢详情”弹窗的结果表中，操作列点击“详情”后，关闭当前弹窗并跳转到“游戏对局记录”页。</li>
+                <li>跳转时自动带入当前行会员ID和当前输赢统计查询条件，用于查看该统计结果对应的游戏对局明细。</li>
+                <li>需带入的统计条件包括：会员ID、地区、商户、推广渠道、游戏性质、用户类型、是否充值、游戏平台、游戏类型、游戏名称、玩家输赢范围、统计日期等；原型中重点模拟会员ID和统计日期带入。</li>
+                <li>跳转到游戏对局记录页后，自动按带入条件完成查询并展示对应明细数据；无结果时按统一空数据规则展示“暂无数据”。</li>
               </ul>
             </div>
 
@@ -4623,21 +4646,22 @@
             <label>CPF:</label>
             <input id="pixCpf" type="text" placeholder="请输入CPF ID">
           </div>
+          <div class="pix-disabled-note">以下字段本期不做，保留展示但不可编辑。</div>
           <div class="pix-row">
             <label>CNPJ:</label>
-            <input id="pixCnpj" type="text" placeholder="请输入CNPJ">
+            <input id="pixCnpj" type="text" placeholder="本期不做" disabled>
           </div>
           <div class="pix-row">
             <label>EVP:</label>
-            <input id="pixEvp" type="text" placeholder="请输入EVP">
+            <input id="pixEvp" type="text" placeholder="本期不做" disabled>
           </div>
           <div class="pix-row">
             <label>手机号:</label>
-            <input id="pixPhone" type="text" placeholder="请输入手机号">
+            <input id="pixPhone" type="text" placeholder="本期不做" disabled>
           </div>
           <div class="pix-row">
             <label>邮箱:</label>
-            <input id="pixEmail" type="text" placeholder="请输入邮箱地址">
+            <input id="pixEmail" type="text" placeholder="本期不做" disabled>
           </div>
         </div>
         <div class="sub-dialog-footer">
@@ -4916,7 +4940,7 @@
                 <td>3</td>
                 <td>2026-08-28 04:07:26<br>(UTC-3)</td>
                 <td>-</td>
-                <td><button class="link" type="button">详情</button></td>
+                <td><button class="link" id="winStatsDetailButton" type="button">详情</button></td>
               </tr>
             </tbody>
           </table>
@@ -5135,6 +5159,7 @@
     const closeWinStatsFooter = document.getElementById('closeWinStatsFooter');
     const winStatsMemberId = document.getElementById('winStatsMemberId');
     const winStatsResultMemberId = document.getElementById('winStatsResultMemberId');
+    const winStatsDetailButton = document.getElementById('winStatsDetailButton');
     const winStatsStartDate = document.getElementById('winStatsStartDate');
     const winStatsEndDate = document.getElementById('winStatsEndDate');
     const winOverviewDialogMask = document.getElementById('winOverviewDialogMask');
@@ -5811,10 +5836,6 @@
       if (withdrawAccountBound) {
         boundWithdrawAccount.realName = pixRealName.value.trim() || 'Francisco';
         boundWithdrawAccount.cpf = pixCpf.value.trim() || '83337377068';
-        boundWithdrawAccount.cnpj = pixCnpj.value.trim();
-        boundWithdrawAccount.evp = pixEvp.value.trim();
-        boundWithdrawAccount.phone = pixPhone.value.trim() || '51993351812';
-        boundWithdrawAccount.email = pixEmail.value.trim();
       }
       renderWithdrawAccountDisplay();
       closeWithdrawAccountEditor();
@@ -5903,6 +5924,25 @@
     function closeWinStatsDialogBox() {
       winStatsDialogMask.classList.remove('show');
       winStatsDialogMask.setAttribute('aria-hidden', 'true');
+    }
+
+    function openGameRecordFromWinStats() {
+      const memberId = winStatsMemberId.value.trim() || winStatsResultMemberId.textContent.trim();
+      const startDate = (winStatsStartDate.value || todayText()).replaceAll('-', '/');
+      const endDate = (winStatsEndDate.value || todayText()).replaceAll('-', '/');
+      gameMemberId.value = memberId;
+      gameResultMemberId.textContent = memberId;
+      document.querySelectorAll('.game-result-member').forEach((item) => {
+        item.textContent = memberId;
+      });
+      gameBetStartDate.value = `${startDate} 00:00:00`;
+      gameBetEndDate.value = `${endDate} 23:59:59`;
+      gameSettleStartDate.value = `${startDate} 00:00:00`;
+      gameSettleEndDate.value = `${endDate} 23:59:59`;
+      closeWinStatsDialogBox();
+      closeModal();
+      showPage('gameRecord');
+      showToast('操作成功');
     }
 
     function seededRandom(seed) {
@@ -6365,6 +6405,7 @@
 
     closeWinStatsDialog.addEventListener('click', closeWinStatsDialogBox);
     closeWinStatsFooter.addEventListener('click', closeWinStatsDialogBox);
+    winStatsDetailButton.addEventListener('click', openGameRecordFromWinStats);
 
     winStatsDialogMask.addEventListener('click', (event) => {
       if (event.target === winStatsDialogMask) closeWinStatsDialogBox();
