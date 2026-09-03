@@ -1309,6 +1309,162 @@
       content: "";
     }
 
+    .profile-extra {
+      margin-top: 34px;
+      padding-bottom: 14px;
+    }
+
+    .profile-section-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 22px 0 20px;
+      color: #30343b;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .profile-section-title:before,
+    .profile-section-title:after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--line-soft);
+    }
+
+    .profile-extra-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      margin: 0 4px 8px;
+      color: #30343b;
+      font-size: 18px;
+    }
+
+    .profile-extra-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 1px solid var(--line-soft);
+      color: #30343b;
+    }
+
+    .profile-extra-table th,
+    .profile-extra-table td {
+      min-height: 46px;
+      padding: 13px 12px;
+      border: 1px solid var(--line-soft);
+      text-align: center;
+      vertical-align: middle;
+      line-height: 1.45;
+    }
+
+    .profile-extra-table th {
+      background: #fbfbfb;
+      font-weight: 700;
+    }
+
+    .profile-login-pager {
+      height: 36px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 8px;
+      color: #30343b;
+      font-size: 14px;
+    }
+
+    .profile-login-pager .page {
+      min-width: 28px;
+      height: 26px;
+      border: 1px solid #1677d2;
+      border-radius: 6px;
+      color: #fff;
+      background: #1677d2;
+      font-weight: 600;
+    }
+
+    .profile-login-pager select {
+      height: 28px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      color: #606266;
+      background: #fff;
+      padding: 0 8px;
+    }
+
+    .game-enable-table th:first-child,
+    .game-enable-table td:first-child {
+      width: 120px;
+      text-align: left;
+      padding-left: 18px;
+      font-weight: 700;
+      background: #fbfbfb;
+    }
+
+    .game-enable-module {
+      border: 1px solid var(--line-soft);
+      background: #fff;
+    }
+
+    .game-enable-module .profile-extra-table {
+      border: 0;
+    }
+
+    .game-enable-module .profile-extra-table th:first-child,
+    .game-enable-module .profile-extra-table td:first-child {
+      border-left: 0;
+    }
+
+    .game-enable-module .profile-extra-table th:last-child,
+    .game-enable-module .profile-extra-table td:last-child {
+      border-right: 0;
+    }
+
+    .game-enable-module .profile-extra-table thead tr:first-child th {
+      border-top: 0;
+    }
+
+    .game-enable-list {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      text-align: left;
+    }
+
+    .game-enable-list label,
+    .game-enable-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .game-enable-list input,
+    .game-enable-type input,
+    .game-select-all input {
+      width: 16px;
+      height: 16px;
+      accent-color: #1e9af0;
+    }
+
+    .game-select-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #30343b;
+      font-weight: 600;
+    }
+
+    .profile-extra-save {
+      display: flex;
+      justify-content: center;
+      padding: 18px 0 16px;
+      border-top: 1px solid var(--line-soft);
+    }
+
     .action-link {
       border: 0;
       background: transparent;
@@ -3040,6 +3196,10 @@
                     <th>个人资料</th>
                     <td>展示会员账号、会员ID、注册方式、所属地区、所属商户、账号状态、上级代理、VIP等级、会员层级、账户余额、充值提现、投注输赢、登录注册信息等。</td>
                   </tr>
+                  <tr>
+                    <th>底部复用模块</th>
+                    <td>个人资料弹窗底部补充“登录信息”和“开启游戏”模块，复用已有会员详情页的登录信息列表与开启游戏配置现有功能；“开启游戏”勾选区、选择全部和保存按钮属于同一个功能模块组，需放在同一框内展示，避免开发误解为独立操作。</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -4175,6 +4335,115 @@
             </div>
           </div>
         </div>
+
+        <div class="profile-extra">
+          <div class="profile-section-title"><span>登录信息</span></div>
+          <div class="profile-extra-toolbar" aria-label="登录信息表格工具">
+            <span>↻</span>
+            <span>↕</span>
+            <span>⚙</span>
+          </div>
+          <table class="profile-extra-table">
+            <thead>
+              <tr>
+                <th style="width:70px;">序号</th>
+                <th>访问时间</th>
+                <th style="width:140px;">登录状态</th>
+                <th>访问地区</th>
+                <th>登录IP</th>
+                <th style="width:150px;">终端设备</th>
+                <th>终端设备号</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>2026-08-28 22:08:19 (UTC-3)</td>
+                <td><span class="status">成功</span></td>
+                <td>MY-Kuala Lumpur</td>
+                <td>47.250.72.229</td>
+                <td>电脑系统</td>
+                <td>bcdfdc422162a6f808b08f445da10e0a</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="profile-login-pager">
+            <span>共 1 条数据</span>
+            <button class="page" type="button">1</button>
+            <select>
+              <option>50 条/页</option>
+            </select>
+          </div>
+
+          <div class="profile-section-title"><span>开启游戏</span></div>
+          <div class="game-enable-module">
+            <table class="profile-extra-table game-enable-table">
+              <thead>
+                <tr>
+                  <th>游戏类型</th>
+                  <th>游戏场馆</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label class="game-enable-type"><input class="game-toggle" type="checkbox" checked> 真人</label></td>
+                  <td>
+                    <div class="game-enable-list">
+                      <label><input class="game-toggle" type="checkbox" checked> EVO真人</label>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><label class="game-enable-type"><input class="game-toggle" type="checkbox" checked> 电游</label></td>
+                  <td>
+                    <div class="game-enable-list">
+                      <label><input class="game-toggle" type="checkbox" checked> CQ9电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> JDB电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MG电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> PG电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> PP电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> Kingmidas电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> FC电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> CP电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> InOut电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> TaDa 电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> G759 电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> FASTSPIN 电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> Spribe 电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> Playson 电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> RubyPlay 电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> TP 电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MyPG电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> Yb Bingo</label>
+                      <label><input class="game-toggle" type="checkbox" checked> dbhash</label>
+                      <label><input class="game-toggle" type="checkbox" checked> 1BET</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MyTaDa电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MyPP电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MyPanda电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MyPPK电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MyPlayson电子</label>
+                      <label><input class="game-toggle" type="checkbox" checked> MyG759电子</label>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><label class="game-enable-type"><input class="game-toggle" type="checkbox" checked> 捕鱼</label></td>
+                  <td>
+                    <div class="game-enable-list">
+                      <label><input class="game-toggle" type="checkbox" checked> TaDa 捕鱼</label>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2"><label class="game-select-all"><input id="gameSelectAll" type="checkbox" checked> 选择全部</label></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="profile-extra-save">
+              <button class="btn primary" id="saveGameEnable" type="button">保存</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -4701,6 +4970,9 @@
     const ledgerReturnButtons = document.querySelectorAll('.ledger-return');
     const auditReturnButtons = document.querySelectorAll('.audit-return');
     const quickFilterButtons = document.querySelectorAll('.quick-filter-btn');
+    const gameSelectAll = document.getElementById('gameSelectAll');
+    const gameToggles = document.querySelectorAll('.game-toggle');
+    const saveGameEnable = document.getElementById('saveGameEnable');
     const memberListPage = document.getElementById('memberListPage');
     const manualDepositPage = document.getElementById('manualDepositPage');
     const ledgerPage = document.getElementById('ledgerPage');
@@ -5773,6 +6045,22 @@
         quickFilterButtons.forEach((item) => item.classList.toggle('active', item === button));
         showToast('操作成功');
       });
+    });
+
+    gameSelectAll.addEventListener('change', () => {
+      gameToggles.forEach((checkbox) => {
+        checkbox.checked = gameSelectAll.checked;
+      });
+    });
+
+    gameToggles.forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        gameSelectAll.checked = Array.from(gameToggles).every((item) => item.checked);
+      });
+    });
+
+    saveGameEnable.addEventListener('click', () => {
+      showToast('操作成功');
     });
 
     document.querySelectorAll('.pending').forEach((button) => {
