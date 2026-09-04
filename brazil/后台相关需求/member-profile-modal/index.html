@@ -1722,7 +1722,7 @@
 
     .sub-dialog.agent-dialog {
       width: 675px;
-      height: 480px;
+      height: 620px;
     }
 
     .sub-dialog.risk-dialog {
@@ -2631,16 +2631,25 @@
     }
 
     .agent-warn {
-      width: 370px;
+      width: 480px;
       margin: 0 auto 24px;
       color: #ff1f1f;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1.6;
       font-weight: 600;
     }
 
     .agent-warn p {
-      margin: 0 0 16px;
+      margin: 0 0 12px;
+    }
+
+    .agent-warn ol {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .agent-warn li {
+      margin-bottom: 8px;
     }
 
     .relation-body {
@@ -3330,6 +3339,38 @@
             </div>
 
             <div class="prd-card wide">
+              <div class="prd-card-title">代理拉线佣金归属规则</div>
+              <table class="prd-table">
+                <tbody>
+                  <tr>
+                    <th>目标校验</th>
+                    <td>拉线前需要先查询目标会员ID，确认不会出现闭环，才可以拉线到目标会员的下级；否则提示“无效的目标会员ID”。</td>
+                  </tr>
+                  <tr>
+                    <th>T+1任务前拉线</th>
+                    <td>在 T+1 凌晨佣金任务执行前拉线，T 日整天业绩会算给新上级链。</td>
+                  </tr>
+                  <tr>
+                    <th>佣金任务成功后拉线</th>
+                    <td>在佣金计算任务成功后拉线，T 日佣金仍留在旧上级链。</td>
+                  </tr>
+                  <tr>
+                    <th>强制重算</th>
+                    <td>对 T 日强制重算且佣金尚未领取时，系统会删除原有 T 日结果，按当前新关系重新归属。</td>
+                  </tr>
+                  <tr>
+                    <th>已领取佣金</th>
+                    <td>T 日佣金已经领取时，系统拒绝重算。</td>
+                  </tr>
+                  <tr>
+                    <th>当天指标刷新</th>
+                    <td>当天每 5 分钟的指标刷新（投注、充值、提款等）也使用当前关系；拉线后，当天已发生的业绩会整体显示到新上级链，不会按拉线时间切分。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="prd-card wide">
               <div class="prd-card-title">账户安全类操作</div>
               <table class="prd-table">
                 <tbody>
@@ -3386,8 +3427,16 @@
                     <td>个人资料“提现账号”字段显示“未绑定”；右侧保留“修改”按钮，并在按钮后方显示（原型示例：未绑定/已绑定）状态切换。</td>
                   </tr>
                   <tr>
+                    <th>未保存提款信息</th>
+                    <td>系统支持三种录入方式：提款成功后录入、会员通过客户端提现管理页手动录入、后台运营人员在个人资料弹窗中手动录入。</td>
+                  </tr>
+                  <tr>
                     <th>已绑定</th>
                     <td>个人资料“提现账号”字段显示PIX账户信息，格式为：PIX:<br>CPF：83337377068 手机号：51993351812 真实姓名：Francisco。</td>
+                  </tr>
+                  <tr>
+                    <th>已保存提款信息</th>
+                    <td>已保存提款信息后，仅支持后台运营人员手动更改；客户端不再作为已保存提款信息的修改入口。</td>
                   </tr>
                   <tr>
                     <th>弹窗字段</th>
@@ -3494,8 +3543,7 @@
               <ul class="prd-list">
                 <li>横轴为局数，固定展示近100局；按投注时间排序，每一个点代表一局，鼠标移入局数位置时，浮层顶部数字表示当前第几局，例如21、22。</li>
                 <li>纵轴为当日输赢，数值从负数到正数；输赢口径为单局输赢，点越高表示该局盈利越高，低于0表示该局亏损。</li>
-                <li>盈利峰值不是单笔注单盈利，而是会员在某个统计时间段内累计盈利曲线达到过的最高值，例如今日、昨日、本周、本月、上月等时间段；如会员今日累计盈利最高达到5万，则今日盈利峰值显示5万。</li>
-                <li>盈利峰值校验规则：当统计周期最终总输赢为正数时，盈利峰值不得小于该周期最终总输赢；若周期内始终未出现正向累计盈利，则盈利峰值显示0。</li>
+                <li>盈利峰值本期不做，不作为本期开发和验收范围；原型中仅保留字段占位，表格内统一显示“-”。</li>
                 <li>近100局不跨场馆合并排序，按单局展示；每个局数模拟一个或多个游戏场馆的输赢。“输赢总览”表示该局所有游戏场馆合计值，PG、PP_OneAPI、Tada、CQ9、EvoPlay等表示单个游戏场馆值。</li>
                 <li>场馆列表来源为：商户游戏管理 - 平台管理页。</li>
                 <li>浮层按场馆展示当前局数下的输赢值；示例中第21局“输赢总览=353.6、PG=353.6、其他场馆=0”，表示该峰值来自PG场馆。</li>
@@ -4720,7 +4768,13 @@
         </div>
         <div class="agent-warn">
           <p>拉线时，需要先查询目标会员ID，确认不会出现闭环才可以拉线到目标会员的下级，否则会提示'无效的目标会员ID'</p>
-          <p>拉线后，可能会导致新旧上级均结算拉线前一天的佣金，请谨慎操作</p>
+          <ol>
+            <li>在 T+1 凌晨佣金任务执行前拉线：T 日整天业绩会算给新上级链。</li>
+            <li>在佣金计算任务成功后拉线：T 日佣金仍留在旧上级链。</li>
+            <li>对 T 日强制重算且尚未领取：系统会删除原有 T 日结果，按当前新关系重新归属。</li>
+            <li>T 日佣金已经领取：系统拒绝重算。</li>
+            <li>当天每 5 分钟的指标刷新（投注、充值、提款等）也使用当前关系；拉线后，当天已发生的业绩也会整体显示到新上级链，不会按拉线时间切分。</li>
+          </ol>
         </div>
         <div class="sub-dialog-footer">
           <button class="dialog-btn primary" id="saveAgentLine" type="button">保存</button>
@@ -4985,7 +5039,7 @@
         <button class="sub-dialog-close" id="closeWinOverviewDialog" type="button" aria-label="关闭">×</button>
       </div>
       <div class="overview-body">
-        <div class="overview-section-title">盈利峰值</div>
+        <div class="overview-section-title">盈利峰值（本期不做）</div>
         <table class="overview-summary-table">
           <colgroup>
             <col style="width:25%;">
@@ -4998,15 +5052,15 @@
               <th>时间</th>
               <th>有效投注</th>
               <th>当日输赢</th>
-              <th>盈利峰值</th>
+              <th>盈利峰值<br><span class="muted-text">本期不做</span></th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>今日</td><td>0</td><td>0</td><td>0</td></tr>
-            <tr><td>昨日</td><td>3.6</td><td class="negative">-3.3</td><td>0</td></tr>
-            <tr><td>本周</td><td>5.6</td><td class="negative">-5.06</td><td>0</td></tr>
-            <tr><td>本月</td><td>96</td><td class="positive">367.1</td><td>367.1</td></tr>
-            <tr><td>上月</td><td>772.1</td><td class="negative">-350.67</td><td>0</td></tr>
+            <tr><td>今日</td><td>0</td><td>0</td><td class="muted-text">-</td></tr>
+            <tr><td>昨日</td><td>3.6</td><td class="negative">-3.3</td><td class="muted-text">-</td></tr>
+            <tr><td>本周</td><td>5.6</td><td class="negative">-5.06</td><td class="muted-text">-</td></tr>
+            <tr><td>本月</td><td>96</td><td class="positive">367.1</td><td class="muted-text">-</td></tr>
+            <tr><td>上月</td><td>772.1</td><td class="negative">-350.67</td><td class="muted-text">-</td></tr>
           </tbody>
         </table>
         <div class="overview-chart-title">近100局输赢趋势</div>
