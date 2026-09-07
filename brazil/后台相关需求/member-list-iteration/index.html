@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>巴西-会员管理 / 会员列表迭代原型</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      color: #303133;
+      background: #eef2f6;
+      font-size: 14px;
+    }
+    .app { min-width: 1440px; min-height: 100vh; display: flex; }
+    .sidebar {
+      width: 235px;
+      background: #082137;
+      color: #b7c6d7;
+      flex: 0 0 235px;
+    }
+    .brand {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 3px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #fff 0%, #e7f1ff 46%, #154f94 47%, #082a53 100%);
+      color: #f4c542;
+      font-size: 10px;
+      border: 1px solid #dce8f6;
+    }
+    .menu-section { padding: 8px 0; }
+    .menu-item, .submenu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 55px;
+      padding: 0 18px;
+      color: #b7c6d7;
+      white-space: nowrap;
+    }
+    .menu-left { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .icon { width: 16px; color: #a5b4c6; text-align: center; font-size: 15px; }
+    .menu-item.active-parent { background: #0d2b45; color: #fff; }
+    .submenu { background: #0d2b45; }
+    .submenu-item {
+      height: 56px;
+      padding-left: 44px;
+      font-size: 14px;
+    }
+    .submenu-item.active {
+      background: #166dc5;
+      color: #fff;
+      font-weight: 600;
+    }
+    .main { flex: 1; min-width: 0; }
+    .topbar {
+      height: 49px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 18px 0 12px;
+    }
+    .breadcrumb { display: flex; align-items: center; gap: 16px; color: #909399; }
+    .hamburger { color: #333; font-size: 21px; }
+    .breadcrumb strong { color: #909399; font-weight: 600; }
+    .top-actions { display: flex; align-items: center; gap: 18px; color: #606266; }
+    .notice {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      color: #333;
+    }
+    .badge {
+      position: absolute;
+      top: -14px;
+      right: 38px;
+      min-width: 26px;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 11px;
+      background: #ff4d57;
+      color: #fff;
+      font-size: 12px;
+      line-height: 22px;
+      text-align: center;
+    }
+    .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3aa36f, #74c7e8);
+      display: inline-block;
+    }
+    .tabs-line {
+      height: 38px;
+      background: #fff;
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid #dcdfe6;
+    }
+    .page-tab {
+      height: 36px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #e7e9ee;
+      color: #303133;
+      font-size: 13px;
+    }
+    .page-tab.active {
+      background: #126fc9;
+      color: #fff;
+      font-weight: 600;
+    }
+    .utility-strip {
+      height: 35px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      background: #fff;
+      color: #9ca3af;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .utility-strip span {
+      width: 40px;
+      text-align: center;
+      border-left: 1px solid #e5e7eb;
+    }
+    .content {
+      padding: 38px 18px 24px;
+    }
+    .member-tabs {
+      height: 48px;
+      display: flex;
+      align-items: stretch;
+      margin-left: 8px;
+    }
+    .member-tab {
+      min-width: 110px;
+      padding: 0 20px;
+      background: #fff;
+      border: 1px solid #e8eaef;
+      border-bottom: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c0c4cc;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .member-tab.active { color: #1688ff; }
+    .panel {
+      background: #fff;
+      padding: 36px 26px 0;
+      min-height: 650px;
+      border: 1px solid #eef0f3;
+    }
+    .filters {
+      display: grid;
+      grid-template-columns: 520px 520px 520px 1fr;
+      column-gap: 18px;
+      row-gap: 18px;
+      align-items: start;
+    }
+    .form-row { display: flex; align-items: flex-start; min-width: 0; }
+    .label {
+      width: 92px;
+      flex: 0 0 92px;
+      height: 36px;
+      line-height: 36px;
+      color: #303133;
+      font-weight: 600;
+      text-align: right;
+      padding-right: 10px;
+    }
+    .control { flex: 1; min-width: 0; }
+    .input, .select, .range {
+      height: 36px;
+      border: 1px solid #dcdfe6;
+      background: #fff;
+      color: #c0c4cc;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      min-width: 0;
+    }
+    .range { justify-content: space-between; }
+    .select { justify-content: space-between; }
+    .select.disabled { background: #f5f7fa; color: #b8bcc5; }
+    .split { display: grid; grid-template-columns: 136px 1fr; }
+    .split .select { border-right: none; color: #606266; }
+    .hint { color: #ff4d4f; font-size: 12px; margin-top: 7px; }
+    .search-buttons {
+      grid-column: 4;
+      grid-row: 3 / span 2;
+      justify-self: end;
+      align-self: start;
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+    }
+    .money-filter-row {
+      grid-column: 1 / 5;
+      display: grid;
+      grid-template-columns: 64px 300px 220px 24px 260px 300px 220px 24px 260px;
+      align-items: center;
+      column-gap: 0;
+      margin-top: 2px;
+    }
+    .money-label {
+      height: 36px;
+      line-height: 36px;
+      padding-right: 10px;
+      text-align: right;
+      font-weight: 600;
+    }
+    .filter-dropdown-field { position: relative; }
+    .filter-select {
+      height: 36px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      color: #303133;
+    }
+    .filter-select.open { border-color: #1688ff; }
+    .money-input {
+      height: 36px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      padding: 0 12px;
+      outline: none;
+      font: inherit;
+    }
+    .money-input:focus { border-color: #1688ff; }
+    .money-input:disabled {
+      background: #f5f7fa;
+      color: #c0c4cc;
+      cursor: not-allowed;
+    }
+    .money-separator {
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .filter-dropdown {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 40px;
+      display: none;
+      max-height: 300px;
+      padding: 6px;
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(0,0,0,.14);
+      z-index: 10;
+      overflow-y: auto;
+    }
+    .filter-dropdown.show { display: block; }
+    .filter-option {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 3px;
+    }
+    .filter-option.active,
+    .filter-option:hover {
+      background: #e8f6ff;
+      font-weight: 600;
+    }
+    .filter-option.disabled {
+      color: #c0c4cc;
+      cursor: not-allowed;
+      background: #fff;
+      font-weight: 400;
+    }
+    .filter-option.disabled:hover {
+      background: #fff;
+      font-weight: 400;
+    }
+    .btn {
+      height: 36px;
+      min-width: 70px;
+      padding: 0 18px;
+      border: 1px solid #dcdfe6;
+      background: #fff;
+      color: #303133;
+      border-radius: 2px;
+      font-weight: 600;
+      cursor: default;
+    }
+    .btn.primary {
+      border-color: #1688ff;
+      background: #1688ff;
+      color: #fff;
+    }
+    .table-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 68px 0 10px;
+    }
+    .quick-filter-actions,
+    .operation-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .quick-btn {
+      height: 36px;
+      padding: 0 18px;
+      border: 1px solid #1688ff;
+      background: #1688ff;
+      color: #fff;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+    .tool-icons { display: flex; gap: 16px; margin-left: 10px; color: #4b5563; font-size: 18px; }
+    .check-cell { width: 48px; }
+    .row-check,
+    .all-check {
+      width: 16px;
+      height: 16px;
+      appearance: none;
+      border: 1px solid #dcdfe6;
+      border-radius: 3px;
+      background: #fff;
+      vertical-align: middle;
+    }
+    .row-check:checked,
+    .all-check:checked {
+      border-color: #1688ff;
+      background: #1688ff;
+      box-shadow: inset 0 0 0 3px #fff;
+    }
+    .table-wrap { overflow-x: auto; border: 1px solid #ebeef5; }
+    table {
+      border-collapse: collapse;
+      min-width: 3310px;
+      width: 3310px;
+      table-layout: fixed;
+      background: #fff;
+    }
+    th, td {
+      border-right: 1px solid #ebeef5;
+      border-bottom: 1px solid #ebeef5;
+      text-align: center;
+      padding: 12px 8px;
+      height: 72px;
+      vertical-align: middle;
+      color: #303133;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+    th {
+      height: 78px;
+      background: #fff;
+      font-weight: 700;
+    }
+    th.sortable {
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+    th.sortable .sort-tip {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      display: none;
+      min-width: 78px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 4px;
+      background: #1f1f1f;
+      color: #fff;
+      line-height: 34px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      z-index: 5;
+    }
+    th.sortable .sort-tip::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #1f1f1f;
+    }
+    th.sortable:hover .sort-tip { display: none; }
+    .floating-sort-tip {
+      position: fixed;
+      display: none;
+      min-width: 78px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 4px;
+      background: #1f1f1f;
+      color: #fff;
+      line-height: 34px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 60;
+    }
+    .floating-sort-tip::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #1f1f1f;
+    }
+    .floating-sort-tip.show { display: block; }
+    tr:nth-child(even) td { background: #fbfbfc; }
+    .link { color: #1688ff; }
+    .copy { color: #1688ff; font-size: 13px; }
+    .status {
+      display: inline-block;
+      min-width: 44px;
+      height: 24px;
+      padding: 0 7px;
+      border: 1px solid #9ee27c;
+      border-radius: 2px;
+      color: #67c23a;
+      background: #f3fff0;
+      line-height: 22px;
+      font-weight: 600;
+    }
+    .sort {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-left: 5px;
+      color: #bfc3ca;
+      font-size: 10px;
+      vertical-align: middle;
+      line-height: 8px;
+    }
+    th[data-sort-state="asc"] .sort .up,
+    th[data-sort-state="desc"] .sort .down {
+      color: #2f80d7;
+    }
+    .changed-field {
+      color: #d99a00;
+      font-weight: 800;
+    }
+    .change-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 18px;
+      margin-top: 4px;
+      padding: 0 5px;
+      border: 1px solid #ffd666;
+      border-radius: 3px;
+      background: #fff7d6;
+      color: #ad7a00;
+      font-size: 11px;
+      line-height: 16px;
+      font-weight: 700;
+    }
+    .negative { color: #ff0000; }
+    .positive { color: #00a651; }
+    .w-50 { width: 50px; }
+    .w-60 { width: 60px; }
+    .w-120 { width: 120px; }
+    .w-155 { width: 155px; }
+    .w-110 { width: 110px; }
+    .w-100 { width: 100px; }
+    .w-95 { width: 95px; }
+    .w-85 { width: 85px; }
+    .w-80 { width: 80px; }
+    .w-190 { width: 190px; }
+    .w-135 { width: 135px; }
+    .w-105 { width: 105px; }
+    @media (max-width: 1600px) {
+      .filters { grid-template-columns: 480px 480px 480px 1fr; }
+      .content { padding-left: 14px; padding-right: 14px; }
+    }
+    .toast {
+      position: fixed;
+      top: 96px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 6px;
+      background: #fff;
+      color: #303133;
+      box-shadow: 0 4px 18px rgba(0,0,0,.12);
+      z-index: 30;
+    }
+    .toast.show { display: flex; }
+    .toast-mark {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: #f4bd4f;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .toast.success .toast-mark { background: #67c23a; }
+    .toast.error .toast-mark { background: #f56c6c; }
+    .toast.warning .toast-mark { background: #f4bd4f; }
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.42);
+      z-index: 20;
+    }
+    .modal-mask.show { display: flex; }
+    .batch-modal {
+      width: 750px;
+      min-height: 390px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 12px 36px rgba(0,0,0,.2);
+      overflow: visible;
+    }
+    .modal-head {
+      position: relative;
+      height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #ebeef5;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .modal-close {
+      position: absolute;
+      right: 24px;
+      top: 18px;
+      border: 0;
+      background: transparent;
+      color: #909399;
+      font-size: 26px;
+      line-height: 1;
+    }
+    .modal-body {
+      width: 420px;
+      margin: 26px auto 0;
+    }
+    .modal-row {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .modal-label {
+      width: 100px;
+      height: 36px;
+      line-height: 36px;
+      padding-right: 12px;
+      text-align: right;
+      color: #303133;
+    }
+    .modal-field { width: 280px; position: relative; }
+    .modal-select {
+      height: 38px;
+      border: 1px solid #dcdfe6;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      background: #fff;
+      color: #303133;
+    }
+    .modal-select.open {
+      border-color: #1688ff;
+      box-shadow: 0 0 0 1px rgba(22,136,255,.08);
+    }
+    .modal-select.placeholder { color: #b8bcc5; }
+    .dropdown {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 42px;
+      display: none;
+      max-height: 300px;
+      padding: 6px;
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(0,0,0,.14);
+      z-index: 35;
+      overflow-y: auto;
+    }
+    .dropdown.show { display: block; }
+    .dropdown-item {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      color: #303133;
+      border-radius: 3px;
+    }
+    .dropdown-item.active,
+    .dropdown-item:hover {
+      background: #e8f6ff;
+      font-weight: 600;
+    }
+    .level-dropdown { max-height: 280px; }
+    .modal-radio-row {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      gap: 16px;
+    }
+    .radio-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .radio-label input {
+      width: 16px;
+      height: 16px;
+      accent-color: #1677c9;
+    }
+    .modal-textarea {
+      width: 280px;
+      height: 96px;
+      padding: 10px 12px;
+      border: 1px solid #dcdfe6;
+      border-radius: 5px;
+      resize: none;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+    .modal-textarea:focus { border-color: #1688ff; }
+    .counter {
+      text-align: right;
+      color: #909399;
+      line-height: 22px;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: center;
+      padding: 16px 0 28px;
+    }
+    .confirm-btn {
+      min-width: 74px;
+      height: 40px;
+      border: 0;
+      border-radius: 6px;
+      background: #0f70c7;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .hidden { display: none; }
+    .prd-section {
+      margin-top: 28px;
+      padding: 24px 26px 34px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+    }
+    .prd-title {
+      margin: 0 0 18px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .prd-subtitle {
+      margin: 24px 0 12px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .prd-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #ebeef5;
+      margin-bottom: 14px;
+    }
+    .prd-table {
+      min-width: 900px;
+      width: 100%;
+      table-layout: auto;
+      border-collapse: collapse;
+    }
+    .prd-table th,
+    .prd-table td {
+      height: auto;
+      padding: 12px 14px;
+      text-align: left;
+      line-height: 1.65;
+      vertical-align: top;
+      word-break: break-word;
+    }
+    .prd-table th {
+      background: #f8fafc;
+      color: #111827;
+      white-space: nowrap;
+    }
+    .prd-table td:first-child,
+    .prd-table td:nth-child(2) {
+      white-space: nowrap;
+      color: #374151;
+      font-weight: 600;
+    }
+    .prd-note {
+      color: #6b7280;
+      line-height: 1.7;
+      margin: 8px 0 0;
+    }
+    .permission-map {
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr);
+      gap: 18px;
+      margin: 10px 0 18px;
+    }
+    .permission-card {
+      border: 1px solid #ebeef5;
+      background: #fbfdff;
+      padding: 16px 18px;
+    }
+    .permission-title {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .permission-tree {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      line-height: 1.9;
+      color: #303133;
+    }
+    .permission-tree ul {
+      margin: 2px 0 2px 24px;
+      padding: 0;
+      list-style: none;
+    }
+    .permission-tree li::before {
+      content: "☑";
+      margin-right: 8px;
+      color: #1677c9;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">TEST</span><span>DD.GG</span></div>
+      <div class="menu-section">
+        <div class="menu-item"><span class="menu-left"><span class="icon">⌁</span>平台概况</span><span>⌄</span></div>
+        <div class="menu-item"><span class="menu-left"><span class="icon">⚙</span>系统管理</span><span>⌄</span></div>
+        <div class="menu-item"><span class="menu-left"><span class="icon">♜</span>商户游戏管理</span><span>⌄</span></div>
+        <div class="menu-item active-parent"><span class="menu-left"><span class="icon">♙</span>会员管理</span><span>⌃</span></div>
+        <div class="submenu">
+          <div class="submenu-item">账变记录</div>
+          <div class="submenu-item active">会员列表</div>
+          <div class="submenu-item">会员层级</div>
+          <div class="submenu-item">会员详情</div>
+          <div class="submenu-item">会员财务管理</div>
+          <div class="submenu-item">会员注册记录</div>
+          <div class="submenu-item">会员登录信息</div>
+          <div class="submenu-item">会员标签配置</div>
+          <div class="submenu-item">会员信息变更记录</div>
+          <div class="submenu-item">会员标签变更记录</div>
+          <div class="submenu-item">用户回访</div>
+        </div>
+        <div class="menu-item"><span class="menu-left"><span class="icon">Ⓢ</span>商户财务管理</span><span>⌄</span></div>
+        <div class="menu-item"><span class="menu-left"><span class="icon">▣</span>报表查询</span><span>⌄</span></div>
+        <div class="menu-item"><span class="menu-left"><span class="icon">♚</span>代理中心(无限极差)</span><span>⌄</span></div>
+        <div class="menu-item"><span class="menu-left"><span class="icon">▤</span>商户财务配置</span><span>⌄</span></div>
+        <div class="menu-item"><span class="menu-left"><span class="icon">✉</span>消息管理</span><span>⌄</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb"><span class="hamburger">≡</span><strong>会员管理</strong><span>/</span><strong>会员列表</strong></div>
+        <div class="top-actions">
+          <span>2026-09-07 00:27:47 (巴西雷亚尔：UTC-3)</span>
+          <strong>bxcuculus1</strong>
+          <span class="notice">⇩ 🔔 📖<span class="badge">22</span></span>
+          <span class="avatar"></span>
+        </div>
+      </header>
+      <div class="tabs-line">
+        <div class="page-tab">首页</div>
+        <div class="page-tab active">会员列表&nbsp;×</div>
+      </div>
+      <div class="utility-strip"><span>↻</span><span>⌄</span><span>□</span></div>
+
+      <section class="content">
+        <div class="member-tabs">
+          <div class="member-tab active">全部会员</div>
+          <div class="member-tab">今日新增</div>
+        </div>
+        <div class="panel">
+          <div class="filters">
+            <div class="form-row">
+              <div class="label">注册时间</div>
+              <div class="control">
+                <div class="range"><span>注册开始时间</span><span>→</span><span>注册结束时间</span><span>▣</span></div>
+                <div class="hint">当前时间为 UTC-3 时区</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="label">会员查询</div>
+              <div class="control split">
+                <div class="select"><span>会员ID</span><span>⌄</span></div>
+                <div class="input">请输入会员ID</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="label">上级代理</div>
+              <div class="control split">
+                <div class="select"><span>上级代理ID</span><span>⌄</span></div>
+                <div class="input">请输入上级代理ID</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="label">注册渠道</div>
+              <div class="control"><div class="select"><span>最新渠道</span><span>⌄</span></div></div>
+            </div>
+
+            <div class="form-row">
+              <div class="label">注册方式</div>
+              <div class="control"><div class="select"><span>注册方式</span><span>⌄</span></div></div>
+            </div>
+            <div class="form-row">
+              <div class="label">注册站点</div>
+              <div class="control"><div class="select disabled"><span>巴西站-测试</span><span>⌄</span></div></div>
+            </div>
+            <div class="form-row">
+              <div class="label">会员等级</div>
+              <div class="control"><div class="input">会员等级</div></div>
+            </div>
+            <div class="form-row">
+              <div class="label">账号类型</div>
+              <div class="control"><div class="select"><span>账号类型</span><span>⌄</span></div></div>
+            </div>
+
+            <div class="form-row">
+              <div class="label">账号状态</div>
+              <div class="control"><div class="select"><span>账号状态</span><span>⌄</span></div></div>
+            </div>
+            <div class="form-row">
+              <div class="label">注册终端</div>
+              <div class="control"><div class="select"><span>注册终端</span><span>⌄</span></div></div>
+            </div>
+            <div class="form-row">
+              <div class="label">离线天数</div>
+              <div class="control"><div class="select"><span>离线天数</span><span>⌄</span></div></div>
+            </div>
+
+            <div class="form-row">
+              <div class="label">最后登录时间</div>
+              <div class="control">
+                <div class="range"><span>最后登录开始时间</span><span>→</span><span>最后登录结束时间</span><span>▣</span></div>
+                <div class="hint">当前时间为 UTC-3 时区</div>
+              </div>
+            </div>
+            <div class="money-filter-row">
+              <div class="money-label">金币：</div>
+              <div class="filter-dropdown-field">
+                <div class="filter-select money-type-select" data-target="moneyTypeDropdownA">
+                  <span class="money-type-text" data-value="">全部</span><span>⌄</span>
+                </div>
+                <div class="filter-dropdown" id="moneyTypeDropdownA">
+                  <div class="filter-option active" data-value="">全部</div>
+                  <div class="filter-option" data-value="8">当日充值</div>
+                  <div class="filter-option" data-value="7">首充金额</div>
+                  <div class="filter-option" data-value="10">当日有效投注</div>
+                  <div class="filter-option" data-value="11">当日输赢</div>
+                  <div class="filter-option" data-value="12">当日优惠</div>
+                  <div class="filter-option" data-value="13">历史充值</div>
+                  <div class="filter-option" data-value="15">历史有效投注</div>
+                  <div class="filter-option" data-value="16">历史输赢</div>
+                  <div class="filter-option" data-value="17">历史优惠</div>
+                </div>
+              </div>
+              <input class="money-input" id="moneyMinA" type="text" inputmode="decimal" placeholder="" disabled>
+              <div class="money-separator">~</div>
+              <input class="money-input" id="moneyMaxA" type="text" inputmode="decimal" placeholder="" disabled>
+              <div class="filter-dropdown-field">
+                <div class="filter-select money-type-select" data-target="moneyTypeDropdownB">
+                  <span class="money-type-text" data-value="">全部</span><span>⌄</span>
+                </div>
+                <div class="filter-dropdown" id="moneyTypeDropdownB">
+                  <div class="filter-option active" data-value="">全部</div>
+                  <div class="filter-option" data-value="8">当日充值</div>
+                  <div class="filter-option" data-value="7">首充金额</div>
+                  <div class="filter-option" data-value="10">当日有效投注</div>
+                  <div class="filter-option" data-value="11">当日输赢</div>
+                  <div class="filter-option" data-value="12">当日优惠</div>
+                  <div class="filter-option" data-value="13">历史充值</div>
+                  <div class="filter-option" data-value="15">历史有效投注</div>
+                  <div class="filter-option" data-value="16">历史输赢</div>
+                  <div class="filter-option" data-value="17">历史优惠</div>
+                </div>
+              </div>
+              <input class="money-input" id="moneyMinB" type="text" inputmode="decimal" placeholder="" disabled>
+              <div class="money-separator">~</div>
+              <input class="money-input" id="moneyMaxB" type="text" inputmode="decimal" placeholder="" disabled>
+            </div>
+            <div class="search-buttons">
+              <button class="btn" id="resetBtn">重 置</button>
+              <button class="btn primary" id="searchBtn">查 询</button>
+            </div>
+          </div>
+
+          <div class="table-actions">
+            <div class="quick-filter-actions">
+              <button class="quick-btn">今日新增</button>
+              <button class="quick-btn">昨日新增</button>
+              <button class="quick-btn">三日新增</button>
+              <button class="quick-btn">七日新增</button>
+            </div>
+            <div class="operation-actions">
+              <button class="quick-btn" id="batchActionBtn">批量操作</button>
+              <button class="quick-btn">添加会员</button>
+              <button class="quick-btn">导 出</button>
+              <div class="tool-icons"><span>⟳</span><span>↕</span><span>⚙</span></div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <colgroup>
+                <col class="w-50"><col class="w-60"><col class="w-120"><col class="w-155"><col class="w-120"><col class="w-110">
+                <col class="w-110"><col class="w-85"><col class="w-85"><col class="w-85"><col class="w-100">
+                <col class="w-85"><col class="w-85"><col class="w-85"><col class="w-85"><col class="w-85">
+                <col class="w-100"><col class="w-85"><col class="w-100"><col class="w-105"><col class="w-85">
+                <col class="w-85"><col class="w-95"><col class="w-85"><col class="w-190"><col class="w-190"><col class="w-135">
+                <col class="w-85"><col class="w-105"><col class="w-105"><col class="w-85">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th class="check-cell"><input type="checkbox" class="all-check" id="allCheck" aria-label="全选会员"></th>
+                  <th>序号</th>
+                  <th>会员ID</th>
+                  <th>手机号(会员账号)</th>
+                  <th>上级代理ID</th>
+                  <th>姓名</th>
+                  <th class="sortable metric-sort" data-sort-index="6" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">金币<br>余额</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">更名</span></th>
+                  <th class="sortable metric-sort" data-sort-index="7" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">首充<br>金额</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="8" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">当日<br>充值</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="9" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">当日<br>提现</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="10" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">当日有<br>效投注</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="11" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">当日<br>输赢</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="12" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">当日<br>优惠</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="13" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">历史<br>充值</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="14" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">历史<br>提现</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="15" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">历史有<br>效投注</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="16" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">历史<br>输赢</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th class="sortable metric-sort" data-sort-index="17" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">历史<br>优惠</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
+                  <th><span class="changed-field">出款方式</span><br><span class="change-tag">新增</span></th>
+                  <th>账号<br>状态</th>
+                  <th>会员<br>等级</th>
+                  <th><span class="changed-field">会员<br>层级</span><br><span class="change-tag">新增</span></th>
+                  <th>是否<br>在线</th>
+                  <th class="sortable" id="registerDateSort" data-sort-state="none" title="点击排序">
+                    <span class="sort-tip">点击升序</span>
+                    <span class="changed-field">注册日期</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">拆分</span>
+                  </th>
+                  <th class="sortable" id="loginDateSort" data-sort-state="none" title="点击排序">
+                    <span class="sort-tip">点击升序</span>
+                    <span class="changed-field">最后登录<br>时间</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">拆分</span>
+                  </th>
+                  <th>登录IP<br>注册IP</th>
+                  <th>账号<br>类型</th>
+                  <th>注册<br>渠道名</th>
+                  <th>注册<br>终端</th>
+                  <th>离线<br>天数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员1"></td><td>1</td><td><span class="link">72755525</span> <span class="copy">▣</span></td><td>11920882903<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">472.68</span></td><td>10</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>40</td><td>0</td><td>164.9</td><td class="negative">-53.54</td><td>13.56</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>20雷</td><td>在线</td><td data-register-time="2026-09-06 21:00:09">2026-09-06 21:00:09 (UTC-3)</td><td data-login-time="2026-09-06 21:01:22">2026-09-06 21:01:22 (UTC-3)</td><td>34.2.128.192<br>34.2.128.192</td><td>正式</td><td>官方渠道</td><td>电脑系统</td><td>0</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员2"></td><td>2</td><td><span class="link">40577248</span> <span class="copy">▣</span></td><td>11999996666<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">112.77</span></td><td>23</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>23</td><td>0</td><td>230.7</td><td class="negative">-29.94</td><td>7.02</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>20雷</td><td>离线</td><td data-register-time="2026-09-06 06:52:44">2026-09-06 06:52:44 (UTC-3)</td><td data-login-time="2026-09-06 07:18:55">2026-09-06 07:18:55 (UTC-3)</td><td>157.254.54.111<br>157.254.54.111</td><td>正式</td><td>官方渠道</td><td>苹果H5</td><td>0</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员3"></td><td>3</td><td><span class="link">28495441</span> <span class="copy">▣</span></td><td>11987987987<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">0</span></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.8</td><td class="negative">-0.8</td><td>0.87</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>黑名单</td><td>离线</td><td data-register-time="2026-09-06 06:51:32">2026-09-06 06:51:32 (UTC-3)</td><td data-login-time="2026-09-06 11:58:23">2026-09-06 11:58:23 (UTC-3)</td><td>8.220.154.253<br>8.220.154.253</td><td>正式</td><td>官方渠道</td><td>苹果H5</td><td>0</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员4"></td><td>4</td><td><span class="link">53300951</span> <span class="copy">▣</span></td><td>11912222224<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">58</span></td><td>20</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>260</td><td>450</td><td>1757.82</td><td class="positive">168.09</td><td>22.18</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>200雷</td><td>离线</td><td data-register-time="2026-09-06 05:57:12">2026-09-06 05:57:12 (UTC-3)</td><td data-login-time="2026-09-06 05:57:12">2026-09-06 05:57:12 (UTC-3)</td><td>47.250.72.229<br>47.250.72.229</td><td>正式</td><td>测试注册引导<br>转盘未配置渠道</td><td>电脑系统</td><td>0</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员5"></td><td>5</td><td><span class="link">51019889</span> <span class="copy">▣</span></td><td>11987987989<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">0</span></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.62</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>默认<br>层级</td><td>离线</td><td data-register-time="2026-09-06 05:49:15">2026-09-06 05:49:15 (UTC-3)</td><td data-login-time="2026-09-06 11:49:02">2026-09-06 11:49:02 (UTC-3)</td><td>47.250.72.229<br>47.250.72.229</td><td>正式</td><td>官方渠道</td><td>电脑系统</td><td>0</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员6"></td><td>6</td><td><span class="link">90284581</span> <span class="copy">▣</span></td><td>11956717236<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">0</span></td><td>15</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>15</td><td>0</td><td>140.9</td><td class="negative">-22.95</td><td>8.37</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>10雷</td><td>离线</td><td data-register-time="2026-09-06 05:48:49">2026-09-06 05:48:49 (UTC-3)</td><td data-login-time="2026-09-06 11:52:28">2026-09-06 11:52:28 (UTC-3)</td><td>47.250.72.229<br>47.250.72.229</td><td>正式</td><td>官方渠道</td><td>苹果H5</td><td>0</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员7"></td><td>7</td><td><span class="link">93218705</span> <span class="copy">▣</span></td><td>11933336123<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">0</span></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0.24</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>默认<br>层级</td><td>离线</td><td data-register-time="2026-09-06 05:31:42">2026-09-06 05:31:42 (UTC-3)</td><td data-login-time="2026-09-06 05:41:45">2026-09-06 05:41:45 (UTC-3)</td><td>47.250.72.229<br>47.250.72.229</td><td>正式</td><td>官方渠道</td><td>苹果H5</td><td>0</td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="row-check" aria-label="选择会员8"></td><td>8</td><td><span class="link">81634290</span> <span class="copy">▣</span></td><td>11968881230<span class="copy">▣</span></td><td>-</td><td>-</td><td><span class="link">0</span></td><td>20</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>136</td><td>81</td><td>639.1</td><td class="negative">-148.94</td><td>93.94</td><td><span class="link">自动出款</span></td><td><span class="status">正常</span></td><td>VIP0</td><td>100雷</td><td>离线</td><td data-register-time="2026-09-06 05:28:09">2026-09-06 05:28:09 (UTC-3)</td><td data-login-time="2026-09-06 05:39:20">2026-09-06 05:39:20 (UTC-3)</td><td>47.250.72.229<br>47.250.72.229</td><td>正式</td><td>官方渠道</td><td>苹果H5</td><td>0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <section class="prd-section">
+          <h1 class="prd-title">巴西-会员管理 / 会员列表迭代 PRD</h1>
+          <p class="prd-note">本区域为当前交互原型同步的需求说明，便于评审时在同一个 HTML 文件内查看页面原型与规则口径。</p>
+
+          <h2 class="prd-subtitle">1. 本次已确认需求</h2>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead>
+                <tr><th>模块</th><th>需求项</th><th>已确认规则</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>会员列表</td><td>新增字段</td><td>列表新增「会员层级」字段，排序位置在「会员等级」之后。</td></tr>
+                <tr><td>会员列表</td><td>字段覆盖</td><td>原存款/提款相关字段区域调整为：首充金额、当日充值、当日提现、当日有效投注、当日输赢、当日优惠、历史充值、历史提现、历史有效投注、历史输赢、历史优惠、出款方式。</td></tr>
+                <tr><td>会员列表</td><td>字段更名</td><td>原「总资产」更名为「金币余额」。</td></tr>
+                <tr><td>会员列表</td><td>搜索条件</td><td>搜索区新增「金币」条件，支持两组金币指标区间组合查询。</td></tr>
+                <tr><td>会员列表</td><td>金币条件联动</td><td>当两组金币条件同时被输入时，查询结果需同时满足两个条件后才展示。</td></tr>
+                <tr><td>会员列表</td><td>代理ID查询</td><td>当根据代理ID搜索时，查询结果应包含该代理ID对应的所有下级会员，以及下级会员的全部下级会员；下级关系按无限级递归处理，即该代理整条下级线内的会员结果均需展示。</td></tr>
+                <tr><td>会员列表</td><td>时间字段拆分</td><td>列表原合并展示的「注册日期 / 最后登录时间」拆分为两个独立字段：「注册日期」「最后登录时间」。</td></tr>
+                <tr><td>会员列表</td><td>变更字段标识</td><td>本次新增或改动的列表字段使用黄色字体或标识符突出，便于开发识别变更范围。</td></tr>
+                <tr><td>会员列表</td><td>数据时区</td><td>列表日期字段、当日统计及历史统计结果均按巴西 UTC-3 口径显示。</td></tr>
+                <tr><td>会员列表</td><td>快捷筛选</td><td>「今日新增 / 昨日新增 / 三日新增 / 七日新增」移动至列表左侧；「添加会员 / 导出 / 功能按钮」保持在右侧。</td></tr>
+                <tr><td>会员列表</td><td>排序</td><td>注册日期、最后登录时间、金币余额、首充金额、当日充值、当日提现、当日有效投注、当日输赢、当日优惠、历史充值、历史提现、历史有效投注、历史输赢、历史优惠支持升序/降序排序。</td></tr>
+                <tr><td>会员列表</td><td>排序提示</td><td>可排序字段表头默认展示上下箭头；鼠标悬停时展示黑色气泡提示「点击升序」；点击升序后，上箭头高亮，再次悬停提示「点击降序」；点击降序后，下箭头高亮，再次悬停提示「点击升序」。</td></tr>
+                <tr><td>批量操作</td><td>操作入口</td><td>列表新增勾选框和「批量操作」按钮。未勾选会员时点击，提示「请选择会员」。</td></tr>
+                <tr><td>批量操作</td><td>选择范围</td><td>不支持跨页勾选，仅支持对当前页已勾选会员进行批量操作；本期不支持按筛选结果全量批量操作。</td></tr>
+                <tr><td>会员列表</td><td>导出</td><td>导出为导出当前列表结果数据，与批量操作无关。</td></tr>
+                <tr><td>批量操作</td><td>弹窗名称</td><td>勾选会员后点击「批量操作」，打开「批量操作会员属性」弹窗。</td></tr>
+                <tr><td>批量操作</td><td>操作类型</td><td>操作类型支持：会员层级、出款方式、备注。</td></tr>
+                <tr><td>权限</td><td>按钮状态</td><td>本期无权限按钮统一置灰展示；后期如需隐藏按钮，作为独立迭代处理。</td></tr>
+                <tr><td>操作日志</td><td>记录范围</td><td>所有增删改操作均需加入「子账号操作日志（新）」表，并记录操作模块、操作页面、操作内容、操作前值、操作后值、操作对象会员ID、批量操作批次号、失败原因。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="prd-subtitle">2. 搜索条件规则</h2>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead>
+                <tr><th>字段</th><th>规则</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>代理ID查询</td><td>输入代理ID后，查询结果需展示该代理整条下级线内的会员。包含该代理ID对应的所有直接下级会员，以及直接下级会员的全部下级会员，并按无限级递归继续向下包含所有层级下级会员。</td></tr>
+                <tr><td>代理组合查询</td><td>当代理ID条件与其他筛选条件同时存在时，先限定该代理整条下级线会员范围，再叠加其他筛选条件取交集。</td></tr>
+                <tr><td>金币条件</td><td>支持两组金币条件；每组包含指标选择、最小值、最大值。</td></tr>
+                <tr><td>金币指标</td><td>支持选择：全部、当日充值、首充金额、当日有效投注、当日输赢、当日优惠、历史充值、历史有效投注、历史输赢、历史优惠。</td></tr>
+                <tr><td>区间输入</td><td>每组条件支持输入最小值和最大值，格式为「最小值 ~ 最大值」。</td></tr>
+                <tr><td>前端校验</td><td>金币区间输入框仅允许输入数字和小数点，不允许输入字母、符号、中文等非数字字符。</td></tr>
+                <tr><td>区间完整性</td><td>选择具体金币指标后，最小值和最大值都需要输入；仅输入最小值或仅输入最大值时不允许查询。</td></tr>
+                <tr><td>区间大小</td><td>最小值必须小于等于最大值；若最小值大于最大值，提示「金额范围有误」，toast 显示 3 秒后消失。</td></tr>
+                <tr><td>小数格式</td><td>输入完成后默认追加并展示两位小数；例如输入「50」自动调整为「50.00」。</td></tr>
+                <tr><td>参数口径</td><td>查询和保存/传参时，金币区间值按两位小数格式传递。</td></tr>
+                <tr><td>双组查询</td><td>当两组金币条件同时被输入时，查询结果需同时满足两组条件。</td></tr>
+                <tr><td>条件互斥</td><td>两组金币条件不能重复选择同一个具体指标；例如条件 1 已选择「首充金额」时，条件 2 中「首充金额」置灰不可选，其他具体指标同理。「全部」不参与互斥。</td></tr>
+                <tr><td>全部</td><td>指标选择「全部」时，不作为有效过滤条件，且该组最小值、最大值输入框不可输入并置灰；切回「全部」时需清空该组已输入区间。</td></tr>
+                <tr><td>具体指标</td><td>选择具体金币指标后，该组最小值、最大值输入框恢复可输入。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="prd-subtitle">3. 批量操作规则</h2>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead>
+                <tr><th>操作类型</th><th>规则</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>批量范围</td><td>不支持跨页勾选，仅支持对当前页已勾选会员进行批量操作；本期不支持按筛选结果全量批量操作。</td></tr>
+                <tr><td>导出关系</td><td>导出为导出列表结果数据，与批量操作无关。</td></tr>
+                <tr><td>失败提示</td><td>批量操作失败时不展示会员ID，只提示因系统原因导致操作失败的原因；如失败原因可获取，需同步展示失败原因。</td></tr>
+                <tr><td>操作反馈</td><td>点击弹窗「确定」后不再展示二次确认弹窗，直接提交并反馈程序处理结果；toast 展示「操作成功」或「操作失败」，3 秒后自动消失。</td></tr>
+                <tr><td>会员层级</td><td>选择「会员层级」时展示层级操作、层级、备注。层级操作支持「拉入层级」「移除层级」。选择「拉入层级」时，需选择目标层级。</td></tr>
+                <tr><td>移除层级</td><td>仅移除玩家自定义层级。即玩家存在自定义层级时，清除该玩家的自定义层级，并恢复到会员充值、有效投注、有效直属、直属有效充值为条件的对应层级关系中。</td></tr>
+                <tr><td>无自定义层级</td><td>玩家无自定义层级时，层级数据无变化，并按程序处理结果反馈成功或失败。</td></tr>
+                <tr><td>出款方式</td><td>选择「出款方式」时展示出款方式下拉，支持「自动出款」「手动出款」。玩家注册时，默认出款方式为「自动出款」。</td></tr>
+                <tr><td>手动出款</td><td>当玩家账号被调整为「手动出款」后，即使玩家提现金额低于免审核金额，也不会自动出款，需要财务人员介入处理；财务需选择对应出款方式和渠道后再处理出款。</td></tr>
+                <tr><td>备注</td><td>选择「备注」时展示备注输入框；备注最多 500 字。</td></tr>
+                <tr><td>操作日志</td><td>所有增删改操作均需加入「子账号操作日志（新）」表，并记录操作模块、操作页面、操作内容、操作前值、操作后值、操作对象会员ID、批量操作批次号、失败原因。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="prd-subtitle">4. 权限地图</h2>
+          <div class="permission-map">
+            <div class="permission-card">
+              <h3 class="permission-title">会员列表权限地图</h3>
+              <ul class="permission-tree">
+                <li>会员管理
+                  <ul>
+                    <li>账变记录</li>
+                    <li>会员列表
+                      <ul>
+                        <li>批量操作</li>
+                        <li>新增</li>
+                        <li>导出</li>
+                        <li>设置出款类型</li>
+                        <li>黑名单</li>
+                        <li>禁止投注</li>
+                        <li>踢出大厅</li>
+                        <li>修改密码</li>
+                        <li>修改资金密码</li>
+                        <li>重置资金密码</li>
+                        <li>代理拉线</li>
+                        <li>实名关联</li>
+                        <li>人工提存</li>
+                        <li>资金明细</li>
+                        <li>充值记录</li>
+                        <li>提现记录</li>
+                        <li>稽核详情</li>
+                        <li>投注记录</li>
+                        <li>体育投注记录</li>
+                        <li>输赢总览</li>
+                        <li>输赢统计</li>
+                        <li>优惠记录</li>
+                        <li>IP关联</li>
+                        <li>设备关联</li>
+                        <li>指纹ID关联</li>
+                        <li>修改会员层级</li>
+                        <li>修改提现账号</li>
+                        <li>修改验证信息</li>
+                        <li>修改备注</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead>
+                <tr><th>权限模块</th><th>权限项</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>会员管理</td><td>账变记录、会员列表</td></tr>
+                <tr><td>会员列表</td><td>批量操作、新增、导出、设置出款类型、黑名单、禁止投注、踢出大厅、修改密码、修改资金密码、重置资金密码、代理拉线、实名关联、人工提存、资金明细、充值记录、提现记录、稽核详情、投注记录、体育投注记录、输赢总览、输赢统计、优惠记录、IP关联、设备关联、指纹ID关联、修改会员层级、修改提现账号、修改验证信息、修改备注</td></tr>
+                <tr><td>无权限状态</td><td>本期所有无权限按钮统一置灰展示；后期如需隐藏按钮，作为独立迭代处理。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="prd-subtitle">5. 待确认事项</h2>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead>
+                <tr><th>待确认项</th><th>说明</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>暂无</td><td>当前上述 8 项已按本轮沟通补充为已确认规则。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast warning" id="memberToast"><span class="toast-mark">!</span><span id="toastText">请选择会员</span></div>
+  <div class="floating-sort-tip" id="floatingSortTip">点击升序</div>
+
+  <div class="modal-mask" id="batchModalMask">
+    <div class="batch-modal">
+      <div class="modal-head">
+        批量操作会员属性
+        <button class="modal-close" id="modalClose" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-row">
+          <div class="modal-label">操作类型：</div>
+          <div class="modal-field">
+            <div class="modal-select" id="operationTypeSelect"><span id="operationTypeText">会员层级</span><span>⌄</span></div>
+            <div class="dropdown" id="operationTypeDropdown">
+              <div class="dropdown-item active" data-type="level">会员层级</div>
+              <div class="dropdown-item" data-type="withdraw">出款方式</div>
+              <div class="dropdown-item" data-type="remark">备注</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="levelPanel">
+          <div class="modal-row">
+            <div class="modal-label">层级操作：</div>
+            <div class="modal-field modal-radio-row">
+              <label class="radio-label"><input type="radio" name="levelAction" value="add" checked>拉入层级</label>
+              <label class="radio-label"><input type="radio" name="levelAction" value="remove">移除层级</label>
+            </div>
+          </div>
+          <div class="modal-row" id="levelValueRow">
+            <div class="modal-label">层级：</div>
+            <div class="modal-field">
+              <div class="modal-select placeholder" id="levelSelect"><span id="levelText">默认层级</span><span>⌕</span></div>
+              <div class="dropdown level-dropdown" id="levelDropdown">
+                <div class="dropdown-item active">默认层级</div>
+                <div class="dropdown-item">10雷</div>
+                <div class="dropdown-item">20雷</div>
+                <div class="dropdown-item">50雷</div>
+                <div class="dropdown-item">100雷</div>
+                <div class="dropdown-item">200雷</div>
+                <div class="dropdown-item">500雷</div>
+                <div class="dropdown-item">1000雷</div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-row">
+            <div class="modal-label">备注：</div>
+            <div class="modal-field">
+              <textarea class="modal-textarea remark-input" maxlength="500" placeholder="请输入"></textarea>
+              <div class="counter"><span class="remark-count">0</span> / 500</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="withdrawPanel" class="hidden">
+          <div class="modal-row">
+            <div class="modal-label">出款方式：</div>
+            <div class="modal-field">
+              <div class="modal-select" id="withdrawSelect"><span id="withdrawText">自动出款</span><span>⌄</span></div>
+              <div class="dropdown" id="withdrawDropdown">
+                <div class="dropdown-item active">自动出款</div>
+                <div class="dropdown-item">手动出款</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="remarkPanel" class="hidden">
+          <div class="modal-row">
+            <div class="modal-label">备注：</div>
+            <div class="modal-field">
+              <textarea class="modal-textarea remark-input" maxlength="500" placeholder="请输入"></textarea>
+              <div class="counter"><span class="remark-count">0</span> / 500</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="confirm-btn" id="modalConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const registerDateSort = document.getElementById("registerDateSort");
+    const loginDateSort = document.getElementById("loginDateSort");
+    const tableBody = document.querySelector("tbody");
+    const sortableHeaders = document.querySelectorAll("th.sortable");
+    const floatingSortTip = document.getElementById("floatingSortTip");
+    const allCheck = document.getElementById("allCheck");
+    const batchActionBtn = document.getElementById("batchActionBtn");
+    const memberToast = document.getElementById("memberToast");
+    const batchModalMask = document.getElementById("batchModalMask");
+    const modalClose = document.getElementById("modalClose");
+    const modalConfirm = document.getElementById("modalConfirm");
+    const operationTypeSelect = document.getElementById("operationTypeSelect");
+    const operationTypeDropdown = document.getElementById("operationTypeDropdown");
+    const operationTypeText = document.getElementById("operationTypeText");
+    const levelSelect = document.getElementById("levelSelect");
+    const levelDropdown = document.getElementById("levelDropdown");
+    const levelText = document.getElementById("levelText");
+    const levelValueRow = document.getElementById("levelValueRow");
+    const withdrawSelect = document.getElementById("withdrawSelect");
+    const withdrawDropdown = document.getElementById("withdrawDropdown");
+    const withdrawText = document.getElementById("withdrawText");
+    const levelPanel = document.getElementById("levelPanel");
+    const withdrawPanel = document.getElementById("withdrawPanel");
+    const remarkPanel = document.getElementById("remarkPanel");
+    const searchBtn = document.getElementById("searchBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const moneyInputs = document.querySelectorAll(".money-input");
+
+    function resetSortHeaders(activeHeader) {
+      sortableHeaders.forEach((header) => {
+        if (header !== activeHeader) {
+          header.dataset.sortState = "none";
+          const tip = header.querySelector(".sort-tip");
+          if (tip) tip.textContent = "点击升序";
+        }
+      });
+    }
+
+    function refreshRowNumbers(rows) {
+      rows.forEach((row, index) => {
+        row.children[1].textContent = index + 1;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function showSortTip(header) {
+      const tipText = header.querySelector(".sort-tip").textContent;
+      const rect = header.getBoundingClientRect();
+      floatingSortTip.textContent = tipText;
+      floatingSortTip.classList.add("show");
+      const tipRect = floatingSortTip.getBoundingClientRect();
+      floatingSortTip.style.left = `${rect.left + (rect.width - tipRect.width) / 2}px`;
+      floatingSortTip.style.top = `${Math.max(8, rect.top - tipRect.height - 10)}px`;
+    }
+
+    sortableHeaders.forEach((header) => {
+      header.addEventListener("mouseenter", () => showSortTip(header));
+      header.addEventListener("mousemove", () => showSortTip(header));
+      header.addEventListener("mouseleave", () => floatingSortTip.classList.remove("show"));
+    });
+
+    function bindTimeSort(header, dataSelector, dataKey) {
+      header.addEventListener("click", () => {
+        const currentState = header.dataset.sortState;
+        const nextState = currentState === "asc" ? "desc" : "asc";
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        resetSortHeaders(header);
+
+        rows.sort((a, b) => {
+          const aTime = new Date(a.querySelector(dataSelector).dataset[dataKey].replace(" ", "T")).getTime();
+          const bTime = new Date(b.querySelector(dataSelector).dataset[dataKey].replace(" ", "T")).getTime();
+          return nextState === "asc" ? aTime - bTime : bTime - aTime;
+        });
+
+        refreshRowNumbers(rows);
+
+        header.dataset.sortState = nextState;
+        header.querySelector(".sort-tip").textContent = nextState === "asc" ? "点击降序" : "点击升序";
+        showSortTip(header);
+      });
+    }
+
+    bindTimeSort(registerDateSort, "[data-register-time]", "registerTime");
+    bindTimeSort(loginDateSort, "[data-login-time]", "loginTime");
+
+    document.querySelectorAll(".metric-sort").forEach((header) => {
+      header.addEventListener("click", () => {
+        const currentState = header.dataset.sortState;
+        const nextState = currentState === "asc" ? "desc" : "asc";
+        const columnIndex = Number(header.dataset.sortIndex);
+        const rows = Array.from(tableBody.querySelectorAll("tr"));
+        resetSortHeaders(header);
+
+        rows.sort((a, b) => {
+          const aValue = Number(a.children[columnIndex].textContent.replace(/[^\d.-]/g, "")) || 0;
+          const bValue = Number(b.children[columnIndex].textContent.replace(/[^\d.-]/g, "")) || 0;
+          return nextState === "asc" ? aValue - bValue : bValue - aValue;
+        });
+
+        refreshRowNumbers(rows);
+        header.dataset.sortState = nextState;
+        header.querySelector(".sort-tip").textContent = nextState === "asc" ? "点击降序" : "点击升序";
+        showSortTip(header);
+      });
+    });
+
+    function getRowChecks() {
+      return Array.from(document.querySelectorAll(".row-check"));
+    }
+
+    function closeDropdowns(exceptDropdown) {
+      [operationTypeDropdown, levelDropdown, withdrawDropdown].forEach((dropdown) => {
+        if (dropdown && dropdown !== exceptDropdown) dropdown.classList.remove("show");
+      });
+      [operationTypeSelect, levelSelect, withdrawSelect].forEach((select) => {
+        if (select) select.classList.remove("open");
+      });
+    }
+
+    function showToast(message = "请选择会员", type = "warning", duration = 1800) {
+      const toastText = document.getElementById("toastText");
+      const toastMark = memberToast.querySelector(".toast-mark");
+      toastText.textContent = message;
+      toastMark.textContent = type === "success" ? "✓" : "!";
+      memberToast.classList.remove("success", "error", "warning");
+      memberToast.classList.add(type);
+      memberToast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => memberToast.classList.remove("show"), duration);
+    }
+
+    function updateAllCheckState() {
+      const checks = getRowChecks();
+      allCheck.checked = checks.length > 0 && checks.every((check) => check.checked);
+    }
+
+    function showPanel(type) {
+      levelPanel.classList.toggle("hidden", type !== "level");
+      withdrawPanel.classList.toggle("hidden", type !== "withdraw");
+      remarkPanel.classList.toggle("hidden", type !== "remark");
+    }
+
+    function getCellNumber(row, index) {
+      return Number(row.children[index].textContent.replace(/[^\d.-]/g, "")) || 0;
+    }
+
+    function sanitizeMoneyValue(value) {
+      const cleaned = value.replace(/[^\d.]/g, "");
+      const parts = cleaned.split(".");
+      if (parts.length === 1) return parts[0];
+      return `${parts[0]}.${parts.slice(1).join("")}`;
+    }
+
+    function formatMoneyInput(input) {
+      if (input.value === "") return;
+      const value = Number(input.value);
+      input.value = Number.isFinite(value) ? value.toFixed(2) : "";
+    }
+
+    function formatAllMoneyInputs() {
+      moneyInputs.forEach((input) => formatMoneyInput(input));
+    }
+
+    function readMoneyCondition(selectIndex) {
+      const typeText = document.querySelectorAll(".money-type-text")[selectIndex];
+      const minInput = selectIndex === 0 ? document.getElementById("moneyMinA") : document.getElementById("moneyMinB");
+      const maxInput = selectIndex === 0 ? document.getElementById("moneyMaxA") : document.getElementById("moneyMaxB");
+      return {
+        columnIndex: Number(typeText.dataset.value),
+        min: minInput.value === "" ? null : Number(minInput.value),
+        max: maxInput.value === "" ? null : Number(maxInput.value),
+        active: Boolean(typeText.dataset.value) && minInput.value !== "" && maxInput.value !== ""
+      };
+    }
+
+    function validateMoneyConditions() {
+      const typeTexts = document.querySelectorAll(".money-type-text");
+      for (let index = 0; index < typeTexts.length; index += 1) {
+        const hasMetric = Boolean(typeTexts[index].dataset.value);
+        const minInput = index === 0 ? document.getElementById("moneyMinA") : document.getElementById("moneyMinB");
+        const maxInput = index === 0 ? document.getElementById("moneyMaxA") : document.getElementById("moneyMaxB");
+        if (hasMetric && (minInput.value === "" || maxInput.value === "")) {
+          showToast("金币区间需同时输入最小值和最大值", "warning", 3000);
+          return false;
+        }
+        if (hasMetric && Number(minInput.value) > Number(maxInput.value)) {
+          showToast("金额范围有误", "error", 3000);
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function syncMoneyInputState(selectIndex) {
+      const typeText = document.querySelectorAll(".money-type-text")[selectIndex];
+      const minInput = selectIndex === 0 ? document.getElementById("moneyMinA") : document.getElementById("moneyMinB");
+      const maxInput = selectIndex === 0 ? document.getElementById("moneyMaxA") : document.getElementById("moneyMaxB");
+      const disabled = !typeText.dataset.value;
+      minInput.disabled = disabled;
+      maxInput.disabled = disabled;
+      if (disabled) {
+        minInput.value = "";
+        maxInput.value = "";
+      }
+    }
+
+    function matchesMoneyCondition(row, condition) {
+      if (!condition.active) return true;
+      const value = getCellNumber(row, condition.columnIndex);
+      if (condition.min !== null && value < condition.min) return false;
+      if (condition.max !== null && value > condition.max) return false;
+      return true;
+    }
+
+    function applyMoneySearch() {
+      formatAllMoneyInputs();
+      if (!validateMoneyConditions()) return;
+      const conditionA = readMoneyCondition(0);
+      const conditionB = readMoneyCondition(1);
+      Array.from(tableBody.querySelectorAll("tr")).forEach((row) => {
+        row.classList.toggle("hidden", !(matchesMoneyCondition(row, conditionA) && matchesMoneyCondition(row, conditionB)));
+      });
+      refreshRowNumbers(Array.from(tableBody.querySelectorAll("tr:not(.hidden)")));
+    }
+
+    function resetMoneySearch() {
+      moneyInputs.forEach((input) => input.value = "");
+      document.querySelectorAll(".money-type-text").forEach((text) => {
+        text.textContent = "全部";
+        text.dataset.value = "";
+      });
+      syncMoneyInputState(0);
+      syncMoneyInputState(1);
+      updateMoneyOptionAvailability();
+      document.querySelectorAll(".filter-dropdown").forEach((dropdown) => {
+        dropdown.querySelectorAll(".filter-option").forEach((option) => option.classList.toggle("active", option.dataset.value === ""));
+      });
+      Array.from(tableBody.querySelectorAll("tr")).forEach((row) => row.classList.remove("hidden"));
+      refreshRowNumbers(Array.from(tableBody.querySelectorAll("tr")));
+    }
+
+    function updateMoneyOptionAvailability() {
+      const selectedValues = Array.from(document.querySelectorAll(".money-type-text")).map((text) => text.dataset.value);
+      document.querySelectorAll(".filter-dropdown").forEach((dropdown, dropdownIndex) => {
+        const otherSelectedValue = selectedValues[dropdownIndex === 0 ? 1 : 0];
+        dropdown.querySelectorAll(".filter-option").forEach((option) => {
+          const shouldDisable = option.dataset.value !== "" && option.dataset.value === otherSelectedValue;
+          option.classList.toggle("disabled", shouldDisable);
+        });
+      });
+    }
+
+    function updateLevelActionView() {
+      const checkedAction = document.querySelector("input[name='levelAction']:checked").value;
+      levelValueRow.classList.toggle("hidden", checkedAction === "remove");
+      if (checkedAction === "remove") closeDropdowns();
+    }
+
+    allCheck.addEventListener("change", () => {
+      getRowChecks().forEach((check) => {
+        check.checked = allCheck.checked;
+      });
+    });
+
+    getRowChecks().forEach((check) => {
+      check.addEventListener("change", updateAllCheckState);
+    });
+
+    document.querySelectorAll("input[name='levelAction']").forEach((radio) => {
+      radio.addEventListener("change", updateLevelActionView);
+    });
+
+    batchActionBtn.addEventListener("click", () => {
+      if (!getRowChecks().some((check) => check.checked)) {
+        showToast();
+        return;
+      }
+      batchModalMask.classList.add("show");
+    });
+
+    modalClose.addEventListener("click", () => batchModalMask.classList.remove("show"));
+    modalConfirm.addEventListener("click", () => {
+      batchModalMask.classList.remove("show");
+      showToast("操作成功", "success", 3000);
+    });
+    batchModalMask.addEventListener("click", (event) => {
+      if (event.target === batchModalMask) batchModalMask.classList.remove("show");
+    });
+
+    operationTypeSelect.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const nextVisible = !operationTypeDropdown.classList.contains("show");
+      closeDropdowns(operationTypeDropdown);
+      operationTypeDropdown.classList.toggle("show", nextVisible);
+      operationTypeSelect.classList.toggle("open", nextVisible);
+    });
+
+    operationTypeDropdown.querySelectorAll(".dropdown-item").forEach((item) => {
+      item.addEventListener("click", (event) => {
+        event.stopPropagation();
+        operationTypeDropdown.querySelectorAll(".dropdown-item").forEach((option) => option.classList.remove("active"));
+        item.classList.add("active");
+        operationTypeText.textContent = item.textContent;
+        showPanel(item.dataset.type);
+        closeDropdowns();
+      });
+    });
+
+    levelSelect.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const nextVisible = !levelDropdown.classList.contains("show");
+      closeDropdowns(levelDropdown);
+      levelDropdown.classList.toggle("show", nextVisible);
+      levelSelect.classList.toggle("open", nextVisible);
+    });
+
+    levelDropdown.querySelectorAll(".dropdown-item").forEach((item) => {
+      item.addEventListener("click", (event) => {
+        event.stopPropagation();
+        levelDropdown.querySelectorAll(".dropdown-item").forEach((option) => option.classList.remove("active"));
+        item.classList.add("active");
+        levelText.textContent = item.textContent;
+        closeDropdowns();
+      });
+    });
+
+    withdrawSelect.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const nextVisible = !withdrawDropdown.classList.contains("show");
+      closeDropdowns(withdrawDropdown);
+      withdrawDropdown.classList.toggle("show", nextVisible);
+      withdrawSelect.classList.toggle("open", nextVisible);
+    });
+
+    withdrawDropdown.querySelectorAll(".dropdown-item").forEach((item) => {
+      item.addEventListener("click", (event) => {
+        event.stopPropagation();
+        withdrawDropdown.querySelectorAll(".dropdown-item").forEach((option) => option.classList.remove("active"));
+        item.classList.add("active");
+        withdrawText.textContent = item.textContent;
+        closeDropdowns();
+      });
+    });
+
+    document.querySelectorAll(".remark-input").forEach((textarea) => {
+      textarea.addEventListener("input", () => {
+        textarea.parentElement.querySelector(".remark-count").textContent = textarea.value.length;
+      });
+    });
+
+    moneyInputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        input.value = sanitizeMoneyValue(input.value);
+      });
+      input.addEventListener("blur", () => formatMoneyInput(input));
+    });
+
+    document.querySelectorAll(".money-type-select").forEach((select) => {
+      select.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const dropdown = document.getElementById(select.dataset.target);
+        const nextVisible = !dropdown.classList.contains("show");
+        document.querySelectorAll(".filter-dropdown").forEach((item) => item.classList.remove("show"));
+        document.querySelectorAll(".filter-select").forEach((item) => item.classList.remove("open"));
+        updateMoneyOptionAvailability();
+        dropdown.classList.toggle("show", nextVisible);
+        select.classList.toggle("open", nextVisible);
+      });
+    });
+
+    document.querySelectorAll(".filter-dropdown").forEach((dropdown) => {
+      dropdown.querySelectorAll(".filter-option").forEach((option) => {
+        option.addEventListener("click", (event) => {
+          event.stopPropagation();
+          if (option.classList.contains("disabled")) return;
+          dropdown.querySelectorAll(".filter-option").forEach((item) => item.classList.remove("active"));
+          option.classList.add("active");
+          const text = dropdown.parentElement.querySelector(".money-type-text");
+          text.textContent = option.textContent;
+          text.dataset.value = option.dataset.value;
+          syncMoneyInputState(Array.from(document.querySelectorAll(".filter-dropdown")).indexOf(dropdown));
+          updateMoneyOptionAvailability();
+          dropdown.classList.remove("show");
+          dropdown.parentElement.querySelector(".filter-select").classList.remove("open");
+        });
+      });
+    });
+
+    searchBtn.addEventListener("click", applyMoneySearch);
+    resetBtn.addEventListener("click", resetMoneySearch);
+
+    document.addEventListener("click", () => {
+      closeDropdowns();
+      document.querySelectorAll(".filter-dropdown").forEach((dropdown) => dropdown.classList.remove("show"));
+      document.querySelectorAll(".filter-select").forEach((select) => select.classList.remove("open"));
+    });
+  </script>
+</body>
+</html>
