@@ -379,6 +379,10 @@
       opacity: .58;
     }
 
+    .table-disabled .edit-mark {
+      display: none;
+    }
+
     .table-disabled .data-table tbody tr:hover {
       background: inherit;
     }
@@ -873,6 +877,8 @@
                 <li>若当前页面对应配置未被系统使用，则使用配置按钮可点击，用于切换系统选用的配置维度。</li>
                 <li>当前已被系统选用的配置页面展示“配置开关”；未被选用的配置页面不展示配置开关。</li>
                 <li>配置开关开启时，当前选用列表限制生效；配置开关关闭时，当前选用列表配置保留但不参与提现限制判断。</li>
+                <li>切换使用等级配置或层级配置后，新选用配置的配置开关默认关闭，需人工重新打开后对应列表限制才生效。</li>
+                <li>配置开关关闭后，用户提现完全不受当前列表的单日次数和单日金额限制；若其他配置项存在额外限制，则按其他配置条件继续限制。</li>
               </ul>
             </div>
             <div class="prd-block">
@@ -911,6 +917,7 @@
                 <li>列表字段内容可独立输入和保存，不与“使用等级配置/使用层级配置”按钮绑定。</li>
                 <li>“使用等级配置/使用层级配置”按钮仅用于改变系统当前采用的配置维度。</li>
                 <li>配置开关仅控制当前选用配置的列表限制是否生效，不清空、不覆盖列表字段内容。</li>
+                <li>当前选用配置的配置开关关闭时，列表字段禁止编辑和保存；编辑入口隐藏，字段按只读展示。</li>
                 <li>字段编辑保存后的校验规则、金额精度、次数上限范围由后端现有规则承接；若需新增限制，待确认。</li>
               </ul>
             </div>
@@ -952,6 +959,9 @@
                   </tr>
                 </tbody>
               </table>
+              <ul>
+                <li>权限点名称、权限编码和权限控制方式沿用现有权限体系。</li>
+              </ul>
 
               <div class="permission-tree-demo" aria-label="权限层级勾选原型">
                 <div class="permission-tree-title">权限层级勾选原型</div>
@@ -981,61 +991,9 @@
             <div class="prd-block">
               <h3>八、操作日志规则</h3>
               <ul>
-                <li>提现等级配置相关所有新增、删除、修改操作，均需写入「子账号操作日志（新）」表。</li>
-                <li>使用等级配置、使用层级配置、配置开关开启/关闭、列表字段编辑保存均属于需记录日志的修改操作。</li>
-                <li>操作失败时也需记录失败日志，并写入失败原因，便于后续审计和问题追踪。</li>
-              </ul>
-              <table class="prd-table">
-                <thead>
-                  <tr>
-                    <th>日志字段</th>
-                    <th>记录说明</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>操作模块</td>
-                    <td>记录为商户财务配置/提现管理。</td>
-                  </tr>
-                  <tr>
-                    <td>操作页面</td>
-                    <td>记录为提现等级配置。</td>
-                  </tr>
-                  <tr>
-                    <td>操作内容</td>
-                    <td>记录具体动作，例如使用等级配置、使用层级配置、开启配置开关、关闭配置开关、编辑等级配置、编辑层级配置。</td>
-                  </tr>
-                  <tr>
-                    <td>操作前值</td>
-                    <td>记录操作前的配置维度、开关状态或字段值。</td>
-                  </tr>
-                  <tr>
-                    <td>操作后值</td>
-                    <td>记录操作后的配置维度、开关状态或字段值。</td>
-                  </tr>
-                  <tr>
-                    <td>操作对象会员ID</td>
-                    <td>本页面为配置类操作，若无具体会员对象则记录为空或系统约定默认值，具体口径待确认。</td>
-                  </tr>
-                  <tr>
-                    <td>批量操作批次号</td>
-                    <td>批量保存或批量修改时记录批次号；单条操作可为空或记录单次操作号，具体口径待确认。</td>
-                  </tr>
-                  <tr>
-                    <td>失败原因</td>
-                    <td>操作失败时记录接口返回或系统拦截原因；操作成功时为空。</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="prd-block">
-              <h3>九、待确认事项</h3>
-              <ul>
-                <li>配置开关的初始默认值、切换配置后的开关状态是否沿用历史值，待确认。</li>
-                <li>配置开关关闭后，用户提现是否完全不受单日次数/金额限制，还是回退到全局默认限制，待确认。</li>
-                <li>权限点名称、权限编码、是否沿用现有权限体系，待确认；原型仅先定义权限地图口径。</li>
-                <li>配置开关关闭时，前端列表是否允许继续编辑并保存，待确认；原型当前保留可编辑能力用于配置维护。</li>
-                <li>「子账号操作日志（新）」表的字段编码、枚举值、单条/批量日志拆分规则和配置类操作的会员ID记录口径，待确认。</li>
+                <li>提现等级配置相关操作需要产生操作记录，用于后续审计和问题追踪。</li>
+                <li>使用等级配置、使用层级配置、配置开关开启/关闭、列表字段编辑保存均属于需记录的操作范围。</li>
+                <li>具体写入哪张日志表、记录字段、失败记录口径、单条/批量记录规则，由后续日志改造统一定义，本 PRD 不做约束。</li>
               </ul>
             </div>
           </div>
@@ -1150,8 +1108,31 @@
       });
     }
 
+    function getModeFromElement(element) {
+      const panel = element.closest("section");
+      if (!panel) return "";
+      if (panel.id === "vipPanel") return "vip";
+      if (panel.id === "layerPanel") return "layer";
+      return "";
+    }
+
+    function isEditDisabled(element) {
+      const mode = getModeFromElement(element);
+      return mode === activeConfig && !limitEnabled[mode];
+    }
+
+    function cancelEditingForMode(mode) {
+      const panel = document.getElementById(mode === "vip" ? "vipPanel" : "layerPanel");
+      panel.querySelectorAll("td").forEach((td) => {
+        const input = td.querySelector("input");
+        if (!input) return;
+        td.textContent = td.dataset.value || input.defaultValue || input.value || "0";
+      });
+    }
+
     function startEdit(td) {
       if (td.querySelector("input")) return;
+      if (isEditDisabled(td)) return;
 
       const original = td.dataset.value || td.textContent.trim();
       td.innerHTML = "";
@@ -1200,6 +1181,7 @@
     document.querySelectorAll(".edit-mark").forEach((mark) => {
       mark.addEventListener("click", (event) => {
         const th = event.currentTarget.closest("th");
+        if (isEditDisabled(th)) return;
         const columnIndex = Array.from(th.parentElement.children).indexOf(th);
         const panel = th.closest("section");
         const firstCell = panel.querySelector(`tbody tr td:nth-child(${columnIndex + 1})`);
@@ -1273,7 +1255,8 @@
     document.getElementById("confirmSwitch").addEventListener("click", () => {
       if (pendingMode) {
         activeConfig = pendingMode;
-        limitEnabled[activeConfig] = true;
+        limitEnabled[activeConfig] = false;
+        cancelEditingForMode(activeConfig);
         updateUsageArea();
       }
       closeConfirm();
@@ -1286,6 +1269,7 @@
 
     document.getElementById("configSwitch").addEventListener("change", (event) => {
       limitEnabled[activeConfig] = event.target.checked;
+      if (!event.target.checked) cancelEditingForMode(activeConfig);
       updateUsageArea();
     });
 
