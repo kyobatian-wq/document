@@ -302,6 +302,49 @@
       background: #fff;
       font-weight: 400;
     }
+    .tier-dropdown-field { position: relative; }
+    .tier-select {
+      height: 36px;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: #fff;
+      color: #303133;
+      cursor: pointer;
+    }
+    .tier-select.open { border-color: #1688ff; }
+    .tier-dropdown {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 38px;
+      display: none;
+      max-height: 280px;
+      padding: 6px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 10px 22px rgba(0,0,0,.16);
+      z-index: 40;
+      overflow-y: auto;
+    }
+    .tier-dropdown.show { display: block; }
+    .tier-option {
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 3px;
+      color: #303133;
+      cursor: pointer;
+    }
+    .tier-option.active,
+    .tier-option:hover {
+      background: #e8f6ff;
+      font-weight: 600;
+    }
     .btn {
       height: 36px;
       min-width: 70px;
@@ -381,6 +424,22 @@
       background: #fff;
       font-weight: 700;
     }
+    th:nth-child(-n+3),
+    td:nth-child(-n+3) {
+      position: sticky;
+      z-index: 3;
+      background: #fff;
+    }
+    th:nth-child(-n+3) { z-index: 6; }
+    th:nth-child(1),
+    td:nth-child(1) { left: 0; }
+    th:nth-child(2),
+    td:nth-child(2) { left: 50px; }
+    th:nth-child(3),
+    td:nth-child(3) {
+      left: 110px;
+      box-shadow: 6px 0 10px rgba(15, 23, 42, .06);
+    }
     th.sortable {
       position: relative;
       cursor: pointer;
@@ -442,6 +501,7 @@
     }
     .floating-sort-tip.show { display: block; }
     tr:nth-child(even) td { background: #fbfbfc; }
+    tr:nth-child(even) td:nth-child(-n+3) { background: #fbfbfc; }
     .link { color: #1688ff; }
     .copy { color: #1688ff; font-size: 13px; }
     .status {
@@ -743,6 +803,91 @@
       line-height: 1.7;
       margin: 8px 0 0;
     }
+    .scenario-flow {
+      margin: 12px 0 16px;
+      padding: 18px;
+      border: 1px solid #ebeef5;
+      background: #fbfdff;
+    }
+    .flow-title {
+      margin: 0 0 12px;
+      color: #1f2937;
+      font-weight: 700;
+    }
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .flow-result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .flow-node {
+      min-height: 76px;
+      padding: 12px;
+      border: 1px solid #d8e3f3;
+      border-radius: 6px;
+      background: #fff;
+      color: #253044;
+      line-height: 1.55;
+    }
+    .flow-node .step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      margin-right: 6px;
+      border-radius: 999px;
+      background: #0f70c7;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .flow-node strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #0f5fb8;
+    }
+    .flow-node ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+    .flow-node.manual {
+      border-color: #ffd591;
+      background: #fffaf0;
+    }
+    .flow-node.success {
+      border-color: #b7eb8f;
+      background: #f6ffed;
+    }
+    .flow-node.fail {
+      border-color: #ffccc7;
+      background: #fff2f0;
+    }
+    .flow-path-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .flow-path-title .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 12px;
+    }
+    .badge-manual { background: #fa8c16; }
+    .badge-auto { background: #52c41a; }
     .permission-map {
       display: grid;
       grid-template-columns: minmax(420px, 1fr);
@@ -870,6 +1015,25 @@
             <div class="form-row">
               <div class="label">会员等级</div>
               <div class="control"><div class="input">会员等级</div></div>
+            </div>
+            <div class="form-row">
+              <div class="label">会员层级</div>
+              <div class="control">
+                <div class="tier-dropdown-field">
+                  <div class="tier-select" id="memberTierSelect"><span id="memberTierText" data-value="">全部</span><span>⌕</span></div>
+                  <div class="tier-dropdown" id="memberTierDropdown">
+                    <div class="tier-option active" data-value="">全部</div>
+                    <div class="tier-option" data-value="默认层级">默认层级</div>
+                    <div class="tier-option" data-value="10雷">10雷</div>
+                    <div class="tier-option" data-value="20雷">20雷</div>
+                    <div class="tier-option" data-value="50雷">50雷</div>
+                    <div class="tier-option" data-value="100雷">100雷</div>
+                    <div class="tier-option" data-value="200雷">200雷</div>
+                    <div class="tier-option" data-value="500雷">500雷</div>
+                    <div class="tier-option" data-value="1000雷">1000雷</div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="form-row">
               <div class="label">账号类型</div>
@@ -1054,10 +1218,11 @@
                 <tr><td>会员列表</td><td>新增字段</td><td>列表新增「会员层级」字段，排序位置在「会员等级」之后。</td></tr>
                 <tr><td>会员列表</td><td>字段覆盖</td><td>原存款/提款相关字段区域调整为：首充金额、当日充值、当日提现、当日有效投注、当日输赢、当日优惠、历史充值、历史提现、历史有效投注、历史输赢、历史优惠、出款方式。</td></tr>
                 <tr><td>会员列表</td><td>字段更名</td><td>原「总资产」更名为「金币余额」。</td></tr>
-                <tr><td>会员列表</td><td>搜索条件</td><td>搜索区新增「金币」条件，支持两组金币指标区间组合查询。</td></tr>
+                <tr><td>会员列表</td><td>搜索条件</td><td>搜索区新增「金币」「会员层级」条件；金币支持两组指标区间组合查询，会员层级放在「会员等级」后方。</td></tr>
                 <tr><td>会员列表</td><td>金币条件联动</td><td>当两组金币条件同时被输入时，查询结果需同时满足两个条件后才展示。</td></tr>
                 <tr><td>会员列表</td><td>代理ID查询</td><td>当根据代理ID搜索时，查询结果应包含该代理ID对应的所有下级会员，以及下级会员的全部下级会员；下级关系按无限级递归处理，即该代理整条下级线内的会员结果均需展示。</td></tr>
                 <tr><td>会员列表</td><td>时间字段拆分</td><td>列表原合并展示的「注册日期 / 最后登录时间」拆分为两个独立字段：「注册日期」「最后登录时间」。</td></tr>
+                <tr><td>会员列表</td><td>固定列</td><td>列表左右滑动时，左侧勾选框、序号、会员ID 三列固定展示，不随横向滚动移出可视区域。</td></tr>
                 <tr><td>会员列表</td><td>变更字段标识</td><td>本次新增或改动的列表字段使用黄色字体或标识符突出，便于开发识别变更范围。</td></tr>
                 <tr><td>会员列表</td><td>数据时区</td><td>列表日期字段、当日统计及历史统计结果均按巴西 UTC-3 口径显示。</td></tr>
                 <tr><td>会员列表</td><td>快捷筛选</td><td>「今日新增 / 昨日新增 / 三日新增 / 七日新增」移动至列表左侧；「添加会员 / 导出 / 功能按钮」保持在右侧。</td></tr>
@@ -1095,6 +1260,7 @@
                 <tr><td>条件互斥</td><td>两组金币条件不能重复选择同一个具体指标；例如条件 1 已选择「首充金额」时，条件 2 中「首充金额」置灰不可选，其他具体指标同理。「全部」不参与互斥。</td></tr>
                 <tr><td>全部</td><td>指标选择「全部」时，不作为有效过滤条件，且该组最小值、最大值输入框不可输入并置灰；切回「全部」时需清空该组已输入区间。</td></tr>
                 <tr><td>具体指标</td><td>选择具体金币指标后，该组最小值、最大值输入框恢复可输入。</td></tr>
+                <tr><td>会员层级条件</td><td>搜索区在「会员等级」后方新增「会员层级」下拉筛选，支持选择全部、默认层级、10雷、20雷、50雷、100雷、200雷、500雷、1000雷；选择「全部」时不作为过滤条件，选择具体层级后仅展示该会员层级下的会员。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1111,12 +1277,62 @@
                 <tr><td>失败提示</td><td>批量操作失败时不展示会员ID，只提示因系统原因导致操作失败的原因；如失败原因可获取，需同步展示失败原因。</td></tr>
                 <tr><td>操作反馈</td><td>点击弹窗「确定」后不再展示二次确认弹窗，直接提交并反馈程序处理结果；toast 展示「操作成功」或「操作失败」，3 秒后自动消失。</td></tr>
                 <tr><td>会员层级</td><td>选择「会员层级」时展示层级操作、层级、备注。层级操作支持「拉入层级」「移除层级」。选择「拉入层级」时，需选择目标层级。</td></tr>
-                <tr><td>移除层级</td><td>仅移除玩家自定义层级。即玩家存在自定义层级时，清除该玩家的自定义层级，并恢复到会员充值、有效投注、有效直属、直属有效充值为条件的对应层级关系中。</td></tr>
-                <tr><td>无自定义层级</td><td>玩家无自定义层级时，层级数据无变化，并按程序处理结果反馈成功或失败。</td></tr>
+                <tr><td>人工移入固定规则</td><td>玩家被人工移入指定会员层级后，该会员层级固定，不再随系统层级条件自动升降级或自动重算。</td></tr>
+                <tr><td>移除层级</td><td>移除玩家当前已有会员层级，不区分该层级是否为自定义层级。移除后解除人工固定状态，并重新按系统会员层级规则计算应归属层级。</td></tr>
+                <tr><td>恢复判定口径</td><td>移除现有层级后，需根据后台会员层级配置中当前生效的层级条件重新匹配系统层级；判定字段包含充值、有效投注、有效直属、直属有效充值金额。</td></tr>
+                <tr><td>结果口径</td><td>重新计算后，玩家归属到满足当前系统规则的对应会员层级；如不满足任何更高层级条件，则归属到默认层级。</td></tr>
                 <tr><td>出款方式</td><td>选择「出款方式」时展示出款方式下拉，支持「自动出款」「手动出款」。玩家注册时，默认出款方式为「自动出款」。</td></tr>
                 <tr><td>手动出款</td><td>当玩家账号被调整为「手动出款」后，即使玩家提现金额低于免审核金额，也不会自动出款，需要财务人员介入处理；财务需选择对应出款方式和渠道后再处理出款。</td></tr>
                 <tr><td>备注</td><td>选择「备注」时展示备注输入框；备注最多 500 字。</td></tr>
                 <tr><td>操作日志</td><td>所有增删改操作均需加入「子账号操作日志（新）」表，并记录操作模块、操作页面、操作内容、操作前值、操作后值、操作对象会员ID、批量操作批次号、失败原因。</td></tr>
+                <tr><td>层级变更日志</td><td>子账号操作日志列表需记录地区、商户、操作模块、操作页面、操作对象、操作内容、关键词、操作人、操作人类型、操作时间、操作IP。操作模块为「会员管理」；单会员操作页面为「修改层级」，批量操作页面为「批量更新用户层级」。</td></tr>
+                <tr><td>拉入层级日志</td><td>单会员操作对象记录「移入会员层级 会员ID:{会员ID}」；批量操作对象记录「会员层级 移入」及批次/序号信息。单会员可直接展示「修改层级：修改前 → 修改后」；批量操作列表展示「查看详情」。</td></tr>
+                <tr><td>移除层级日志</td><td>单会员操作对象记录「移出会员层级 会员ID:{会员ID}」；批量操作对象记录「会员层级 移出」及批次/序号信息。单会员可直接展示「修改层级：修改前 → 修改后」；批量操作列表展示「查看详情」。</td></tr>
+                <tr><td>详情字段</td><td>点击「查看详情」后，弹窗按会员维度展示：序号、会员ID、层级id(修改前)、层级id(修改后)、customLevelId(修改前)、customLevelId(修改后)。</td></tr>
+                <tr><td>拉入字段口径</td><td>层级id(修改前)记录玩家操作前系统/当前层级；层级id(修改后)记录人工拉入的目标层级；customLevelId(修改前/后)记录人工固定层级标识的变化，拉入后应写入目标层级对应的固定层级标识。</td></tr>
+                <tr><td>移除字段口径</td><td>层级id(修改前)记录玩家移除前已有层级；层级id(修改后)记录按系统规则重算后的系统层级；customLevelId(修改前/后)记录人工固定/自定义层级标识移除前后变化，移除后为空或系统约定空值。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="prd-subtitle">3.5 自动出款 / 手动出款与自动代付开关场景状态图</h2>
+          <div class="scenario-flow">
+            <p class="flow-title">先看会员账号出款方式，再看自动代付开关，最后看自动代付条件。</p>
+            <div class="flow-steps">
+              <div class="flow-node"><strong><span class="step">1</span>会员发起提现</strong>系统先读取会员账号的出款方式：自动出款 / 手动出款。</div>
+              <div class="flow-node"><strong><span class="step">2</span>判断会员出款方式</strong>手动出款直接走人工；自动出款才继续看自动代付开关。</div>
+              <div class="flow-node"><strong><span class="step">3</span>判断自动代付条件</strong>仅自动出款 + 自动代付开启时，继续判断免审、金额范围、渠道和余额。</div>
+            </div>
+            <div class="flow-result-grid">
+              <div class="flow-node manual">
+                <div class="flow-path-title"><span class="badge badge-manual">人工</span>进入人工处理的场景</div>
+                <ul>
+                  <li>会员账号为手动出款。</li>
+                  <li>会员账号为自动出款，但自动代付开关关闭。</li>
+                  <li>自动代付开关开启，但免审不通过、金额不在范围、无可用渠道或渠道余额不足。</li>
+                </ul>
+              </div>
+              <div class="flow-node success">
+                <div class="flow-path-title"><span class="badge badge-auto">自动</span>允许自动代付的场景</div>
+                <ul>
+                  <li>会员账号为自动出款。</li>
+                  <li>后台自动代付开关开启。</li>
+                  <li>免审通过，提现金额在自动代付范围内。</li>
+                  <li>存在可用代付渠道，且渠道余额充足。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead>
+                <tr><th>会员出款方式</th><th>自动代付开关</th><th>附加条件</th><th>订单流向</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>手动出款</td><td>开启 / 关闭</td><td>不看免审金额，不触发自动代付</td><td>进入人工处理；财务选择出款方式和渠道后处理。</td></tr>
+                <tr><td>自动出款</td><td>关闭</td><td>不触发自动代付</td><td>进入出款审核 / 人工处理链路。</td></tr>
+                <tr><td>自动出款</td><td>开启</td><td>免审通过 + 金额在自动代付范围 + 存在可用渠道且余额充足</td><td>系统自动锁定订单并发起自动代付。</td></tr>
+                <tr><td>自动出款</td><td>开启</td><td>免审不通过 / 金额不在范围 / 无可用渠道 / 渠道余额不足</td><td>不自动打款，进入待审核出款订单，由财务人工处理。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1307,6 +1523,9 @@
     const remarkPanel = document.getElementById("remarkPanel");
     const searchBtn = document.getElementById("searchBtn");
     const resetBtn = document.getElementById("resetBtn");
+    const memberTierSelect = document.getElementById("memberTierSelect");
+    const memberTierDropdown = document.getElementById("memberTierDropdown");
+    const memberTierText = document.getElementById("memberTierText");
     const moneyInputs = document.querySelectorAll(".money-input");
 
     function resetSortHeaders(activeHeader) {
@@ -1495,13 +1714,20 @@
       return true;
     }
 
+    function matchesMemberTier(row) {
+      const selectedTier = memberTierText.dataset.value;
+      if (!selectedTier) return true;
+      const tierText = row.children[21].textContent.replace(/\s/g, "");
+      return tierText === selectedTier;
+    }
+
     function applyMoneySearch() {
       formatAllMoneyInputs();
       if (!validateMoneyConditions()) return;
       const conditionA = readMoneyCondition(0);
       const conditionB = readMoneyCondition(1);
       Array.from(tableBody.querySelectorAll("tr")).forEach((row) => {
-        row.classList.toggle("hidden", !(matchesMoneyCondition(row, conditionA) && matchesMoneyCondition(row, conditionB)));
+        row.classList.toggle("hidden", !(matchesMoneyCondition(row, conditionA) && matchesMoneyCondition(row, conditionB) && matchesMemberTier(row)));
       });
       refreshRowNumbers(Array.from(tableBody.querySelectorAll("tr:not(.hidden)")));
     }
@@ -1518,6 +1744,9 @@
       document.querySelectorAll(".filter-dropdown").forEach((dropdown) => {
         dropdown.querySelectorAll(".filter-option").forEach((option) => option.classList.toggle("active", option.dataset.value === ""));
       });
+      memberTierText.textContent = "全部";
+      memberTierText.dataset.value = "";
+      memberTierDropdown.querySelectorAll(".tier-option").forEach((option) => option.classList.toggle("active", option.dataset.value === ""));
       Array.from(tableBody.querySelectorAll("tr")).forEach((row) => row.classList.remove("hidden"));
       refreshRowNumbers(Array.from(tableBody.querySelectorAll("tr")));
     }
@@ -1669,6 +1898,27 @@
       });
     });
 
+    memberTierSelect.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const nextVisible = !memberTierDropdown.classList.contains("show");
+      document.querySelectorAll(".filter-dropdown").forEach((dropdown) => dropdown.classList.remove("show"));
+      document.querySelectorAll(".filter-select").forEach((select) => select.classList.remove("open"));
+      memberTierDropdown.classList.toggle("show", nextVisible);
+      memberTierSelect.classList.toggle("open", nextVisible);
+    });
+
+    memberTierDropdown.querySelectorAll(".tier-option").forEach((option) => {
+      option.addEventListener("click", (event) => {
+        event.stopPropagation();
+        memberTierDropdown.querySelectorAll(".tier-option").forEach((item) => item.classList.remove("active"));
+        option.classList.add("active");
+        memberTierText.textContent = option.textContent;
+        memberTierText.dataset.value = option.dataset.value;
+        memberTierDropdown.classList.remove("show");
+        memberTierSelect.classList.remove("open");
+      });
+    });
+
     searchBtn.addEventListener("click", applyMoneySearch);
     resetBtn.addEventListener("click", resetMoneySearch);
 
@@ -1676,6 +1926,8 @@
       closeDropdowns();
       document.querySelectorAll(".filter-dropdown").forEach((dropdown) => dropdown.classList.remove("show"));
       document.querySelectorAll(".filter-select").forEach((select) => select.classList.remove("open"));
+      memberTierDropdown.classList.remove("show");
+      memberTierSelect.classList.remove("open");
     });
   </script>
 </body>
