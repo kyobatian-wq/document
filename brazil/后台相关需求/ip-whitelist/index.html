@@ -1460,7 +1460,11 @@
         { account: "super762", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "103.197.240.123", remark: "-", operator: "jskf001", time: "2025-12-27 15:48:23" },
         { account: "super762", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "175.100.6.165", remark: "-", operator: "jskf006", time: "2025-12-19 03:54:02" },
         { account: "ceshi88888", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "36.37.204.192", remark: "-", operator: "dawei777", time: "2025-12-16 06:36:13" },
-        { account: "kuaishou888", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "129.148.56.233", remark: "-", operator: "admin555", time: "2025-11-11 08:53:16" }
+        { account: "kuaishou888", region: "巴西", merchant: "762", target: "账号", type: "商户账号", ip: "129.148.56.233", remark: "-", operator: "admin555", time: "2025-11-11 08:53:16" },
+        { account: "", region: "巴西", merchant: "762", target: "后台", type: "商户后台", ip: "47.250.72.229", remark: "-", operator: "admin555", time: "2026-08-13 12:01:59" },
+        { account: "", region: "巴西", merchant: "762", target: "后台", type: "商户后台", ip: "117.20.117.16", remark: "-", operator: "admin555", time: "2026-08-13 11:44:07" },
+        { account: "", region: "巴西", merchant: "762", target: "后台", type: "商户后台", ip: "180.93.67.89", remark: "-", operator: "admin555", time: "2026-08-13 11:40:11" },
+        { account: "", region: "巴西", merchant: "762", target: "后台", type: "商户后台", ip: "8.221.166.46", remark: "-", operator: "super762", time: "2026-08-11 08:32:15" }
       ],
       app: [
         { region: "巴西", merchant: "762", ip: "2001:240:246a:509f:6c64:2fff:feaf:604c", remark: "-", operator: "admin555", time: "2026-08-13 12:01:59" },
@@ -1482,6 +1486,8 @@
     let pendingDeleteAction = null;
 
     const filterRow = document.getElementById("filterRow");
+    const filterTarget = document.getElementById("filterTarget");
+    const filterType = document.getElementById("filterType");
     const appLimitTip = document.getElementById("appLimitTip");
     const batchDeleteBtn = document.getElementById("batchDeleteBtn");
     const tableCols = document.getElementById("tableCols");
@@ -1642,6 +1648,16 @@
       });
     }
 
+    function syncWhitelistType() {
+      if (filterTarget.value === "后台") {
+        filterType.innerHTML = "<option>商户后台</option>";
+        filterType.value = "商户后台";
+      } else {
+        filterType.innerHTML = "<option>商户账号</option>";
+        filterType.value = "商户账号";
+      }
+    }
+
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add("show");
@@ -1760,8 +1776,9 @@
       const account = document.getElementById("filterAccount").value.trim().toLowerCase();
       const ip = document.getElementById("filterIp").value.trim().toLowerCase();
       const operator = document.getElementById("filterOperator").value.trim().toLowerCase();
-      const target = document.getElementById("filterTarget").value;
-      const type = document.getElementById("filterType").value;
+      syncWhitelistType();
+      const target = filterTarget.value;
+      const type = filterType.value;
       const rows = datasets[currentTab].filter(row =>
         row.status !== "disabled" &&
         (currentTab === "app" || !account || row.account.toLowerCase().includes(account)) &&
@@ -1779,8 +1796,18 @@
         tab.classList.add("active");
         currentTab = tab.dataset.tab;
         updatePageMode();
-        renderTable();
+        if (currentTab === "backend") {
+          syncWhitelistType();
+          searchRows();
+        } else {
+          renderTable();
+        }
       });
+    });
+
+    filterTarget.addEventListener("change", () => {
+      syncWhitelistType();
+      searchRows();
     });
 
     document.getElementById("addBtn").addEventListener("click", () => {
@@ -1925,13 +1952,14 @@
     document.getElementById("searchBtn").addEventListener("click", searchRows);
     document.getElementById("resetBtn").addEventListener("click", () => {
       ["filterAccount", "filterIp", "filterOperator"].forEach(id => document.getElementById(id).value = "");
-      document.getElementById("filterTarget").value = "账号";
-      document.getElementById("filterType").value = "商户账号";
-      renderTable();
+      filterTarget.value = "账号";
+      syncWhitelistType();
+      searchRows();
     });
 
     updatePageMode();
-    renderTable();
+    syncWhitelistType();
+    searchRows();
   </script>
 </body>
 </html>
