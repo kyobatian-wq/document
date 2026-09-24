@@ -1197,7 +1197,7 @@
                   <th>会员ID</th>
                   <th>手机号(会员账号)</th>
                   <th>上级代理ID</th>
-                  <th><span class="changed-field">代理ID</span><br><span class="change-tag">新增</span></th>
+                  <th><span class="changed-field">邀请ID</span><br><span class="change-tag">新增</span></th>
                   <th>姓名</th>
                   <th class="sortable metric-sort" data-sort-index="7" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">金币<br>余额</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">更名</span></th>
                   <th class="sortable metric-sort" data-sort-index="8" data-sort-state="none"><span class="sort-tip">点击升序</span><span class="changed-field">首充<br>金额</span><span class="sort"><span class="up">▲</span><span class="down">▼</span></span><br><span class="change-tag">新增</span></th>
@@ -1272,7 +1272,7 @@
                 <tr><th>模块</th><th>需求项</th><th>已确认规则</th></tr>
               </thead>
               <tbody>
-                <tr><td>会员列表（二次迭代）</td><td>代理ID字段与入口</td><td>列表在「上级代理ID」后新增「代理ID」字段，用于展示该列表玩家自身的代理ID；上级代理ID仅展示，不提供点击交互。仅「代理ID」字段可点击打开「代理下级关系」弹窗。</td></tr>
+                <tr><td>会员列表（二次迭代）</td><td>邀请ID字段与入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，用于展示该列表玩家自身的代理ID；上级代理ID仅展示，不提供点击交互。仅「邀请ID」字段可点击打开「代理下级关系」弹窗。</td></tr>
                 <tr><td>代理关系弹窗</td><td>展示范围</td><td>弹窗以被点击代理ID对应的当前列表玩家为根节点，仅展示该玩家作为代理时的直属下级及全部间接下级会员，按无限级递归处理；不展示该玩家的上级代理或同级代理信息。</td></tr>
                 <tr><td>代理关系弹窗</td><td>节点字段</td><td>当前代理节点、直属下级节点及间接下级节点均展示：代理ID、会员ID、总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级。</td></tr>
                 <tr><td>代理关系弹窗</td><td>无限级展示</td><td>代理关系按无限级递归模式展示。原型以 B21 为深层示例，支持展开/收起下级；实际实现需根据接口返回的完整关系树持续向下渲染。</td></tr>
@@ -1481,7 +1481,7 @@
               <tbody>
                 <tr><td>代理ID查询</td><td>根据代理ID搜索时，展示该代理整条下级线的全部会员，包含直接下级和所有间接下级，按无限级递归处理。</td></tr>
                 <tr><td>组合筛选</td><td>代理ID与其他筛选条件同时存在时，先限定代理线范围，再叠加其他筛选条件，取交集展示结果。</td></tr>
-                <tr><td>列表入口</td><td>列表在「上级代理ID」后新增「代理ID」字段，展示列表玩家自身代理ID。上级代理ID仅展示；点击「代理ID」打开「代理下级关系」弹窗。</td></tr>
+                <tr><td>列表入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，展示列表玩家自身代理ID。上级代理ID仅展示；点击「邀请ID」打开「代理下级关系」弹窗。</td></tr>
                 <tr><td>关系范围</td><td>弹窗以被点击代理ID对应的当前列表玩家为根节点，仅展示其直属下级及所有间接下级会员；关系树按无限级模式继续向下渲染，不展示该玩家的上级代理或同级代理。</td></tr>
                 <tr><td>节点标识</td><td>所有节点标题直接展示对应的「代理ID」，节点下方展示「会员ID」；不展示任何上级代理ID信息。</td></tr>
                 <tr><td>节点字段</td><td>每个节点展示总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级；当前列表会员节点需高亮，以便识别查看对象。</td></tr>
