@@ -207,6 +207,46 @@
     .select.disabled { background: #f5f7fa; color: #b8bcc5; }
     .split { display: grid; grid-template-columns: 136px 1fr; }
     .split .select { border-right: none; color: #606266; }
+    .agent-search-field { position: relative; }
+    .agent-search-select { cursor: pointer; user-select: none; }
+    .agent-search-select.open { border-color: #1688ff; }
+    .agent-search-dropdown {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 172px;
+      display: none;
+      padding: 6px;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(0,0,0,.14);
+      z-index: 20;
+    }
+    .agent-search-dropdown.show { display: block; }
+    .agent-search-option {
+      width: 100%;
+      height: 34px;
+      border: 0;
+      border-radius: 3px;
+      background: transparent;
+      color: #303133;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      padding: 0 10px;
+    }
+    .agent-search-option.active,
+    .agent-search-option:hover { background: #e8f6ff; font-weight: 600; }
+    .agent-search-input {
+      width: 100%;
+      height: 36px;
+      border: 1px solid #dcdfe6;
+      padding: 0 12px;
+      color: #303133;
+      font: inherit;
+      outline: none;
+    }
+    .agent-search-input:focus { border-color: #1688ff; }
     .hint { color: #ff4d4f; font-size: 12px; margin-top: 7px; }
     .search-buttons {
       grid-column: 4;
@@ -1051,8 +1091,14 @@
             <div class="form-row">
               <div class="label">上级代理</div>
               <div class="control split">
-                <div class="select"><span>上级代理ID</span><span>⌄</span></div>
-                <div class="input">请输入上级代理ID</div>
+                <div class="agent-search-field">
+                  <div class="select agent-search-select" id="agentSearchSelect" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false"><span id="agentSearchTypeText" data-value="parent">上级代理ID</span><span>⌄</span></div>
+                  <div class="agent-search-dropdown" id="agentSearchDropdown" role="listbox">
+                    <button class="agent-search-option active" type="button" data-value="parent">上级代理ID</button>
+                    <button class="agent-search-option" type="button" data-value="invitation">邀请ID</button>
+                  </div>
+                </div>
+                <input class="agent-search-input" id="agentSearchInput" type="text" inputmode="numeric" placeholder="请输入上级代理ID">
               </div>
             </div>
             <div class="form-row">
@@ -1274,7 +1320,7 @@
               <tbody>
                 <tr><td>会员列表（二次迭代）</td><td>邀请ID字段与入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，用于展示该列表玩家自身的邀请ID；上级代理ID仅展示，不提供点击交互。仅「邀请ID」字段可点击打开「代理下级关系」弹窗。</td></tr>
                 <tr><td>代理关系弹窗</td><td>展示范围</td><td>弹窗以被点击邀请ID对应的当前列表玩家为根节点，仅展示该玩家作为邀请人的直属下级及全部间接下级会员，按无限级递归处理；不展示该玩家的上级代理或同级代理信息。</td></tr>
-                <tr><td>代理关系弹窗</td><td>节点字段</td><td>当前邀请ID节点、直属下级节点及间接下级节点均展示：邀请ID、会员ID、总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级。</td></tr>
+                <tr><td>代理关系弹窗</td><td>节点字段</td><td>当前邀请ID节点、直属下级节点及间接下级节点均展示：邀请ID、会员ID、总下级人数、直属下级人数、首充时间、首充金额。节点身份标签中，直属下级展示为「直属」，间接下级展示为「团队」。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级。</td></tr>
                 <tr><td>代理关系弹窗</td><td>无限级展示</td><td>代理关系按无限级递归模式展示。原型以 B21 为深层示例，支持展开/收起下级；实际实现需根据接口返回的完整关系树持续向下渲染。</td></tr>
                 <tr><td>会员列表</td><td>新增字段</td><td>列表新增「会员层级」字段，排序位置在「会员等级」之后。</td></tr>
                 <tr><td>会员列表</td><td>字段覆盖</td><td>原存款/提款相关字段区域调整为：首充金额、当日充值、当日提现、当日有效投注、当日输赢、当日优惠、历史充值、历史提现、历史有效投注、历史输赢、历史优惠、出款方式。</td></tr>
@@ -1282,6 +1328,7 @@
                 <tr><td>会员列表</td><td>搜索条件</td><td>搜索区新增「金币」「会员层级」条件；金币支持两组指标区间组合查询，会员层级放在「会员等级」后方。</td></tr>
                 <tr><td>会员列表</td><td>金币条件联动</td><td>当两组金币条件同时被输入时，查询结果需同时满足两个条件后才展示。</td></tr>
                 <tr><td>会员列表</td><td>代理ID查询</td><td>当根据代理ID搜索时，查询结果应包含该代理ID对应的所有下级会员，以及下级会员的全部下级会员；下级关系按无限级递归处理，即该代理整条下级线内的会员结果均需展示。</td></tr>
+                <tr><td>会员列表</td><td>邀请ID查询</td><td>在「上级代理」搜索框中新增「邀请ID」选项。选择后输入邀请ID，查询结果仅展示该邀请ID对应的直属会员，不包含团队层级会员。</td></tr>
                 <tr><td>会员列表</td><td>时间字段拆分</td><td>列表原合并展示的「注册日期 / 最后登录时间」拆分为两个独立字段：「注册日期」「最后登录时间」。</td></tr>
                 <tr><td>会员列表</td><td>固定列</td><td>列表左右滑动时，左侧勾选框、序号、会员ID 三列固定展示，不随横向滚动移出可视区域。</td></tr>
                 <tr><td>会员列表</td><td>变更字段标识</td><td>本次新增或改动的列表字段使用黄色字体或标识符突出，便于开发识别变更范围。</td></tr>
@@ -1309,6 +1356,7 @@
               <tbody>
                 <tr><td>代理ID查询</td><td>输入代理ID后，查询结果需展示该代理整条下级线内的会员。包含该代理ID对应的所有直接下级会员，以及直接下级会员的全部下级会员，并按无限级递归继续向下包含所有层级下级会员。</td></tr>
                 <tr><td>代理组合查询</td><td>当代理ID条件与其他筛选条件同时存在时，先限定该代理整条下级线会员范围，再叠加其他筛选条件取交集。</td></tr>
+                <tr><td>邀请ID查询</td><td>在「上级代理」搜索框的下拉选项中新增「邀请ID」。输入邀请ID后，仅查询该邀请ID对应的直属会员，不包含团队层级会员。</td></tr>
                 <tr><td>代理关系弹窗</td><td>打开范围</td><td>点击列表中任一「邀请ID」时，弹窗展示该邀请ID对应玩家作为邀请人时的完整下级树，包含直属下级及全部间接下级；不展示上级代理或同级代理；当前邀请ID节点需有明确高亮。</td></tr>
                 <tr><td>金币条件</td><td>支持两组金币条件；每组包含指标选择、最小值、最大值。</td></tr>
                 <tr><td>金币指标</td><td>支持选择：全部、当日充值、首充金额、当日有效投注、当日输赢、当日优惠、历史充值、历史有效投注、历史输赢、历史优惠。</td></tr>
@@ -1481,9 +1529,10 @@
               <tbody>
                 <tr><td>代理ID查询</td><td>根据代理ID搜索时，展示该代理整条下级线的全部会员，包含直接下级和所有间接下级，按无限级递归处理。</td></tr>
                 <tr><td>组合筛选</td><td>代理ID与其他筛选条件同时存在时，先限定代理线范围，再叠加其他筛选条件，取交集展示结果。</td></tr>
+                <tr><td>邀请ID查询</td><td>「上级代理」搜索框新增「邀请ID」选项。选择后输入邀请ID，仅展示该邀请ID对应的直属会员，不包含团队层级会员。</td></tr>
                 <tr><td>列表入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，展示列表玩家自身邀请ID。上级代理ID仅展示；点击「邀请ID」打开「代理下级关系」弹窗。</td></tr>
                 <tr><td>关系范围</td><td>弹窗以被点击邀请ID对应的当前列表玩家为根节点，仅展示其直属下级及所有间接下级会员；关系树按无限级模式继续向下渲染，不展示该玩家的上级代理或同级代理。</td></tr>
-                <tr><td>节点标识</td><td>所有节点标题直接展示对应的「邀请ID」，节点下方展示「会员ID」；不展示任何上级代理ID信息。</td></tr>
+                <tr><td>节点标识</td><td>所有节点标题直接展示对应的「邀请ID」，节点下方展示「会员ID」；直属下级节点标签展示为「直属」，间接下级节点标签展示为「团队」；不展示任何上级代理ID信息。</td></tr>
                 <tr><td>节点字段</td><td>每个节点展示总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级；当前列表会员节点需高亮，以便识别查看对象。</td></tr>
                 <tr><td>展开交互</td><td>存在下级的节点支持展开/收起直属下级；原型以第二层下级为示例，正式实现按接口返回的关系树递归渲染。</td></tr>
               </tbody>
@@ -1598,8 +1647,8 @@
           <div class="agent-node-wrap root"><div class="agent-node root-node current-node"><div class="agent-avatar">P</div><div><div class="agent-name">邀请ID：<span id="currentAgentNodeId">10024</span> <span class="agent-role">当前邀请ID</span></div><div class="agent-meta"><span>会员ID：<span id="currentAgentMemberId">72755525</span></span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>3</b></div><div class="agent-stat">直属下级人数<b>2</b></div><div class="agent-stat">首充时间<b>2026-02-01</b></div><div class="agent-stat">首充金额<b>50.00</b></div></div><button class="tree-action" data-toggle-target="memberBChildren">收起下级</button></div></div>
           <div id="agentLevelOne">
             <div class="tree-children" id="memberBChildren">
-                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B1</div><div><div class="agent-name">邀请ID：10088 <span class="agent-role">直属下级</span></div><div class="agent-meta"><span>会员ID：72755526</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-08</b></div><div class="agent-stat">首充金额<b>20.00</b></div></div></div></div>
-                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B2</div><div><div class="agent-name">邀请ID：10089 <span class="agent-role">直属下级</span></div><div class="agent-meta"><span>会员ID：72755527</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>1</b></div><div class="agent-stat">直属下级人数<b>1</b></div><div class="agent-stat">首充时间<b>2026-02-09</b></div><div class="agent-stat">首充金额<b>35.00</b></div></div><button class="tree-action" data-toggle-target="memberB2Children">收起下级</button></div><div class="tree-children" id="memberB2Children"><div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B21</div><div><div class="agent-name">邀请ID：10101 <span class="agent-role">间接下级</span></div><div class="agent-meta"><span>会员ID：72755528</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-12</b></div><div class="agent-stat">首充金额<b>10.00</b></div></div></div></div></div></div>
+                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B1</div><div><div class="agent-name">邀请ID：10088 <span class="agent-role">直属</span></div><div class="agent-meta"><span>会员ID：72755526</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-08</b></div><div class="agent-stat">首充金额<b>20.00</b></div></div></div></div>
+                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B2</div><div><div class="agent-name">邀请ID：10089 <span class="agent-role">直属</span></div><div class="agent-meta"><span>会员ID：72755527</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>1</b></div><div class="agent-stat">直属下级人数<b>1</b></div><div class="agent-stat">首充时间<b>2026-02-09</b></div><div class="agent-stat">首充金额<b>35.00</b></div></div><button class="tree-action" data-toggle-target="memberB2Children">收起下级</button></div><div class="tree-children" id="memberB2Children"><div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B21</div><div><div class="agent-name">邀请ID：10101 <span class="agent-role">团队</span></div><div class="agent-meta"><span>会员ID：72755528</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-12</b></div><div class="agent-stat">首充金额<b>10.00</b></div></div></div></div></div></div>
             </div>
           </div>
         </div>
@@ -1638,6 +1687,10 @@
     const memberTierSelect = document.getElementById("memberTierSelect");
     const memberTierDropdown = document.getElementById("memberTierDropdown");
     const memberTierText = document.getElementById("memberTierText");
+    const agentSearchSelect = document.getElementById("agentSearchSelect");
+    const agentSearchDropdown = document.getElementById("agentSearchDropdown");
+    const agentSearchTypeText = document.getElementById("agentSearchTypeText");
+    const agentSearchInput = document.getElementById("agentSearchInput");
     const moneyInputs = document.querySelectorAll(".money-input");
     const agentModalMask = document.getElementById("agentModalMask");
     const agentModalClose = document.getElementById("agentModalClose");
@@ -1839,13 +1892,23 @@
       return tierText === selectedTier;
     }
 
+    function matchesAgentSearch(row) {
+      const searchValue = agentSearchInput.value.trim();
+      if (!searchValue) return true;
+      const searchType = agentSearchTypeText.dataset.value;
+      if (searchType === "invitation") {
+        return row.dataset.parentInvitationId === searchValue;
+      }
+      return row.dataset.parentAgentId === searchValue;
+    }
+
     function applyMoneySearch() {
       formatAllMoneyInputs();
       if (!validateMoneyConditions()) return;
       const conditionA = readMoneyCondition(0);
       const conditionB = readMoneyCondition(1);
       Array.from(tableBody.querySelectorAll("tr")).forEach((row) => {
-        row.classList.toggle("hidden", !(matchesMoneyCondition(row, conditionA) && matchesMoneyCondition(row, conditionB) && matchesMemberTier(row)));
+        row.classList.toggle("hidden", !(matchesMoneyCondition(row, conditionA) && matchesMoneyCondition(row, conditionB) && matchesMemberTier(row) && matchesAgentSearch(row)));
       });
       refreshRowNumbers(Array.from(tableBody.querySelectorAll("tr:not(.hidden)")));
     }
@@ -1865,6 +1928,11 @@
       memberTierText.textContent = "全部";
       memberTierText.dataset.value = "";
       memberTierDropdown.querySelectorAll(".tier-option").forEach((option) => option.classList.toggle("active", option.dataset.value === ""));
+      agentSearchTypeText.textContent = "上级代理ID";
+      agentSearchTypeText.dataset.value = "parent";
+      agentSearchInput.value = "";
+      agentSearchInput.placeholder = "请输入上级代理ID";
+      agentSearchDropdown.querySelectorAll(".agent-search-option").forEach((option) => option.classList.toggle("active", option.dataset.value === "parent"));
       Array.from(tableBody.querySelectorAll("tr")).forEach((row) => row.classList.remove("hidden"));
       refreshRowNumbers(Array.from(tableBody.querySelectorAll("tr")));
     }
@@ -1919,11 +1987,11 @@
 
     function buildAgentIdCells() {
       const agentData = [
-        { parentAgentId: "10001", agentId: "10024", memberId: "72755525" },
-        { parentAgentId: "10001", agentId: "10025", memberId: "40577248" },
-        { parentAgentId: "-", agentId: "", memberId: "28495441" },
-        { parentAgentId: "-", agentId: "", memberId: "53300951" },
-        { parentAgentId: "-", agentId: "", memberId: "51019889" },
+        { parentAgentId: "10001", parentInvitationId: "10001", agentId: "10024", memberId: "72755525" },
+        { parentAgentId: "10001", parentInvitationId: "10001", agentId: "10025", memberId: "40577248" },
+        { parentAgentId: "10024", parentInvitationId: "10024", agentId: "10088", memberId: "28495441" },
+        { parentAgentId: "10024", parentInvitationId: "10024", agentId: "10089", memberId: "53300951" },
+        { parentAgentId: "10089", parentInvitationId: "10089", agentId: "10101", memberId: "51019889" },
         { parentAgentId: "-", agentId: "", memberId: "90284581" },
         { parentAgentId: "-", agentId: "", memberId: "93218705" },
         { parentAgentId: "-", agentId: "", memberId: "81634290" }
@@ -1933,6 +2001,8 @@
         const data = agentData[index];
         const parentAgentCell = row.children[4];
         parentAgentCell.textContent = data.parentAgentId;
+        row.dataset.parentAgentId = data.parentAgentId;
+        row.dataset.parentInvitationId = data.parentInvitationId || "";
 
         const agentCell = document.createElement("td");
         if (data.agentId) {
@@ -1977,6 +2047,34 @@
         const target = document.getElementById(button.dataset.toggleTarget);
         const isHidden = target.classList.toggle("hidden");
         button.textContent = isHidden ? "展开下级" : "收起下级";
+      });
+    });
+
+    function closeAgentSearchDropdown() {
+      agentSearchDropdown.classList.remove("show");
+      agentSearchSelect.classList.remove("open");
+      agentSearchSelect.setAttribute("aria-expanded", "false");
+    }
+
+    agentSearchSelect.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const shouldOpen = !agentSearchDropdown.classList.contains("show");
+      agentSearchDropdown.classList.toggle("show", shouldOpen);
+      agentSearchSelect.classList.toggle("open", shouldOpen);
+      agentSearchSelect.setAttribute("aria-expanded", String(shouldOpen));
+    });
+
+    agentSearchDropdown.querySelectorAll(".agent-search-option").forEach((option) => {
+      option.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const isInvitationSearch = option.dataset.value === "invitation";
+        agentSearchDropdown.querySelectorAll(".agent-search-option").forEach((item) => item.classList.remove("active"));
+        option.classList.add("active");
+        agentSearchTypeText.textContent = option.textContent;
+        agentSearchTypeText.dataset.value = option.dataset.value;
+        agentSearchInput.value = "";
+        agentSearchInput.placeholder = isInvitationSearch ? "请输入邀请ID" : "请输入上级代理ID";
+        closeAgentSearchDropdown();
       });
     });
 
@@ -2109,6 +2207,7 @@
       document.querySelectorAll(".filter-select").forEach((select) => select.classList.remove("open"));
       memberTierDropdown.classList.remove("show");
       memberTierSelect.classList.remove("open");
+      closeAgentSearchDropdown();
     });
   </script>
 </body>
