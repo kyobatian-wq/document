@@ -1272,9 +1272,9 @@
                 <tr><th>模块</th><th>需求项</th><th>已确认规则</th></tr>
               </thead>
               <tbody>
-                <tr><td>会员列表（二次迭代）</td><td>邀请ID字段与入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，用于展示该列表玩家自身的代理ID；上级代理ID仅展示，不提供点击交互。仅「邀请ID」字段可点击打开「代理下级关系」弹窗。</td></tr>
-                <tr><td>代理关系弹窗</td><td>展示范围</td><td>弹窗以被点击代理ID对应的当前列表玩家为根节点，仅展示该玩家作为代理时的直属下级及全部间接下级会员，按无限级递归处理；不展示该玩家的上级代理或同级代理信息。</td></tr>
-                <tr><td>代理关系弹窗</td><td>节点字段</td><td>当前代理节点、直属下级节点及间接下级节点均展示：代理ID、会员ID、总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级。</td></tr>
+                <tr><td>会员列表（二次迭代）</td><td>邀请ID字段与入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，用于展示该列表玩家自身的邀请ID；上级代理ID仅展示，不提供点击交互。仅「邀请ID」字段可点击打开「代理下级关系」弹窗。</td></tr>
+                <tr><td>代理关系弹窗</td><td>展示范围</td><td>弹窗以被点击邀请ID对应的当前列表玩家为根节点，仅展示该玩家作为邀请人的直属下级及全部间接下级会员，按无限级递归处理；不展示该玩家的上级代理或同级代理信息。</td></tr>
+                <tr><td>代理关系弹窗</td><td>节点字段</td><td>当前邀请ID节点、直属下级节点及间接下级节点均展示：邀请ID、会员ID、总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级。</td></tr>
                 <tr><td>代理关系弹窗</td><td>无限级展示</td><td>代理关系按无限级递归模式展示。原型以 B21 为深层示例，支持展开/收起下级；实际实现需根据接口返回的完整关系树持续向下渲染。</td></tr>
                 <tr><td>会员列表</td><td>新增字段</td><td>列表新增「会员层级」字段，排序位置在「会员等级」之后。</td></tr>
                 <tr><td>会员列表</td><td>字段覆盖</td><td>原存款/提款相关字段区域调整为：首充金额、当日充值、当日提现、当日有效投注、当日输赢、当日优惠、历史充值、历史提现、历史有效投注、历史输赢、历史优惠、出款方式。</td></tr>
@@ -1309,7 +1309,7 @@
               <tbody>
                 <tr><td>代理ID查询</td><td>输入代理ID后，查询结果需展示该代理整条下级线内的会员。包含该代理ID对应的所有直接下级会员，以及直接下级会员的全部下级会员，并按无限级递归继续向下包含所有层级下级会员。</td></tr>
                 <tr><td>代理组合查询</td><td>当代理ID条件与其他筛选条件同时存在时，先限定该代理整条下级线会员范围，再叠加其他筛选条件取交集。</td></tr>
-                <tr><td>代理关系弹窗</td><td>打开范围</td><td>点击列表中任一「代理ID」时，弹窗展示该代理对应玩家作为代理时的完整下级树，包含直属下级及全部间接下级；不展示上级代理或同级代理；当前代理节点需有明确高亮。</td></tr>
+                <tr><td>代理关系弹窗</td><td>打开范围</td><td>点击列表中任一「邀请ID」时，弹窗展示该邀请ID对应玩家作为邀请人时的完整下级树，包含直属下级及全部间接下级；不展示上级代理或同级代理；当前邀请ID节点需有明确高亮。</td></tr>
                 <tr><td>金币条件</td><td>支持两组金币条件；每组包含指标选择、最小值、最大值。</td></tr>
                 <tr><td>金币指标</td><td>支持选择：全部、当日充值、首充金额、当日有效投注、当日输赢、当日优惠、历史充值、历史有效投注、历史输赢、历史优惠。</td></tr>
                 <tr><td>区间输入</td><td>每组条件支持输入最小值和最大值，格式为「最小值 ~ 最大值」。</td></tr>
@@ -1481,9 +1481,9 @@
               <tbody>
                 <tr><td>代理ID查询</td><td>根据代理ID搜索时，展示该代理整条下级线的全部会员，包含直接下级和所有间接下级，按无限级递归处理。</td></tr>
                 <tr><td>组合筛选</td><td>代理ID与其他筛选条件同时存在时，先限定代理线范围，再叠加其他筛选条件，取交集展示结果。</td></tr>
-                <tr><td>列表入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，展示列表玩家自身代理ID。上级代理ID仅展示；点击「邀请ID」打开「代理下级关系」弹窗。</td></tr>
-                <tr><td>关系范围</td><td>弹窗以被点击代理ID对应的当前列表玩家为根节点，仅展示其直属下级及所有间接下级会员；关系树按无限级模式继续向下渲染，不展示该玩家的上级代理或同级代理。</td></tr>
-                <tr><td>节点标识</td><td>所有节点标题直接展示对应的「代理ID」，节点下方展示「会员ID」；不展示任何上级代理ID信息。</td></tr>
+                <tr><td>列表入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，展示列表玩家自身邀请ID。上级代理ID仅展示；点击「邀请ID」打开「代理下级关系」弹窗。</td></tr>
+                <tr><td>关系范围</td><td>弹窗以被点击邀请ID对应的当前列表玩家为根节点，仅展示其直属下级及所有间接下级会员；关系树按无限级模式继续向下渲染，不展示该玩家的上级代理或同级代理。</td></tr>
+                <tr><td>节点标识</td><td>所有节点标题直接展示对应的「邀请ID」，节点下方展示「会员ID」；不展示任何上级代理ID信息。</td></tr>
                 <tr><td>节点字段</td><td>每个节点展示总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级；当前列表会员节点需高亮，以便识别查看对象。</td></tr>
                 <tr><td>展开交互</td><td>存在下级的节点支持展开/收起直属下级；原型以第二层下级为示例，正式实现按接口返回的关系树递归渲染。</td></tr>
               </tbody>
@@ -1589,21 +1589,21 @@
   <div class="modal-mask" id="agentModalMask" aria-hidden="true">
     <div class="agent-modal" role="dialog" aria-modal="true" aria-labelledby="agentModalTitle">
       <div class="agent-modal-head">
-        <div><div id="agentModalTitle">代理下级关系</div><div class="agent-modal-subtitle">当前代理ID：<span id="currentAgentId">10024</span>　会员ID：<span id="currentMemberId">72755525</span></div></div>
+        <div><div id="agentModalTitle">代理下级关系</div><div class="agent-modal-subtitle">当前邀请ID：<span id="currentAgentId">10024</span>　会员ID：<span id="currentMemberId">72755525</span></div></div>
         <button class="agent-modal-close" id="agentModalClose" aria-label="关闭代理关系弹窗">×</button>
       </div>
       <div class="agent-modal-body">
-        <div class="agent-legend"><strong>关系说明</strong><span class="agent-pill">当前代理</span><span>仅展示该代理的直属下级及全部间接下级会员</span><span class="agent-pill">无限级递归</span></div>
+        <div class="agent-legend"><strong>关系说明</strong><span class="agent-pill">当前邀请ID</span><span>仅展示该邀请ID对应会员的直属下级及全部间接下级会员</span><span class="agent-pill">无限级递归</span></div>
         <div class="agent-tree">
-          <div class="agent-node-wrap root"><div class="agent-node root-node current-node"><div class="agent-avatar">P</div><div><div class="agent-name">代理ID：<span id="currentAgentNodeId">10024</span> <span class="agent-role">当前代理</span></div><div class="agent-meta"><span>会员ID：<span id="currentAgentMemberId">72755525</span></span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>3</b></div><div class="agent-stat">直属下级人数<b>2</b></div><div class="agent-stat">首充时间<b>2026-02-01</b></div><div class="agent-stat">首充金额<b>50.00</b></div></div><button class="tree-action" data-toggle-target="memberBChildren">收起下级</button></div></div>
+          <div class="agent-node-wrap root"><div class="agent-node root-node current-node"><div class="agent-avatar">P</div><div><div class="agent-name">邀请ID：<span id="currentAgentNodeId">10024</span> <span class="agent-role">当前邀请ID</span></div><div class="agent-meta"><span>会员ID：<span id="currentAgentMemberId">72755525</span></span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>3</b></div><div class="agent-stat">直属下级人数<b>2</b></div><div class="agent-stat">首充时间<b>2026-02-01</b></div><div class="agent-stat">首充金额<b>50.00</b></div></div><button class="tree-action" data-toggle-target="memberBChildren">收起下级</button></div></div>
           <div id="agentLevelOne">
             <div class="tree-children" id="memberBChildren">
-                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B1</div><div><div class="agent-name">代理ID：10088 <span class="agent-role">直属下级</span></div><div class="agent-meta"><span>会员ID：72755526</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-08</b></div><div class="agent-stat">首充金额<b>20.00</b></div></div></div></div>
-                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B2</div><div><div class="agent-name">代理ID：10089 <span class="agent-role">直属下级</span></div><div class="agent-meta"><span>会员ID：72755527</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>1</b></div><div class="agent-stat">直属下级人数<b>1</b></div><div class="agent-stat">首充时间<b>2026-02-09</b></div><div class="agent-stat">首充金额<b>35.00</b></div></div><button class="tree-action" data-toggle-target="memberB2Children">收起下级</button></div><div class="tree-children" id="memberB2Children"><div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B21</div><div><div class="agent-name">代理ID：10101 <span class="agent-role">间接下级</span></div><div class="agent-meta"><span>会员ID：72755528</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-12</b></div><div class="agent-stat">首充金额<b>10.00</b></div></div></div></div></div></div>
+                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B1</div><div><div class="agent-name">邀请ID：10088 <span class="agent-role">直属下级</span></div><div class="agent-meta"><span>会员ID：72755526</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-08</b></div><div class="agent-stat">首充金额<b>20.00</b></div></div></div></div>
+                <div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B2</div><div><div class="agent-name">邀请ID：10089 <span class="agent-role">直属下级</span></div><div class="agent-meta"><span>会员ID：72755527</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>1</b></div><div class="agent-stat">直属下级人数<b>1</b></div><div class="agent-stat">首充时间<b>2026-02-09</b></div><div class="agent-stat">首充金额<b>35.00</b></div></div><button class="tree-action" data-toggle-target="memberB2Children">收起下级</button></div><div class="tree-children" id="memberB2Children"><div class="agent-node-wrap"><div class="agent-node"><div class="agent-avatar">B21</div><div><div class="agent-name">邀请ID：10101 <span class="agent-role">间接下级</span></div><div class="agent-meta"><span>会员ID：72755528</span></div></div><div class="agent-stats"><div class="agent-stat">总下级人数<b>0</b></div><div class="agent-stat">直属下级人数<b>0</b></div><div class="agent-stat">首充时间<b>2026-02-12</b></div><div class="agent-stat">首充金额<b>10.00</b></div></div></div></div></div></div>
             </div>
           </div>
         </div>
-        <p class="agent-modal-note">当前原型以当前代理的直属下级与间接下级为样例，不展示该代理的上级代理或同级代理信息。实际页面按接口返回的下级树无限级递归渲染；点击有下级的节点可展开或收起其直属下级。</p>
+        <p class="agent-modal-note">当前原型以当前邀请ID对应会员的直属下级与间接下级为样例，不展示该会员的上级代理或同级代理信息。实际页面按接口返回的下级树无限级递归渲染；点击有下级的节点可展开或收起其直属下级。</p>
       </div>
     </div>
   </div>
