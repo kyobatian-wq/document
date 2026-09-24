@@ -577,6 +577,51 @@
       accent-color: #bfbfbf;
     }
 
+    .switch-control {
+      position: relative;
+      display: inline-flex;
+      width: 50px;
+      height: 26px;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .switch-control input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .switch-track {
+      width: 50px;
+      height: 26px;
+      border-radius: 13px;
+      background: #bfbfbf;
+      transition: background .2s ease;
+    }
+
+    .switch-track::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,.22);
+      transition: transform .2s ease;
+    }
+
+    .switch-control input:checked + .switch-track {
+      background: var(--blue);
+    }
+
+    .switch-control input:checked + .switch-track::after {
+      transform: translateX(24px);
+    }
+
     .textarea {
       min-height: 96px;
       padding: 10px;
@@ -868,7 +913,7 @@
                   </tr>
                   <tr>
                     <td><span class="prd-tag">推广域名</span></td>
-                    <td>可修改跳转域名来源、跳转域名目标、落地指向相关字段；解析值只读。</td>
+                    <td>可修改跳转域名来源、跳转域名目标及条件联动字段；解析值只读。</td>
                   </tr>
                   <tr>
                     <td><span class="prd-tag">防封苹果页域名</span></td>
@@ -888,6 +933,8 @@
                 <li>跳转域名(来源)选项包含：主域名、防封下载页、其他、防封主域名。</li>
                 <li>跳转域名(目标)为下拉多选，不支持自定义输入；已选项以标签形式展示，可移除。</li>
                 <li>当来源为“防封下载页”时，目标下拉展示防封谷歌页域名选项。</li>
+                <li>当来源为“防封下载页”时，新增“开启防封苹果页域名”开关；开启后展示“防封苹果页域名”下拉选择，关闭后隐藏该字段。</li>
+                <li>防封苹果页域名仅允许从系统提供的防封苹果页域名中选择，不支持自定义输入。</li>
                 <li>仅当来源为“主域名”时展示“落地指向”；来源为“防封下载页 / 其他 / 防封主域名”时不展示落地指向条件选项。</li>
                 <li>落地指向为“仿谷歌页”时展示仿谷歌模板；为“官网首页 / 官网注册页”时不展示模板字段。</li>
               </ul>
@@ -1019,9 +1066,11 @@
         access: "失效",
         time: "2026-07-31 02:13:43 (UTC-3)",
         operator: "fly220",
-        redirectSource: "主域名",
+        redirectSource: "防封下载页",
         targetDomains: ["app-google.bx-1234.xyz"],
-        landingTarget: "官网首页"
+        landingTarget: "官网首页",
+        antiAppleEnabled: true,
+        antiAppleDomain: "app-ios.bx-1234.xyz"
       },
       {
         id: 2,
@@ -1234,6 +1283,8 @@
     const domainOptions = {
       main: ["h501.bx-1234.xyz", "h502.bx-1234.xyz", "h503.bx-1234.xyz", "app01.bx-1234.xyz", "app02.bx-1234.xyz", "app03.bx-1234.xyz"],
       antiBlock: ["app-ios.bx-1234.xyz", "app-google.bx-1234.xyz"],
+      antiGoogle: ["app-google.bx-1234.xyz"],
+      antiApple: ["app-ios.bx-1234.xyz"],
       landingMain: ["app01.bx-1234.xyz", "app02.bx-1234.xyz", "app03.bx-1234.xyz", "h501.bx-1234.xyz", "h502.bx-1234.xyz", "h503.bx-1234.xyz"]
     };
 
@@ -1336,7 +1387,7 @@
     }
 
     function promotionFields(item) {
-      const targetOptions = item.redirectSource === "防封下载页" ? domainOptions.antiBlock : domainOptions.main;
+      const targetOptions = item.redirectSource === "防封下载页" ? domainOptions.antiGoogle : domainOptions.main;
       const targetPlaceholder = item.redirectSource === "防封下载页" ? "请选择防封谷歌页域名（可多选）" : "请选择跳转目标域名（可多选）";
       return `
         <div class="editable-area">
@@ -1350,6 +1401,7 @@
             <div class="form-label">跳转域名(目标)：</div>
             <div>${multiSelect("targetDomains", item.targetDomains, targetOptions, targetPlaceholder)}</div>
           </div>
+          <div id="downloadProtectionSection"></div>
           <div id="landingSection"></div>
           ${valueField(item)}
         </div>
@@ -1397,10 +1449,37 @@
     function rebuildTargetDomainSelect(source) {
       const selectEl = modalBody.querySelector(".multi-select[data-name='targetDomains']");
       if (!selectEl) return;
-      const options = source === "防封下载页" ? domainOptions.antiBlock : domainOptions.main;
+      const options = source === "防封下载页" ? domainOptions.antiGoogle : domainOptions.main;
       const placeholder = source === "防封下载页" ? "请选择防封谷歌页域名（可多选）" : "请选择跳转目标域名（可多选）";
       const current = selectedValues(selectEl).filter(value => options.includes(value));
       refreshMultiSelect(selectEl, current, options, placeholder);
+    }
+
+    function renderDownloadProtectionSection(item) {
+      const source = modalBody.querySelector("input[name='redirectSource']:checked")?.value || item.redirectSource || "主域名";
+      const section = document.getElementById("downloadProtectionSection");
+      if (!section) return;
+      if (source !== "防封下载页") {
+        section.innerHTML = "";
+        return;
+      }
+      const enabled = item.antiAppleEnabled !== false;
+      const selected = item.antiAppleDomain || domainOptions.antiApple[0];
+      section.innerHTML = `
+        <div class="form-row">
+          <div class="form-label">开启防封苹果页域名：</div>
+          <label class="switch-control" title="开启后可选择防封苹果页域名">
+            <input type="checkbox" id="antiAppleSwitch" ${enabled ? "checked" : ""}>
+            <span class="switch-track"></span>
+          </label>
+        </div>
+        <div class="form-row" id="antiAppleDomainRow" ${enabled ? "" : "hidden"}>
+          <div class="form-label required">防封苹果页域名：</div>
+          <select class="select" id="antiAppleDomainSelect">
+            ${domainOptions.antiApple.map(value => `<option value="${value}" ${value === selected ? "selected" : ""}>${value}</option>`).join("")}
+          </select>
+        </div>
+      `;
     }
 
     function renderLandingSection(item) {
@@ -1465,6 +1544,7 @@
 
       renderLandingExtra(item);
       renderLandingSection(item);
+      renderDownloadProtectionSection(item);
       mask.classList.add("open");
       mask.setAttribute("aria-hidden", "false");
     }
@@ -1508,6 +1588,12 @@
       if (event.target.id === "closeBtn" || event.target.id === "cancelBtn") closeDetail();
 
       if (event.target.id === "saveBtn") {
+        if (currentRecord?.type === "推广域名") {
+          currentRecord.redirectSource = modalBody.querySelector("input[name='redirectSource']:checked")?.value || currentRecord.redirectSource;
+          currentRecord.targetDomains = selectedValues(modalBody.querySelector(".multi-select[data-name='targetDomains']"));
+          currentRecord.antiAppleEnabled = Boolean(modalBody.querySelector("#antiAppleSwitch")?.checked);
+          currentRecord.antiAppleDomain = currentRecord.antiAppleEnabled ? (modalBody.querySelector("#antiAppleDomainSelect")?.value || "") : "";
+        }
         showToast("已保存修改");
         closeDetail();
       }
@@ -1565,7 +1651,14 @@
       }
       if (event.target.name === "redirectSource") {
         rebuildTargetDomainSelect(event.target.value);
-        if (currentRecord) renderLandingSection(currentRecord);
+        if (currentRecord) {
+          renderLandingSection(currentRecord);
+          renderDownloadProtectionSection(currentRecord);
+        }
+      }
+      if (event.target.id === "antiAppleSwitch") {
+        const row = document.getElementById("antiAppleDomainRow");
+        if (row) row.hidden = !event.target.checked;
       }
     });
 
