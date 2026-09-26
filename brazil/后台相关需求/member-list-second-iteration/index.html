@@ -788,8 +788,41 @@
       font-size: 15px;
       font-weight: 700;
     }
+    .single-withdraw-modal { width: min(500px, calc(100vw - 36px)); background: #fff; border-radius: 6px; box-shadow: 0 12px 36px rgba(0,0,0,.2); overflow: hidden; }
+    .single-withdraw-head { position: relative; height: 60px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #ebeef5; color: #303133; font-size: 16px; font-weight: 700; }
+    .single-withdraw-close { position: absolute; top: 15px; right: 18px; border: 0; background: transparent; color: #909399; font-size: 24px; line-height: 1; cursor: pointer; }
+    .single-withdraw-body { padding: 28px 46px 30px; }
+    .single-withdraw-row { display: grid; grid-template-columns: 82px 1fr; align-items: center; min-height: 36px; color: #303133; font-size: 14px; }
+    .single-withdraw-label { text-align: right; padding-right: 12px; color: #606266; }
+    .withdraw-radio-group { display: flex; gap: 20px; align-items: center; }
+    .withdraw-radio { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+    .withdraw-radio input { width: 15px; height: 15px; margin: 0; accent-color: #1688ff; }
+    .single-withdraw-footer { display: flex; justify-content: center; padding-top: 18px; }
+    .withdraw-type-link { color: #1688ff; cursor: pointer; font-weight: 600; }
+    .withdraw-type-link:hover { text-decoration: underline; }
     .agent-link { color: #1688ff; cursor: pointer; font-weight: 600; }
     .agent-link:hover { text-decoration: underline; }
+    .parent-agent-link { color: #1688ff; cursor: pointer; font-weight: 600; }
+    .parent-agent-link:hover { text-decoration: underline; }
+    .profile-modal { width: min(1120px, calc(100vw - 48px)); max-height: calc(100vh - 48px); background: #fff; border-radius: 5px; box-shadow: 0 16px 46px rgba(0,0,0,.24); overflow: hidden; }
+    .profile-modal-head { position: relative; height: 68px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e5e7eb; color: #303133; font-size: 20px; font-weight: 700; }
+    .profile-modal-subtitle { display: none; }
+    .profile-modal-close { position: absolute; top: 18px; right: 22px; border: 0; background: transparent; color: #909399; font-size: 26px; line-height: 1; cursor: pointer; }
+    .profile-modal-body { max-height: calc(100vh - 116px); padding: 26px 20px 32px; overflow: auto; background: #fff; }
+    .profile-topline { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 34px; margin: 0 0 18px; color: #303133; font-size: 14px; }
+    .profile-topline-item { white-space: nowrap; }
+    .profile-topline strong { margin-right: 7px; }
+    .profile-copy { color: #1688ff; font-weight: 700; }
+    .profile-detail-table { border: 1px solid #edf0f5; }
+    .profile-detail-row { display: grid; grid-template-columns: 174px minmax(0, 1fr) 344px; min-height: 44px; border-bottom: 1px solid #edf0f5; }
+    .profile-detail-row:last-child { border-bottom: 0; }
+    .profile-detail-label { display: flex; align-items: center; justify-content: flex-end; padding: 8px 16px; border-right: 1px solid #edf0f5; background: #fbfcfe; color: #303133; font-weight: 600; }
+    .profile-detail-value { display: flex; align-items: center; padding: 8px 14px; color: #303133; line-height: 1.6; }
+    .profile-detail-value.multiline { align-items: flex-start; white-space: pre-line; }
+    .profile-detail-actions { display: flex; flex-wrap: wrap; align-content: center; gap: 9px 14px; padding: 8px 14px; border-left: 1px solid #edf0f5; color: #1688ff; line-height: 1.6; }
+    .profile-action { color: #1688ff; cursor: pointer; white-space: nowrap; }
+    .profile-action.danger { color: #e55b63; }
+    .profile-action.disabled { color: #c0c4cc; cursor: not-allowed; }
     .agent-modal { width: min(1080px, calc(100vw - 80px)); max-height: calc(100vh - 72px); background: #f7f9fc; border-radius: 8px; box-shadow: 0 16px 46px rgba(0,0,0,.24); overflow: hidden; }
     .agent-modal-head { height: 64px; padding: 0 26px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #e5e7eb; font-size: 18px; font-weight: 700; }
     .agent-modal-subtitle { margin-top: 3px; color: #909399; font-size: 12px; font-weight: 400; }
@@ -824,7 +857,7 @@
     .tree-children .agent-node-wrap::before { left: -30px; width: 30px; background: #dbe6f3; }
     .tree-action { min-width: 78px; height: 30px; padding: 0 10px; border: 1px solid #b7caff; border-radius: 4px; background: #f7f9ff; color: #3b5fca; font-size: 12px; cursor: pointer; }
     .agent-modal-note { margin: 18px 0 0 42px; color: #909399; font-size: 12px; line-height: 1.65; }
-    @media (max-width: 900px) { .agent-modal { width: calc(100vw - 24px); } .agent-modal-body { padding: 16px; } .agent-tree { padding-left: 22px; } .agent-tree::before { left: 8px; } .agent-node-wrap::before { left: -14px; width: 14px; } .agent-node { grid-template-columns: 42px 1fr; } .agent-stats { grid-column: 2; text-align: left; gap: 12px; } .tree-action { grid-column: 2; justify-self: start; } .tree-children { margin-left: 18px; padding-left: 18px; } .tree-children .agent-node-wrap::before { left: -18px; width: 18px; } }
+    @media (max-width: 900px) { .agent-modal, .profile-modal { width: calc(100vw - 24px); } .agent-modal-body, .profile-modal-body { padding: 16px; } .agent-tree { padding-left: 22px; } .agent-tree::before { left: 8px; } .agent-node-wrap::before { left: -14px; width: 14px; } .agent-node { grid-template-columns: 42px 1fr; } .agent-stats { grid-column: 2; text-align: left; gap: 12px; } .tree-action { grid-column: 2; justify-self: start; } .tree-children { margin-left: 18px; padding-left: 18px; } .tree-children .agent-node-wrap::before { left: -18px; width: 18px; } .profile-topline { justify-content: flex-start; gap: 8px 18px; } .profile-detail-row { grid-template-columns: 110px minmax(0, 1fr); } .profile-detail-label { padding: 8px; } .profile-detail-actions { grid-column: 2; border-left: 0; border-top: 1px solid #edf0f5; padding: 8px 12px; } }
     .hidden { display: none; }
     .prd-section {
       margin-top: 28px;
@@ -1318,7 +1351,8 @@
                 <tr><th>模块</th><th>需求项</th><th>已确认规则</th></tr>
               </thead>
               <tbody>
-                <tr><td>会员列表（二次迭代）</td><td>邀请ID字段与入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，用于展示该列表玩家自身的邀请ID；上级代理ID仅展示，不提供点击交互。仅「邀请ID」字段可点击打开「代理下级关系」弹窗。</td></tr>
+                <tr><td>会员列表（二次迭代）</td><td>代理关系入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，用于展示该列表玩家自身的邀请ID。点击「上级代理ID」打开该目标代理的个人资料弹窗；点击「邀请ID」打开该玩家作为邀请人的「代理下级关系」弹窗。</td></tr>
+                <tr><td>上级代理ID</td><td>个人资料弹窗</td><td>点击列表中的上级代理ID后，按既有个人资料弹窗结构展示；会员ID字段值直接等于被点击的上级代理ID，会员账号按目标代理资料展示，其余资料字段及操作入口按既有个人资料弹窗展示。无上级代理ID时展示「-」，不可点击。</td></tr>
                 <tr><td>代理关系弹窗</td><td>展示范围</td><td>弹窗以被点击邀请ID对应的当前列表玩家为根节点，仅展示该玩家作为邀请人的直属下级及全部间接下级会员，按无限级递归处理；不展示该玩家的上级代理或同级代理信息。</td></tr>
                 <tr><td>代理关系弹窗</td><td>节点字段</td><td>当前邀请ID节点、直属下级节点及间接下级节点均展示：邀请ID、会员ID、总下级人数、直属下级人数、首充时间、首充金额。节点身份标签中，直属下级展示为「直属」，间接下级展示为「团队」。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级。</td></tr>
                 <tr><td>代理关系弹窗</td><td>无限级展示</td><td>代理关系按无限级递归模式展示。原型以 B21 为深层示例，支持展开/收起下级；实际实现需根据接口返回的完整关系树持续向下渲染。</td></tr>
@@ -1530,7 +1564,7 @@
                 <tr><td>代理ID查询</td><td>根据代理ID搜索时，展示该代理整条下级线的全部会员，包含直接下级和所有间接下级，按无限级递归处理。</td></tr>
                 <tr><td>组合筛选</td><td>代理ID与其他筛选条件同时存在时，先限定代理线范围，再叠加其他筛选条件，取交集展示结果。</td></tr>
                 <tr><td>邀请ID查询</td><td>「上级代理」搜索框新增「邀请ID」选项。选择后输入邀请ID，仅展示该邀请ID对应的直属会员，不包含团队层级会员。</td></tr>
-                <tr><td>列表入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，展示列表玩家自身邀请ID。上级代理ID仅展示；点击「邀请ID」打开「代理下级关系」弹窗。</td></tr>
+                <tr><td>列表入口</td><td>列表在「上级代理ID」后新增「邀请ID」字段，展示列表玩家自身邀请ID。点击「上级代理ID」打开目标代理个人资料；点击「邀请ID」打开「代理下级关系」弹窗。</td></tr>
                 <tr><td>关系范围</td><td>弹窗以被点击邀请ID对应的当前列表玩家为根节点，仅展示其直属下级及所有间接下级会员；关系树按无限级模式继续向下渲染，不展示该玩家的上级代理或同级代理。</td></tr>
                 <tr><td>节点标识</td><td>所有节点标题直接展示对应的「邀请ID」，节点下方展示「会员ID」；直属下级节点标签展示为「直属」，间接下级节点标签展示为「团队」；不展示任何上级代理ID信息。</td></tr>
                 <tr><td>节点字段</td><td>每个节点展示总下级人数、直属下级人数、首充时间、首充金额。总下级人数统计当前节点整条下级线的直接及间接下级去重人数，不包含当前节点本人；直属下级人数仅统计第一层直接下级；当前列表会员节点需高亮，以便识别查看对象。</td></tr>
@@ -1544,6 +1578,37 @@
             <table class="prd-table">
               <thead><tr><th>待确认项</th><th>说明</th></tr></thead>
               <tbody><tr><td>暂无</td><td>当前原型范围内的查询口径、节点字段与展示交互均已按本轮沟通补充。</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="prd-section" id="thirdIterationPrd">
+          <h1 class="prd-title">会员列表三次迭代 PRD 说明</h1>
+          <div class="prd-meta"><span class="prd-date-tag">迭代日期：2026-09-26</span><span>关联页面：会员列表 / 个人资料弹窗</span></div>
+
+          <h2 class="prd-subtitle">1. 已确认内容</h2>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead><tr><th>模块</th><th>规则说明</th></tr></thead>
+              <tbody>
+                <tr><td>上级代理ID入口</td><td>列表中的「上级代理ID」支持点击。点击后打开被点击上级代理ID对应的个人资料弹窗。</td></tr>
+                <tr><td>个人资料弹窗</td><td>弹窗使用既有个人资料弹窗的完整展示结构与操作入口，不新增或调整弹窗内已有操作的执行逻辑。</td></tr>
+                <tr><td>字段映射</td><td>弹窗顶部「会员ID」字段值直接等于被点击的上级代理ID；「会员账号」替换为该目标代理对应的账号值。</td></tr>
+                <tr><td>固定展示内容</td><td>除会员账号、会员ID外，其余资料字段、统计内容及操作入口按既有个人资料弹窗结构固定展示。</td></tr>
+                <tr><td>空值状态</td><td>列表无上级代理ID时展示「-」，不提供点击入口，也不打开个人资料弹窗。</td></tr>
+                <tr><td>入口区分</td><td>「上级代理ID」用于查看目标上级代理的个人资料；「邀请ID」仍用于打开当前会员作为邀请人的代理下级关系弹窗。</td></tr>
+                <tr><td>出款方式入口</td><td>列表「出款方式」字段支持点击。点击后打开「设置出款类型」弹窗，带入当前行会员账号、会员ID及现有出款方式。</td></tr>
+                <tr><td>出款方式变更</td><td>弹窗支持选择「自动出款」「手动出款」。点击「确定」后直接执行变更并回写列表字段，不展示二次确认弹窗；操作成功或失败以 Toast 提示，展示 3 秒后消失。</td></tr>
+                <tr><td>操作日志</td><td>修改出款方式时，需按「用户日志（新）」写入规范记录操作模块、操作页面、操作对象会员ID、操作前值、操作后值、操作时间、操作人、操作IP、操作结果及失败原因（如有）。</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="prd-subtitle">2. 待确认事项</h2>
+          <div class="prd-table-wrap">
+            <table class="prd-table">
+              <thead><tr><th>待确认项</th><th>说明</th></tr></thead>
+              <tbody><tr><td>暂无</td><td>当前仅新增上级代理ID查看个人资料入口，弹窗展示与字段映射已按本轮沟通确认。</td></tr></tbody>
             </table>
           </div>
         </section>
@@ -1657,6 +1722,62 @@
     </div>
   </div>
 
+  <div class="modal-mask" id="profileModalMask" aria-hidden="true">
+    <section class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+      <div class="profile-modal-head">
+        <div id="profileModalTitle">个人资料</div>
+        <button class="profile-modal-close" id="profileModalClose" type="button" aria-label="关闭个人资料弹窗">×</button>
+      </div>
+      <div class="profile-modal-body">
+        <div class="profile-topline">
+          <span class="profile-topline-item"><strong>会员账号：</strong><span id="profileAccount">11999988865</span> <span class="profile-copy">▣</span></span>
+          <span class="profile-topline-item"><strong>会员ID：</strong><span id="profileMemberId">55569741</span> <span class="profile-copy">▣</span></span>
+          <span class="profile-topline-item"><strong>注册方式：</strong>手机号</span>
+          <span class="profile-topline-item"><strong>所属地区：</strong>巴西(BRL)</span>
+          <span class="profile-topline-item"><strong>所属商户：</strong>888</span>
+        </div>
+        <div class="profile-detail-table">
+          <div class="profile-detail-row"><div class="profile-detail-label">账号状态</div><div class="profile-detail-value">正式 / 正常</div><div class="profile-detail-actions"><span class="profile-action danger">加入黑名单</span><span class="profile-action danger">禁止投注</span><span class="profile-action danger">踢到大厅</span><span class="profile-action">修改密码</span><span class="profile-action">修改资金密码</span><span class="profile-action">重置资金密码</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">上级代理</div><div class="profile-detail-value">账号：无 ID：无 同上级会员人数 (0)</div><div class="profile-detail-actions"><span class="profile-action">代理拉线</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">真实姓名</div><div class="profile-detail-value">- 同名会员人数 (0)</div><div class="profile-detail-actions"><span class="profile-action">实名关联</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">VIP等级</div><div class="profile-detail-value">VIP0</div><div class="profile-detail-actions"></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">会员层级</div><div class="profile-detail-value">默认层级</div><div class="profile-detail-actions"><span class="profile-action">修改层级</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">账户余额</div><div class="profile-detail-value">0.00 (可用 0.00 + 余额宝 0.00 + 冻结 0.00)</div><div class="profile-detail-actions"><span class="profile-action">刷新</span><span class="profile-action">人工提存</span><span class="profile-action">帐变记录</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">今日/累计充值</div><div class="profile-detail-value">0.00 (0次) / 0.00 (0次)</div><div class="profile-detail-actions"><span class="profile-action">充值记录</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">今日/累计提现</div><div class="profile-detail-value">0.00 (0次) / 0.00 (0次)</div><div class="profile-detail-actions"><span class="profile-action">提现记录</span><span class="profile-action">稽核详情</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">今日/累计充提差</div><div class="profile-detail-value">0.00 / 0.00</div><div class="profile-detail-actions"></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">今日/累计有效投注</div><div class="profile-detail-value">0.00 / 0.00</div><div class="profile-detail-actions"><span class="profile-action">投注记录</span><span class="profile-action disabled">体育投注记录</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">今日/累计输赢</div><div class="profile-detail-value">0.00 / 0.00</div><div class="profile-detail-actions"><span class="profile-action">输赢总览</span><span class="profile-action">输赢统计</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">今日/累计活动优惠</div><div class="profile-detail-value">0.00 / 0.00</div><div class="profile-detail-actions"><span class="profile-action">优惠记录</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">今日/累计结算佣金</div><div class="profile-detail-value">0.00 / 0.00</div><div class="profile-detail-actions"></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">提现账号</div><div class="profile-detail-value">未绑定</div><div class="profile-detail-actions"><span class="profile-action">修改</span></div></div>
+          <div class="profile-detail-row"><div class="profile-detail-label">最后登录</div><div class="profile-detail-value multiline">2001:19f0:b800:1716:5400:4fff:fe95:249c(国家:美国New, 运营商:Jersey 州Matawan Choopa, LLC)&#10;5edf6dda55cd91a0d192249bf46756d4(设备号)&#10;(ANDROID_H5)&#10;同IP登录人数 (2)&#10;同设备登录人数 (3)&#10;最后登录时间 (2026-09-25 11:44:03 (UTC-3))</div><div class="profile-detail-actions"><span class="profile-action">IP关联</span><span class="profile-action">设备关联</span></div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-mask" id="singleWithdrawModalMask" aria-hidden="true">
+    <section class="single-withdraw-modal" role="dialog" aria-modal="true" aria-labelledby="singleWithdrawTitle">
+      <div class="single-withdraw-head">
+        <div id="singleWithdrawTitle">设置出款类型</div>
+        <button class="single-withdraw-close" id="singleWithdrawClose" type="button" aria-label="关闭设置出款类型弹窗">×</button>
+      </div>
+      <div class="single-withdraw-body">
+        <div class="single-withdraw-row"><div class="single-withdraw-label">账号：</div><div id="singleWithdrawAccount">11920882903</div></div>
+        <div class="single-withdraw-row"><div class="single-withdraw-label">会员ID：</div><div id="singleWithdrawMemberId">72755525</div></div>
+        <div class="single-withdraw-row">
+          <div class="single-withdraw-label">出款方式：</div>
+          <div class="withdraw-radio-group">
+            <label class="withdraw-radio"><input type="radio" name="singleWithdrawType" value="自动出款" checked>自动出款</label>
+            <label class="withdraw-radio"><input type="radio" name="singleWithdrawType" value="手动出款">手动出款</label>
+          </div>
+        </div>
+        <div class="single-withdraw-footer"><button class="confirm-btn" id="singleWithdrawConfirm" type="button">确定</button></div>
+      </div>
+    </section>
+  </div>
+
   <script>
     const registerDateSort = document.getElementById("registerDateSort");
     const loginDateSort = document.getElementById("loginDateSort");
@@ -1698,6 +1819,16 @@
     const currentAgentId = document.getElementById("currentAgentId");
     const currentAgentNodeId = document.getElementById("currentAgentNodeId");
     const currentAgentMemberId = document.getElementById("currentAgentMemberId");
+    const profileModalMask = document.getElementById("profileModalMask");
+    const profileModalClose = document.getElementById("profileModalClose");
+    const profileMemberId = document.getElementById("profileMemberId");
+    const profileAccount = document.getElementById("profileAccount");
+    const singleWithdrawModalMask = document.getElementById("singleWithdrawModalMask");
+    const singleWithdrawClose = document.getElementById("singleWithdrawClose");
+    const singleWithdrawConfirm = document.getElementById("singleWithdrawConfirm");
+    const singleWithdrawAccount = document.getElementById("singleWithdrawAccount");
+    const singleWithdrawMemberId = document.getElementById("singleWithdrawMemberId");
+    let activeWithdrawLink = null;
 
     function resetSortHeaders(activeHeader) {
       sortableHeaders.forEach((header) => {
@@ -1985,6 +2116,12 @@
       if (event.target === batchModalMask) batchModalMask.classList.remove("show");
     });
 
+    const agentProfiles = {
+      "10001": { memberId: "10000001", account: "11900010001", invitationId: "10001", parentAgentId: "-", status: "正常", tier: "默认层级", registerTime: "2026-09-01 08:30:00 (UTC-3)", loginTime: "2026-09-06 21:01:22 (UTC-3)", balance: "2,348.60", withdrawType: "自动出款" },
+      "10024": { memberId: "72755525", account: "11920882903", invitationId: "10024", parentAgentId: "10001", status: "正常", tier: "20雷", registerTime: "2026-09-06 21:00:09 (UTC-3)", loginTime: "2026-09-06 21:01:22 (UTC-3)", balance: "472.68", withdrawType: "自动出款" },
+      "10089": { memberId: "53300951", account: "11912222224", invitationId: "10089", parentAgentId: "10024", status: "正常", tier: "200雷", registerTime: "2026-09-06 05:57:12 (UTC-3)", loginTime: "2026-09-06 05:57:12 (UTC-3)", balance: "58.00", withdrawType: "自动出款" }
+    };
+
     function buildAgentIdCells() {
       const agentData = [
         { parentAgentId: "10001", parentInvitationId: "10001", agentId: "10024", memberId: "72755525" },
@@ -2000,7 +2137,16 @@
       Array.from(tableBody.querySelectorAll("tr")).forEach((row, index) => {
         const data = agentData[index];
         const parentAgentCell = row.children[4];
-        parentAgentCell.textContent = data.parentAgentId;
+        parentAgentCell.textContent = "";
+        if (data.parentAgentId !== "-") {
+          const parentLink = document.createElement("span");
+          parentLink.className = "parent-agent-link";
+          parentLink.dataset.agentId = data.parentAgentId;
+          parentLink.textContent = data.parentAgentId;
+          parentAgentCell.appendChild(parentLink);
+        } else {
+          parentAgentCell.textContent = "-";
+        }
         row.dataset.parentAgentId = data.parentAgentId;
         row.dataset.parentInvitationId = data.parentInvitationId || "";
 
@@ -2016,6 +2162,17 @@
           agentCell.textContent = "-";
         }
         parentAgentCell.insertAdjacentElement("afterend", agentCell);
+
+        const withdrawCell = row.children[19];
+        const withdrawType = withdrawCell.textContent.trim();
+        const withdrawLink = document.createElement("span");
+        withdrawLink.className = "withdraw-type-link";
+        withdrawLink.dataset.memberId = data.memberId;
+        withdrawLink.dataset.account = row.children[3].textContent.replace("▣", "").trim();
+        withdrawLink.dataset.withdrawType = withdrawType;
+        withdrawLink.textContent = withdrawType;
+        withdrawCell.textContent = "";
+        withdrawCell.appendChild(withdrawLink);
       });
     }
 
@@ -2030,6 +2187,65 @@
         agentModalMask.classList.add("show");
         agentModalMask.setAttribute("aria-hidden", "false");
       });
+    });
+
+    function openProfileModal(agentId) {
+      const profile = agentProfiles[agentId] || {
+        memberId: "-", account: "-", invitationId: agentId, parentAgentId: "-", status: "-", tier: "-", registerTime: "-", loginTime: "-", balance: "-", withdrawType: "-"
+      };
+      profileMemberId.textContent = agentId;
+      profileAccount.textContent = profile.account;
+      profileModalMask.classList.add("show");
+      profileModalMask.setAttribute("aria-hidden", "false");
+    }
+
+    function closeProfileModal() {
+      profileModalMask.classList.remove("show");
+      profileModalMask.setAttribute("aria-hidden", "true");
+    }
+
+    document.querySelectorAll(".parent-agent-link").forEach((link) => {
+      link.addEventListener("click", () => openProfileModal(link.dataset.agentId));
+    });
+
+    profileModalClose.addEventListener("click", closeProfileModal);
+    profileModalMask.addEventListener("click", (event) => {
+      if (event.target === profileModalMask) closeProfileModal();
+    });
+
+    function openSingleWithdrawModal(link) {
+      activeWithdrawLink = link;
+      singleWithdrawAccount.textContent = link.dataset.account;
+      singleWithdrawMemberId.textContent = link.dataset.memberId;
+      document.querySelectorAll("input[name='singleWithdrawType']").forEach((radio) => {
+        radio.checked = radio.value === link.dataset.withdrawType;
+      });
+      singleWithdrawModalMask.classList.add("show");
+      singleWithdrawModalMask.setAttribute("aria-hidden", "false");
+    }
+
+    function closeSingleWithdrawModal() {
+      singleWithdrawModalMask.classList.remove("show");
+      singleWithdrawModalMask.setAttribute("aria-hidden", "true");
+      activeWithdrawLink = null;
+    }
+
+    document.querySelectorAll(".withdraw-type-link").forEach((link) => {
+      link.addEventListener("click", () => openSingleWithdrawModal(link));
+    });
+
+    singleWithdrawClose.addEventListener("click", closeSingleWithdrawModal);
+    singleWithdrawModalMask.addEventListener("click", (event) => {
+      if (event.target === singleWithdrawModalMask) closeSingleWithdrawModal();
+    });
+    singleWithdrawConfirm.addEventListener("click", () => {
+      const selectedType = document.querySelector("input[name='singleWithdrawType']:checked").value;
+      if (activeWithdrawLink) {
+        activeWithdrawLink.dataset.withdrawType = selectedType;
+        activeWithdrawLink.textContent = selectedType;
+      }
+      closeSingleWithdrawModal();
+      showToast("出款方式修改成功", "success", 3000);
     });
 
     function closeAgentModal() {
