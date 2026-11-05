@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>电子游戏注单撤单与取消退款｜交互原型</title>
+  <title>电子游戏注单撤单与二次结算｜交互原型</title>
   <style>
     :root{--navy:#08243d;--blue:#1769d2;--bg:#f3f6fa;--card:#fff;--line:#dfe6ee;--text:#23364b;--muted:#68798b;--green:#12805c;--red:#c93542;--amber:#895200}
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}button,input,select{font:inherit}button{cursor:pointer}
@@ -15,18 +15,18 @@
 </head>
 <body>
   <div class="app">
-    <aside><div class="brand"><span>DD</span>DD.GG 管理后台</div><div class="side-title">会员管理</div><div class="side-link active">帐变记录</div><div class="side-title">本期范围</div><div class="side-link">电子游戏撤单</div><div class="side-link">取消退款 T065</div><div class="side-title">类型边界</div><div class="side-link">T066 游戏退回</div></aside>
+    <aside><div class="brand"><span>DD</span>DD.GG 管理后台</div><div class="side-title">会员管理</div><div class="side-link active">帐变记录</div><div class="side-title">本期范围</div><div class="side-link">电子游戏撤单</div><div class="side-link">取消退款 T065</div><div class="side-link">二次结算 T064</div><div class="side-title">类型边界</div><div class="side-link">T066 游戏退回</div></aside>
     <div class="content">
-      <header><div class="crumb">巴西站 / 会员管理 / 帐变记录 / 电子游戏</div><h1>游戏撤单与取消退款 · 一期交互原型</h1></header>
+      <header><div class="crumb">巴西站 / 会员管理 / 帐变记录 / 电子游戏</div><h1>游戏撤单与二次结算 · 一期交互原型</h1></header>
       <main>
-        <div class="notice"><strong>已确认口径：</strong>注单取消及取消退款仅归入 T065「游戏撤单」，通知退款金额记录在对应 T065 帐变；已结算撤单先内部回滚原结算，再退还通知金额。<small>已确认行数：未结算一条 T065 +C；已结算两条 T065，先 −P 后 +C。后台与客户端的类型、业务时间、备注应同源；零额、分次结算及并发处理待开发核对。T066 的独立定义见下方说明。</small></div>
+        <div class="notice"><strong>已确认口径：</strong>未结算撤单生成一条 T065 +C；已结算撤单生成两条 T065，先 −P 后 +C。已结算注单二次结算时，保留首次 T064 +P1，新增两条 T064，先冲回原派彩 −P1，再按新结算总额派彩 +P2；原投注本金不变。<small>T066 仅用于订单结算错误后退回下注本金，不承载撤单或二次结算派彩。后台与客户端的类型、业务时间和备注同源；重复、乱序及零额结算等实现细节待开发核对。</small></div>
         <section class="card"><h2>选择注单情况</h2><div id="modeGrid" class="stage-grid"></div></section>
-        <section class="card"><h2>选择处理阶段</h2><p class="muted small">切换后查看注单状态、帐变记录和主钱包余额。示例下注 100 BRL、下注前余额 500 BRL；已结算场景入账 150 BRL，金额不一致场景通知取消 80 BRL。</p><div id="stageGrid" class="stage-grid"></div></section>
+        <section class="card"><h2>选择处理阶段</h2><p class="muted small">切换后查看注单状态、帐变记录和主钱包余额。示例下注 100 BRL、下注前余额 500 BRL；首次结算入账 150 BRL，二次结算示例新派彩 80 BRL；取消金额不一致场景通知取消 80 BRL。</p><div id="stageGrid" class="stage-grid"></div></section>
         <div id="metricGrid" class="metric-grid"></div>
-        <section class="card"><h2>单条注单处理流程</h2><div id="flow" class="flow"></div><p class="foot">已结算撤单的回滚由平台依据原结算记录执行，三方只发送取消通知。原型为阶段演示，不新增生产后台手动回滚按钮。</p></section>
-        <section class="card"><h2>帐变记录示意</h2><div id="status" class="status"></div><div class="toolbar"><label class="field">帐变二类<select id="typeFilter"><option value="all">全部类型</option><option value="游戏投注">游戏投注</option><option value="游戏结算">游戏结算</option><option value="游戏撤单">游戏撤单</option></select></label><label class="field">注单 ID<input id="betFilter" type="search" placeholder="输入注单 ID"></label><button id="query" class="btn primary" type="button">查询</button><button id="reset" class="btn" type="button">重置</button><button id="duplicate" class="btn" type="button">模拟重复通知</button></div><div class="table-wrap"><table><thead><tr><th>帐变 ID</th><th>所属一类</th><th>帐变二类</th><th>注单 ID</th><th>帐变金额</th><th>变动前余额</th><th>变动后余额</th><th>业务时间（三方事件）</th><th>备注</th></tr></thead><tbody id="ledgerBody"></tbody></table></div><p id="rowCount" class="foot"></p><p class="foot">本表仅演示注单取消流程；T066 属订单结算错误后的本金退回，不在本组撤单阶段生成。</p></section>
-        <section class="card"><h2>规则说明</h2><div class="rule-grid"><div class="rule"><h3>未结算撤单 T065</h3><p>一条 T065 同时记录取消事件和通知退款金额 +C，并保留三方取消时间；不再生成独立的 0 金额行。</p></div><div class="rule"><h3>已结算撤单 T065</h3><p>平台依据成功入账的 T064 回滚结算额 P；两条 T065 分别记录回滚 −P 与退款 +C，回滚成功后才退款。</p></div><div class="rule"><h3>通知金额差异</h3><p>按三方通知的取消金额 C 退款。C 与投注 A 不一致时记录差额，留待人工核对，不自动补足。</p></div><div class="rule"><h3>客户端与报表</h3><p>类型、业务时间、备注与后台同源。下注与结算跨天时，报表归属结算日；取消调整归属三方取消日。具体时区待开发核对。</p></div></div></section>
-        <section class="card"><h2>T066 游戏退回 · 独立类型说明</h2><p class="muted">T066 不属于本页注单取消的处理阶段，也不用于记录已结算撤单时的结算回滚 −P。</p><div class="rule"><h3>已确认的业务含义</h3><p>订单结算错误后，退回该注单的下注本金；二级帐变记录为 T066「游戏退回」。与 T065「游戏撤单」按业务原因区分。</p></div></section>
+        <section class="card"><h2>单条注单处理流程</h2><div id="flow" class="flow"></div><p id="flowNote" class="foot"></p></section>
+        <section class="card"><h2>帐变记录示意</h2><div id="status" class="status"></div><div class="toolbar"><label class="field">帐变二类<select id="typeFilter"><option value="all">全部类型</option><option value="游戏投注">游戏投注</option><option value="游戏结算">游戏结算</option><option value="游戏撤单">游戏撤单</option></select></label><label class="field">注单 ID<input id="betFilter" type="search" placeholder="输入注单 ID"></label><button id="query" class="btn primary" type="button">查询</button><button id="reset" class="btn" type="button">重置</button><button id="duplicate" class="btn" type="button">模拟重复通知</button></div><div class="table-wrap"><table><thead><tr><th>帐变 ID</th><th>所属一类</th><th>帐变二类</th><th>注单 ID</th><th>帐变金额</th><th>变动前余额</th><th>变动后余额</th><th>业务时间（三方事件）</th><th>备注</th></tr></thead><tbody id="ledgerBody"></tbody></table></div><p id="rowCount" class="foot"></p><p class="foot">本表演示注单撤单与二次结算的正常路径；T066 属订单结算错误后的本金退回，不在本组阶段生成。</p></section>
+        <section class="card"><h2>规则说明</h2><div class="rule-grid"><div class="rule"><h3>未结算撤单 T065</h3><p>一条 T065 同时记录取消事件和通知退款金额 +C，并保留三方取消时间；不再生成独立的 0 金额行。</p></div><div class="rule"><h3>已结算撤单 T065</h3><p>平台依据成功入账的 T064 回滚结算额 P；两条 T065 分别记录回滚 −P 与退款 +C，回滚成功后才退款。</p></div><div class="rule"><h3>通知金额差异</h3><p>按三方通知的取消金额 C 退款。C 与投注 A 不一致时记录差额，留待人工核对，不自动补足。</p></div><div class="rule"><h3>二次结算 T064</h3><p>保留原 T064 +P1；新增 T064 −P1 冲回首次派彩，再新增 T064 +P2 按新结算总额派彩。投注本金不变，不生成 T065 或 T066。</p></div><div class="rule"><h3>客户端与报表</h3><p>类型、业务时间、备注与后台同源。原结算归属原结算日；撤单调整归属三方取消日，二次结算调整归属三方二次结算日。具体时区待开发核对。</p></div></div></section>
+        <section class="card"><h2>T066 游戏退回 · 独立类型说明</h2><p class="muted">T066 不属于本页注单取消或二次结算的处理阶段，也不用于记录撤单结算回滚 −P 或二次结算派彩调整 −P1／+P2。</p><div class="rule"><h3>已确认的业务含义</h3><p>订单结算错误后，退回该注单的下注本金；二级帐变记录为 T066「游戏退回」。与 T065「游戏撤单」按业务原因区分。</p></div></section>
       </main>
     </div>
   </div>
@@ -59,6 +59,22 @@
           refund: { id: 'GL-S-004', type: '游戏撤单', code: 'T065', amount: 100, time: '2026-10-30 00:20:00', ref: 'GL-S-001', note: '三方取消注单；通知取消金额 100.00；投注单号 BET-ELE-1028-002；帐变前金额 400.00' }
         }
       },
+      resettled: {
+        label: '已结算后二次结算', description: '冲回原派彩，再按新总额派彩', betId: 'BET-ELE-1028-004',
+        stages: [
+          { key: 'bet', name: '1. 投注成功', sub: 'T063 扣款 100', state: '待结算', info: '投注 100.00 BRL 已扣款，主钱包为 400.00 BRL。', rows: ['bet'] },
+          { key: 'settled', name: '2. 首次结算', sub: 'T064 派彩 150', state: '已结算', info: '首次实际派彩 150.00 BRL 已入主钱包，余额 550.00 BRL。', rows: ['bet', 'settlement'] },
+          { key: 'received', name: '3. 二次结算通知', sub: '新结算总额 80', state: '二次结算处理中', info: '三方提供本注单新的结算总额 80.00 BRL；此阶段尚未产生新的资金帐变。', rows: ['bet', 'settlement'] },
+          { key: 'rollback', name: '4. 冲回首次派彩', sub: 'T064 扣回 150', state: '原派彩已冲回', info: '关联首次 T064，新增 T064 −150.00 BRL；主钱包为 400.00 BRL，尚未重新派彩。', rows: ['bet', 'settlement', 'rollback'] },
+          { key: 'payout', name: '5. 二次派彩完成', sub: 'T064 派彩 80', state: '二次结算已完成', info: '新增 T064 +80.00 BRL，主钱包为 480.00 BRL；投注本金 100.00 BRL 未改变。', rows: ['bet', 'settlement', 'rollback', 'payout'] }
+        ],
+        events: {
+          bet: { id: 'GL-R-001', type: '游戏投注', code: 'T063', amount: -100, time: '2026-10-28 20:30:00', ref: '—', note: '投注单号 BET-ELE-1028-004；帐变前金额 500.00' },
+          settlement: { id: 'GL-R-002', type: '游戏结算', code: 'T064', amount: 150, time: '2026-10-29 00:15:00', ref: 'GL-R-001', note: '首次结算派彩 150.00；投注单号 BET-ELE-1028-004；帐变前金额 400.00' },
+          rollback: { id: 'GL-R-003', type: '游戏结算', code: 'T064', role: 'resettleRollback', amount: -150, time: '2026-10-30 00:20:00', ref: 'GL-R-002', note: '二次结算冲回首次派彩 150.00；关联原结算 GL-R-002；投注单号 BET-ELE-1028-004；帐变前金额 550.00' },
+          payout: { id: 'GL-R-004', type: '游戏结算', code: 'T064', role: 'resettlePayout', amount: 80, time: '2026-10-30 00:20:00', ref: 'GL-R-003', note: '二次结算总额 80.00；关联冲回帐变 GL-R-003；投注单号 BET-ELE-1028-004；帐变前金额 400.00' }
+        }
+      },
       mismatch: {
         label: '取消金额不一致', description: '投注 100，通知取消 80', betId: 'BET-ELE-1028-003',
         stages: [
@@ -89,15 +105,17 @@
       const config = currentMode(), stage = currentStage(), data = rows(), last = data.at(-1);
       $('modeGrid').innerHTML = Object.entries(modes).map(([key, item]) => '<button type="button" class="stage ' + (mode === key ? 'active' : '') + '" data-mode="' + key + '"><strong>' + esc(item.label) + '</strong><span>' + esc(item.description) + '</span></button>').join('');
       $('stageGrid').innerHTML = config.stages.map(item => '<button type="button" class="stage ' + (stageKey === item.key ? 'active' : '') + '" data-stage="' + item.key + '"><strong>' + esc(item.name) + '</strong><span>' + esc(item.sub) + '</span></button>').join('');
-      const rollbackAmount = data.filter(row => row.code === 'T065' && row.amount < 0).reduce((total, row) => total - row.amount, 0);
-      const returnedAmount = data.filter(row => row.code === 'T065' && row.amount > 0).reduce((total, row) => total + row.amount, 0);
-      $('metricGrid').innerHTML = '<div class="metric"><span>注单状态</span><strong>' + esc(stage.state) + '</strong></div><div class="metric"><span>主钱包真实余额</span><strong>' + last.after.toFixed(2) + ' BRL</strong></div><div class="metric"><span>已回滚结算</span><strong class="' + (rollbackAmount ? 'negative' : 'neutral') + '">' + rollbackAmount.toFixed(2) + ' BRL</strong></div><div class="metric"><span>已取消退款</span><strong class="' + (returnedAmount ? 'positive' : 'neutral') + '">' + returnedAmount.toFixed(2) + ' BRL</strong></div>';
+      const isResettled = mode === 'resettled';
+      const rollbackAmount = data.filter(row => isResettled ? row.role === 'resettleRollback' : row.code === 'T065' && row.amount < 0).reduce((total, row) => total - row.amount, 0);
+      const returnedAmount = data.filter(row => isResettled ? row.role === 'resettlePayout' : row.code === 'T065' && row.amount > 0).reduce((total, row) => total + row.amount, 0);
+      $('metricGrid').innerHTML = '<div class="metric"><span>注单状态</span><strong>' + esc(stage.state) + '</strong></div><div class="metric"><span>主钱包真实余额</span><strong>' + last.after.toFixed(2) + ' BRL</strong></div><div class="metric"><span>' + (isResettled ? '已冲回原派彩' : '已回滚结算') + '</span><strong class="' + (rollbackAmount ? 'negative' : 'neutral') + '">' + rollbackAmount.toFixed(2) + ' BRL</strong></div><div class="metric"><span>' + (isResettled ? '二次结算派彩' : '已取消退款') + '</span><strong class="' + (returnedAmount ? 'positive' : 'neutral') + '">' + returnedAmount.toFixed(2) + ' BRL</strong></div>';
       $('flow').innerHTML = config.stages.map((item, index) => '<div class="flow-step ' + (stageKey === item.key ? 'current' : '') + '"><span>' + String(index + 1).padStart(2, '0') + '</span><h3>' + esc(item.name.slice(3)) + '</h3><p>' + esc(item.sub) + '</p></div>' + (index < config.stages.length - 1 ? '<div class="arrow">→</div>' : '')).join('');
-      $('status').className = 'status ' + (stageKey === 'refund' || stageKey === 'cancel' && mode === 'unsettled' ? 'success' : stageKey === 'received' || mode === 'mismatch' && stageKey === 'cancel' ? 'warn' : '');
+      $('flowNote').textContent = isResettled ? '二次结算的冲回与重新派彩均由平台依据三方新结算总额处理；阶段仅用于评审，不新增生产后台操作按钮。' : '已结算撤单的回滚由平台依据原结算记录执行，三方只发送取消通知。阶段仅用于评审，不新增生产后台手动回滚按钮。';
+      $('status').className = 'status ' + (stageKey === 'refund' || stageKey === 'payout' || stageKey === 'cancel' && mode === 'unsettled' ? 'success' : stageKey === 'received' || stageKey === 'rollback' && isResettled || mode === 'mismatch' && stageKey === 'cancel' ? 'warn' : '');
       $('status').textContent = message || stage.info;
       const visible = data.filter(row => (filter.type === 'all' || filter.type === row.type) && (!filter.bet || row.betId.toLowerCase().includes(filter.bet)));
       $('ledgerBody').innerHTML = visible.length ? visible.map(row => '<tr><td class="nowrap">' + esc(row.id) + '</td><td>游戏输赢</td><td><span class="pill ' + (row.code === 'T065' ? row.amount > 0 ? 'return' : 'cancel' : '') + '">' + esc(row.type + ' ' + row.code) + '</span></td><td class="nowrap">' + esc(row.betId) + '</td><td class="' + (row.amount > 0 ? 'positive' : row.amount < 0 ? 'negative' : 'neutral') + ' nowrap">' + money(row.amount) + '</td><td>' + row.before.toFixed(2) + '</td><td>' + row.after.toFixed(2) + '</td><td class="nowrap">' + esc(row.time) + '</td><td>' + esc(row.note) + '</td></tr>').join('') : '<tr><td colspan="9" class="muted">无符合筛选条件的帐变记录</td></tr>';
-      $('rowCount').textContent = '共 ' + visible.length + ' 条记录。' + (mode === 'settled' ? '已结算撤单：T065 分别记录结算回滚与取消退款。' : '未结算撤单：T065 记录取消退款及三方取消时间。');
+      $('rowCount').textContent = '共 ' + visible.length + ' 条记录。' + (mode === 'settled' ? '已结算撤单：T065 分别记录结算回滚与取消退款。' : isResettled ? '二次结算：首次 T064 保留，新增 T064 分别记录 −P1 与 +P2。' : '未结算撤单：T065 记录取消退款及三方取消时间。');
     }
     function clearFilter() { filter = {type:'all', bet:''}; $('typeFilter').value = 'all'; $('betFilter').value = ''; }
     document.addEventListener('click', event => {
@@ -108,7 +126,7 @@
     });
     $('query').addEventListener('click', () => { filter = {type:$('typeFilter').value, bet:$('betFilter').value.trim().toLowerCase()}; message = ''; render(); });
     $('reset').addEventListener('click', () => { clearFilter(); message = ''; render(); });
-    $('duplicate').addEventListener('click', () => { message = stageKey === 'bet' || stageKey === 'settled' ? '当前阶段尚未收到撤单通知。' : '重复取消通知已识别：结算不会再次回滚，取消退款不会再次入账。'; render(); });
+    $('duplicate').addEventListener('click', () => { message = mode === 'resettled' ? (stageKey === 'bet' || stageKey === 'settled' ? '当前阶段尚未收到二次结算通知。' : '重复或乱序二次结算通知的识别规则待开发核对；本原型只展示单次正常路径。') : (stageKey === 'bet' || stageKey === 'settled' ? '当前阶段尚未收到撤单通知。' : '重复取消通知已识别：结算不会再次回滚，取消退款不会再次入账。'); render(); });
     render();
   </script>
 </body>
