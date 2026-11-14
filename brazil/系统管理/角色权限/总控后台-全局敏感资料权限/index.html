@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>总控后台－全局敏感资料权限交互原型</title>
+  <style>
+    :root{--blue:#1687f8;--line:#e5e9ef;--bg:#f3f6fa;--text:#253044;--muted:#768397}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}.shell{max-width:1510px;margin:auto;padding:24px}.intro{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.intro h1{margin:0;font-size:20px}.subtle{color:var(--muted);font-size:12px}.btn{border:1px solid #d8dee8;background:#fff;border-radius:4px;padding:8px 16px;color:var(--text)}.btn.primary{color:#fff;background:var(--blue);border-color:var(--blue)}.btn:disabled{opacity:.5;cursor:not-allowed}.modal{background:#fff;border:1px solid #dce2ea;box-shadow:0 6px 30px #1b2e490f;border-radius:4px;overflow:hidden}.modal-head{height:62px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px}.modal-head strong{font-size:18px}.close{border:0;background:none;color:#8793a2;font-size:25px;line-height:1}.modal-body{display:grid;grid-template-columns:34% 66%;min-height:540px}.role-info{padding:20px 24px;border-right:1px solid var(--line)}.panel-title{font-size:16px;margin:0 0 20px}.form-row{display:grid;grid-template-columns:92px 1fr;align-items:start;gap:12px;margin-bottom:20px}.form-row label{text-align:right;padding-top:9px}.required{color:#ed5353}.text{width:100%;height:38px;border:1px solid #d7dde6;border-radius:4px;padding:8px 10px}.text.area{height:88px;resize:vertical}.permission-side{padding:20px 24px;min-width:0}.tree-wrap{height:485px;overflow:auto;border:1px solid var(--line);border-radius:4px;padding:8px 10px}.tree-head{position:sticky;top:-8px;background:#fff;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:8px 7px;border-bottom:1px solid var(--line);font-weight:600}.node-row{min-height:31px;display:flex;align-items:center;gap:7px;white-space:nowrap}.node-row:hover{background:#f6faff}.node-row input,.tree-head input{width:17px;height:17px;accent-color:var(--blue);margin:0}.node-row label{cursor:pointer}.node-row.sensitive-label{font-weight:600}.arrow{width:18px;height:24px;padding:0;border:0;background:transparent;color:#536171;flex:none}.arrow.no-child{visibility:hidden}.node-children{margin-left:26px}.leaf-sensitive label{color:var(--blue);font-weight:600}.modal-foot{border-top:1px solid var(--line);min-height:64px;display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:10px 22px}.card{background:#fff;border:1px solid var(--line);border-radius:4px;margin-top:18px;padding:18px 22px}.card h2{font-size:17px;margin:0 0 10px}.card h3{font-size:15px;margin:18px 0 8px}.note{color:var(--muted);line-height:1.65;margin:8px 0 12px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:650px}th,td{border:1px solid #e4e9f0;padding:10px 12px;text-align:left;vertical-align:top}th{background:#f5f7fa;font-weight:600}.mask{color:#d25757;font-weight:600}.good{color:#15734f}.tag{display:inline-block;border-radius:10px;background:#e8f3ff;color:#1474d7;padding:2px 8px;font-size:12px;margin-left:6px}.feedback{min-height:18px;color:#15734f;font-size:12px}.status{color:var(--muted);font-size:12px}.hidden{display:none!important}@media(max-width:850px){.modal-body{grid-template-columns:1fr}.role-info{border-right:0;border-bottom:1px solid var(--line)}.tree-wrap{height:460px}.shell{padding:12px}.form-row{grid-template-columns:74px 1fr}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="intro"><div><h1>总控后台－全局敏感资料权限</h1><div class="subtle">独立交互原型 · 修改时间：2026 年 11 月 14 日</div></div><button id="reopen" class="btn hidden" type="button">打开修改角色</button></div>
+    <section class="modal" id="roleModal" aria-label="修改角色">
+      <div class="modal-head"><strong>修改角色</strong><button id="closeModal" class="close" type="button" aria-label="关闭">×</button></div>
+      <div class="modal-body">
+        <div class="role-info"><p class="panel-title">角色信息</p><div class="form-row"><label for="roleName"><span class="required">*</span> 角色名称</label><input class="text" id="roleName" maxlength="64" value="金流管理员"></div><div class="form-row"><label for="roleDesc"><span class="required">*</span> 角色描述</label><textarea class="text area" id="roleDesc" maxlength="200">金流管理员</textarea></div><p class="note">左侧信息与原有权限模块仅用于还原截图场景。本原型重点演示新增的全局敏感资料权限。</p></div>
+        <div class="permission-side"><p class="panel-title">角色权限</p><div class="tree-wrap"><div class="tree-head"><span>权限</span><label style="display:flex;gap:8px;align-items:center;font-weight:400"><input id="selectAll" type="checkbox">选择全部</label></div><div id="permissionTree"></div></div><p class="note">手机号、邮箱对应用户表；提现资料独立对应提现资料表，包含其中的手机号和邮箱。</p></div>
+      </div>
+      <div class="modal-foot"><span class="feedback" id="saveFeedback" role="status"></span><button id="cancel" class="btn" type="button">取消</button><button id="save" class="btn primary" type="button">确认</button></div>
+    </section>
+    <section class="card"><h2>权限效果预览 <span class="tag">演示数据</span></h2><p class="note">勾选上方权限后，查看、编辑和导出效果立即更新。此处假设当前示例页面已有独立的导出操作权限；全局“导出”只决定文件中隐私字段的显示值。</p><div class="table-wrap"><table><thead><tr><th>敏感字段</th><th>原始示例值</th><th>页面查看</th><th>编辑入口</th><th>导出文件</th></tr></thead><tbody id="effectRows"></tbody></table></div><div style="margin-top:12px;display:flex;gap:10px;align-items:center"><button id="exportDemo" class="btn primary" type="button">导出预览</button><span class="status">导出按钮展示由页面原有操作权限控制</span></div><div id="exportResult" class="hidden" style="margin-top:12px"></div></section>
+    <section class="card" id="scopeCard">
+      <h2>涉及页面效果预览 <span class="tag">总控后台现场字段</span></h2>
+      <p class="note">从云桌面打开的总控后台核对字段位置；表内账号、姓名和金额均为原型演示值。切换页面或上方“查看”权限，可观察未授权手机号仅显示前 2 位和后 4 位，其余位以 * 打码；其他未授权字段显示 ***。页面清单仍需逐页核全，未验证导出文件内容。</p>
+      <label for="scopeSelect">选择页面：</label> <select id="scopeSelect" class="text" style="width:min(100%,460px);margin:0 0 12px"></select>
+      <div class="table-wrap"><table><thead><tr><th>字段位置</th><th>线上字段名称</th><th>对应权限</th><th>效果预览</th></tr></thead><tbody id="scopeRows"></tbody></table></div>
+      <p class="note" id="scopeNote"></p>
+    </section>
+    <section class="card">
+      <h2>总控后台－全局敏感资料权限需求说明</h2>
+      <h3>一、已确认内容</h3>
+      <div class="table-wrap"><table><thead><tr><th>权限层级</th><th>字段</th><th>原型规则</th></tr></thead><tbody><tr><td>查看</td><td>姓名、手机号、邮箱、提现资料、账户余额</td><td>用户表与提现资料表的手机号未获各自查看权限时，均仅显示前 2 位和后 4 位，其余位以 * 打码；其他未授权敏感值显示“***”。</td></tr><tr><td>编辑</td><td>姓名、手机号、邮箱、提现资料</td><td>分别配置对应字段的编辑权限；“编辑－提现资料”独立于用户表手机号、邮箱编辑权限。</td></tr><tr><td>导出</td><td>姓名、手机号、邮箱、提现资料、账户余额</td><td>只限定导出文件中的隐私字段值，不控制导出按钮。两个来源的手机号未获各自导出权限时，均仅显示前 2 位和后 4 位，其余位以 * 打码；其他未授权值显示“***”。</td></tr></tbody></table></div>
+      <p class="note">当前站点仅运营巴西地区；手机号不足 11 位时，前端校验不通过、无法存储。未获对应查看或导出权限时，正常存储的手机号仅显示前 2 位和后 4 位，其余位以 * 打码。原型对不足 11 位的异常数据保守显示“***”，不作为正常业务场景。</p>
+      <p class="note">字段来源独立：用户表的手机号、邮箱分别由“手机号”“邮箱”权限控制；提现资料表的真实姓名、CPF、CNPJ、EVP、手机号、邮箱整体由“提现资料”权限控制。只勾选“查看－提现资料”即可查看提现资料表的手机号和邮箱，不会同时取得用户表手机号、邮箱的查看权限；反向也一样。未获“查看－提现资料”时，提现信息表手机号仅显示前 2 位和后 4 位，其余位以 * 打码，例如 11987654321 显示为 11*****4321；其他非空值显示“***”。用户表手机号未授权时也采用相同的手机号打码格式。查看、编辑、导出按字段来源和操作分类分别判断。截图中的角色名称、其他模块勾选状态均为原型示例，不代表新增角色的默认授权。</p>
+      <div class="table-wrap"><table><thead><tr><th>查看权限组合</th><th>用户表手机号／邮箱</th><th>提现资料表手机号／邮箱</th></tr></thead><tbody><tr><td>只勾选“提现资料”</td><td>手机号仅显示前 2 位和后 4 位，其余位以 * 打码；邮箱“***”</td><td>完整显示</td></tr><tr><td>只勾选“手机号”“邮箱”</td><td>完整显示</td><td>手机号仅显示前 2 位和后 4 位，其余位以 * 打码；邮箱“***”</td></tr></tbody></table></div>
+      <h3>二、现场页面范围与字段映射 <span class="tag">已见字段，设计映射</span></h3>
+      <div class="table-wrap"><table><thead><tr><th>总控页面与位置</th><th>现场看到的字段</th><th>建议对应权限</th><th>核对结论</th></tr></thead><tbody>
+        <tr><td>站点会员管理－会员列表／列表</td><td>手机号（会员账号）、姓名、金币余额</td><td>手机号、姓名、账户余额</td><td>已看到字段列；当前样例多为测试账号或空值，未通过切换权限验证实际打码。</td></tr>
+        <tr><td>站点会员管理－会员反馈管理－反馈列表／列表</td><td>会员账号、联系方式</td><td>手机号或邮箱，按实际值类型判断</td><td>已看到会员账号的部分隐藏号码、联系方式中的邮箱和手机号样例；未授权时手机号仅显示前 2 位和后 4 位，其余位以 * 打码；邮箱显示 ***。页面有“导出”入口，文件字段未核对。</td></tr>
+        <tr><td>站点金流管理－订单管理－代付订单列表／详情</td><td>收款人、银行账号、银行</td><td>提现资料</td><td>已看到详情字段位置；本次打开的失败订单值为空，须用有值订单核对实际数据。</td></tr>
+        <tr><td>会员列表－提现账户／提现信息表（站点后台截图，待总控页面核对）</td><td>真实姓名、CPF、CNPJ、EVP、提现资料表中的手机号、邮箱</td><td>仅由“提现资料”独立控制</td><td>截图确认站点后台弹窗字段；总控是否存在相同入口仍待核对。无提现资料权限时，手机号仅显示前 2 位和后 4 位，其余位以 * 打码；其他值为 ***。有该权限即可显示表内原值。</td></tr>
+      </tbody></table></div>
+    </section>
+  </div>
+  <script>
+    const fields = [
+      {key:'Name',name:'姓名',value:'示例姓名',editable:true},
+      {key:'Phone',name:'手机号',value:'11901230984',editable:true},
+      {key:'Email',name:'邮箱',value:'member@example.com',editable:true},
+      {key:'Withdrawal',name:'提现资料',value:'收款账户 1234567890',editable:true},
+      {key:'Balance',name:'账户余额',value:'205.98',editable:false}
+    ];
+    const categories = [
+      {key:'View',name:'查看',fields:fields},
+      {key:'Edit',name:'编辑',fields:fields.filter(field=>field.editable)},
+      {key:'Export',name:'导出',fields:fields}
+    ];
+    const scopePages = [
+      {name:'站点会员管理－会员列表',note:'列表中已看到“手机号（会员账号）”“姓名”“金币余额”列。本预览仅演示字段查看权限，不表示现场样例已填充原值。',rows:[
+        {position:'列表',label:'会员ID',value:'74679202'},
+        {position:'列表',label:'手机号（会员账号）',key:'Phone',value:'11962222244'},
+        {position:'列表',label:'姓名',key:'Name',value:'示例姓名'},
+        {position:'列表',label:'金币余额',key:'Balance',value:'147.68'}
+      ]},
+      {name:'站点会员管理－会员反馈管理－反馈列表',note:'会员账号与联系方式须按实际存储值的类型映射：手机号归“手机号”，邮箱归“邮箱”。现场看到了这两类样例和“导出”入口，尚未核对导出文件。',rows:[
+        {position:'列表',label:'反馈ID',value:'F20261114001'},
+        {position:'列表',label:'会员账号（手机号样例）',key:'Phone',value:'11962222244'},
+        {position:'列表',label:'联系方式（邮箱样例）',key:'Email',value:'member@example.com'},
+        {position:'列表',label:'联系方式（手机号样例）',key:'Phone',value:'+5561999999999'}
+      ]},
+      {name:'提现账户（站点截图，待总控核验）',note:'截图中的 PIX 提现信息表包含真实姓名、CPF、CNPJ、EVP、手机号、邮箱。这些值只由“查看－提现资料”控制；未授权时手机号仅显示前 2 位和后 4 位，其余位以 * 打码；其他值显示 ***。总控是否有相同入口仍待核对。',rows:[
+        {position:'提现信息表',label:'真实姓名',key:'Name',scope:'Withdrawal',value:'示例收款人'},
+        {position:'提现信息表',label:'CPF',key:'Withdrawal',scope:'Withdrawal',value:'123.456.789-00'},
+        {position:'提现信息表',label:'CNPJ',key:'Withdrawal',scope:'Withdrawal',value:'12.345.678/0001-90'},
+        {position:'提现信息表',label:'EVP',key:'Withdrawal',scope:'Withdrawal',value:'exemplo@pix.com'},
+        {position:'提现信息表',label:'手机号',key:'Phone',scope:'Withdrawal',value:'11987654321'},
+        {position:'提现信息表',label:'邮箱',key:'Email',scope:'Withdrawal',value:'payout@example.com'}
+      ]},
+      {name:'站点金流管理－订单管理－代付订单详情',note:'详情抽屉已看到收款人、银行账号、银行字段。本次打开的订单值为空，以下值仅为演示；空值不替换为 ***。',rows:[
+        {position:'详情',label:'订单号',value:'P20261114001'},
+        {position:'详情',label:'收款人',key:'Withdrawal',value:'示例收款人'},
+        {position:'详情',label:'银行账号',key:'Withdrawal',value:'1234567890'},
+        {position:'详情',label:'银行',key:'Withdrawal',value:'示例银行'}
+      ]}
+    ];
+    const modules = [
+      {key:'sensitive',name:'全局敏感资料权限',open:true,children:categories.map(category=>({key:category.key,name:category.name,open:true,children:category.fields.map(field=>({key:category.key+field.key,name:field.name,sensitiveLeaf:true,checked:false}))}))},
+      {key:'system',name:'系统功能管理',checked:true},
+      {key:'domain',name:'站点域名管理',checked:true},
+      {key:'resource',name:'资源管理',checked:true},
+      {key:'siteMembers',name:'站点会员管理',open:true,children:[
+        {key:'memberList',name:'会员列表',checked:true},
+        {key:'memberFeedback',name:'会员反馈管理',checked:false},
+        {key:'memberLimit',name:'会员限红管理',checked:true},
+        {key:'memberWater',name:'会员水位管理',checked:true}
+      ]},
+      {key:'siteFunctions',name:'站点功能管理',checked:true},
+      {key:'siteFinance',name:'站点金流管理',checked:true},
+      {key:'siteVenue',name:'站点场馆管理',checked:true},
+      {key:'reports',name:'总控报表管理',checked:false},
+      {key:'siteOwner',name:'站点厅主管理',checked:true},
+      {key:'controlSystem',name:'总控系统管理',checked:true}
+    ];
+    const $=id=>document.getElementById(id);
+    const maskPhoneValue=value=>{const digits=String(value??'').replace(/\D/g,'');return digits.length>=11?digits.slice(0,2)+'*'.repeat(digits.length-6)+digits.slice(-4):'***';};
+    const maskSensitiveValue=(value,key)=>key==='Phone'?maskPhoneValue(value):'***';
+    const nodeByKey=new Map();
+    function indexNodes(nodes){nodes.forEach(node=>{nodeByKey.set(node.key,node);if(node.children)indexNodes(node.children)});}indexNodes(modules);
+    function renderNode(node){
+      const hasChildren=Boolean(node.children?.length);
+      const row=document.createElement('div');row.className='node-row'+(node.key==='sensitive'?' sensitive-label':'')+(node.sensitiveLeaf?' leaf-sensitive':'');
+      const arrow=document.createElement('button');arrow.type='button';arrow.className='arrow'+(hasChildren?'':' no-child');arrow.textContent=node.open?'⌄':'›';arrow.setAttribute('aria-label',(node.open?'收起':'展开')+node.name);row.appendChild(arrow);
+      const check=document.createElement('input');check.type='checkbox';check.id='p-'+node.key;check.dataset.key=node.key;check.checked=Boolean(node.checked);row.appendChild(check);
+      const label=document.createElement('label');label.htmlFor=check.id;label.textContent=node.name;row.appendChild(label);
+      const wrap=document.createElement('div');wrap.appendChild(row);
+      if(hasChildren){const children=document.createElement('div');children.className='node-children';children.dataset.children=node.key;children.hidden=!node.open;node.children.forEach(child=>children.appendChild(renderNode(child)));wrap.appendChild(children);arrow.onclick=()=>{node.open=!node.open;children.hidden=!node.open;arrow.textContent=node.open?'⌄':'›';arrow.setAttribute('aria-label',(node.open?'收起':'展开')+node.name);};}
+      return wrap;
+    }
+    modules.forEach(node=>$('permissionTree').appendChild(renderNode(node)));
+    function setNode(node,checked){$('p-'+node.key).checked=checked;$('p-'+node.key).indeterminate=false;node.children?.forEach(child=>setNode(child,checked));}
+    function syncNodes(nodes){nodes.forEach(node=>{if(!node.children?.length)return;syncNodes(node.children);const inputs=node.children.map(child=>$('p-'+child.key));const all=inputs.every(input=>input.checked&&!input.indeterminate);const some=inputs.some(input=>input.checked||input.indeterminate);$('p-'+node.key).checked=all;$('p-'+node.key).indeterminate=some&&!all;});const roots=modules.map(node=>$('p-'+node.key));$('selectAll').checked=roots.every(input=>input.checked&&!input.indeterminate);$('selectAll').indeterminate=roots.some(input=>input.checked||input.indeterminate)&&!$('selectAll').checked;}
+    function renderEffect(){
+      $('effectRows').innerHTML=fields.map(field=>{const view=$('p-View'+field.key).checked,exported=$('p-Export'+field.key).checked,edit=field.editable?$('p-Edit'+field.key).checked:null;return '<tr><td>'+field.name+'</td><td>'+field.value+'</td><td class="'+(view?'':'mask')+'">'+(view?field.value:maskSensitiveValue(field.value,field.key))+'</td><td>'+(!field.editable?'—':edit?'<span class="good">可编辑</span>':'不可编辑')+'</td><td class="'+(exported?'':'mask')+'">'+(exported?field.value:maskSensitiveValue(field.value,field.key))+'</td></tr>';}).join('');
+      if(!$('exportResult').classList.contains('hidden'))renderExport();
+      renderScope();
+    }
+    function renderScope(){
+      const page=scopePages[Number($('scopeSelect').value)||0];
+      $('scopeRows').innerHTML=page.rows.map(row=>{
+        const permissionKey=row.scope||row.key;
+        const granted=!permissionKey||$('p-View'+permissionKey).checked;
+        const value=granted?row.value:maskSensitiveValue(row.value,row.key);
+        const permission=permissionKey?fields.find(field=>field.key===permissionKey).name:'不属于本次五类权限';
+        return '<tr><td>'+row.position+'</td><td>'+row.label+'</td><td>'+permission+'</td><td class="'+(granted?'':'mask')+'">'+value+'</td></tr>';
+      }).join('');
+      $('scopeNote').textContent=page.note;
+    }
+    function renderExport(){const headers=fields.map(field=>'<th>'+field.name+'</th>').join('');const values=fields.map(field=>'<td class="'+($('p-Export'+field.key).checked?'':'mask')+'">'+($('p-Export'+field.key).checked?field.value:maskSensitiveValue(field.value,field.key))+'</td>').join('');$('exportResult').innerHTML='<div class="note">导出文件示例：字段清单不变；未授权手机号仅显示前 2 位和后 4 位，其余位以 * 打码；其他未授权敏感值为 ***。</div><div class="table-wrap"><table><thead><tr>'+headers+'</tr></thead><tbody><tr>'+values+'</tr></tbody></table></div>';}
+    $('permissionTree').addEventListener('change',event=>{const node=nodeByKey.get(event.target.dataset.key);if(!node)return;setNode(node,event.target.checked);syncNodes(modules);renderEffect();$('saveFeedback').textContent='';});
+    $('selectAll').onchange=event=>{modules.forEach(node=>setNode(node,event.target.checked));syncNodes(modules);renderEffect();$('saveFeedback').textContent='';};
+    $('exportDemo').onclick=()=>{$('exportResult').classList.remove('hidden');renderExport();};
+    scopePages.forEach((page,index)=>{const option=document.createElement('option');option.value=String(index);option.textContent=page.name;$('scopeSelect').appendChild(option);});
+    $('scopeSelect').onchange=renderScope;
+    const getSnapshot=()=>({name:$('roleName').value,desc:$('roleDesc').value,checked:[...document.querySelectorAll('#permissionTree input[type="checkbox"]')].map(input=>[input.dataset.key,input.checked,input.indeterminate])});
+    let saved;
+    $('save').onclick=()=>{if(!$('roleName').value.trim()||!$('roleDesc').value.trim()){$('saveFeedback').style.color='#d25757';$('saveFeedback').textContent='请填写角色名称和角色描述';return;}$('saveFeedback').style.color='#15734f';saved=getSnapshot();$('saveFeedback').textContent='原型演示：角色权限已保存';};
+    $('cancel').onclick=()=>{if(!saved)return;$('roleName').value=saved.name;$('roleDesc').value=saved.desc;saved.checked.forEach(([key,checked,partial])=>{$('p-'+key).checked=checked;$('p-'+key).indeterminate=partial;});syncNodes(modules);renderEffect();$('saveFeedback').style.color='#15734f';$('saveFeedback').textContent='已取消本次修改';};
+    $('closeModal').onclick=()=>{$('roleModal').classList.add('hidden');$('reopen').classList.remove('hidden');};
+    $('reopen').onclick=()=>{$('roleModal').classList.remove('hidden');$('reopen').classList.add('hidden');};
+    syncNodes(modules);$('p-reports').indeterminate=true;syncNodes(modules);renderEffect();saved=getSnapshot();
+  </script>
+</body>
+</html>
