@@ -43,6 +43,16 @@
         <tr><td>会员列表－提现账户／提现信息表（站点后台截图，待总控页面核对）</td><td>真实姓名、CPF、CNPJ、EVP、提现资料表中的手机号、邮箱</td><td>仅由“提现资料”独立控制</td><td>截图确认站点后台弹窗字段；总控是否存在相同入口仍待核对。无提现资料权限时，手机号仅显示前 2 位和后 4 位，其余位以 * 打码；其他值为 ***。有该权限即可显示表内原值。</td></tr>
       </tbody></table></div>
     </section>
+    <section class="card">
+      <h2>总控后台－角色权限变更重新登录 PRD（迭代）</h2>
+      <p class="note">修改时间：2026 年 11 月 16 日</p>
+      <h3>一、已确认需求</h3>
+      <p class="note">角色权限项发生变更并保存成功后，使用该角色的已登录用户须收到权限变更提示，并强制重新登录。当前会话在重新登录前不得继续使用原权限；重新登录后按最新角色权限生效。</p>
+      <div class="table-wrap"><table><thead><tr><th>场景</th><th>处理规则</th></tr></thead><tbody><tr><td>权限项变更且保存成功</td><td>提示受影响的已登录用户权限已变更，终止原会话并要求重新登录。</td></tr><tr><td>取消编辑、保存失败或权限项没有变化</td><td>未发生角色权限变更，不触发重新登录。</td></tr></tbody></table></div>
+      <h3>二、交互效果预览</h3>
+      <div style="margin-top:12px"><button id="simulateRoleChange" class="btn primary" type="button">模拟权限变更</button><span id="roleChangeStatus" class="status" style="margin-left:12px" role="status"></span></div>
+      <p class="note">提示文案为原型示例；点击后演示受影响用户的强制重新登录流程。</p>
+    </section>
   </div>
   <script>
     const fields = [
@@ -150,6 +160,35 @@
     $('closeModal').onclick=()=>{$('roleModal').classList.add('hidden');$('reopen').classList.remove('hidden');};
     $('reopen').onclick=()=>{$('roleModal').classList.remove('hidden');$('reopen').classList.add('hidden');};
     syncNodes(modules);$('p-reports').indeterminate=true;syncNodes(modules);renderEffect();saved=getSnapshot();
+  </script>
+  <div id="roleReloginOverlay" role="dialog" aria-modal="true" aria-labelledby="roleReloginTitle" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(14,24,41,.55);align-items:center;justify-content:center;padding:20px">
+    <div style="width:min(100%,430px);background:#fff;border-radius:8px;padding:28px;box-shadow:0 16px 44px #14203833">
+      <div id="roleReloginNotice">
+        <h2 id="roleReloginTitle" style="margin:0 0 14px;font-size:20px">角色权限已变更</h2>
+        <p style="line-height:1.6;margin:0 0 20px">当前角色权限已更新，请重新登录后继续使用。</p>
+        <button id="goRoleLogin" class="btn primary" type="button">重新登录</button>
+      </div>
+      <div id="roleReloginForm" style="display:none">
+        <h2 style="margin:0 0 14px;font-size:20px">重新登录</h2>
+        <p style="line-height:1.6;margin:0 0 20px">原登录会话已失效。以下为登录页交互演示。</p>
+        <label style="display:block;margin-bottom:12px">账号<input type="text" value="示例子账号" style="display:block;width:100%;height:36px;margin-top:6px;border:1px solid #d9dee7;border-radius:4px;padding:0 10px"></label>
+        <label style="display:block;margin-bottom:18px">密码<input type="password" value="example123" style="display:block;width:100%;height:36px;margin-top:6px;border:1px solid #d9dee7;border-radius:4px;padding:0 10px"></label>
+        <button id="demoRoleSignIn" class="btn primary" type="button">模拟登录成功</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (()=>{
+      const trigger=document.getElementById('simulateRoleChange');
+      if(!trigger)return;
+      const overlay=document.getElementById('roleReloginOverlay');
+      const notice=document.getElementById('roleReloginNotice');
+      const form=document.getElementById('roleReloginForm');
+      const status=document.getElementById('roleChangeStatus');
+      trigger.onclick=()=>{notice.style.display='';form.style.display='none';overlay.style.display='flex';document.body.style.overflow='hidden';status.textContent='原会话已失效（演示）';};
+      document.getElementById('goRoleLogin').onclick=()=>{notice.style.display='none';form.style.display='';};
+      document.getElementById('demoRoleSignIn').onclick=()=>{overlay.style.display='none';document.body.style.overflow='';status.textContent='已重新登录，按最新权限继续使用（演示）';};
+    })();
   </script>
 </body>
 </html>
