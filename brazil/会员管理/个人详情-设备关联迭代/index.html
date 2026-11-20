@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>个人详情 - 设备关联迭代</title>
+  <style>
+    :root{--blue:#1685e6;--line:#e8ebf0;--text:#303133;--muted:#7c8492;--pale:#f7f9fc;--gold:#a66b00}
+    *{box-sizing:border-box;letter-spacing:0}
+    body{margin:0;background:#f2f4f7;color:var(--text);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    button,input,select{font:inherit}
+    button,a,input,select{-webkit-tap-highlight-color:transparent}
+    button{cursor:pointer}
+    button:disabled{cursor:not-allowed;opacity:.42}
+    a{color:var(--blue);text-decoration:none}
+    button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+    svg.icon{width:17px;height:17px;flex-shrink:0;display:block}
+    h1,h2,h3,p{margin:0}
+    h1{font-size:22px}
+    h2{font-size:20px}
+    h3{font-size:16px}
+    button{border-radius:4px}
+    input,select{min-width:0;height:36px;border:1px solid #d9dde5;background:white;padding:0 10px;border-radius:4px;color:var(--text)}
+    input:focus,select:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 2px #1685e617}
+    input::placeholder{color:#a7adb7}
+    .topbar{background:white;border-bottom:1px solid var(--line);height:56px;display:flex;justify-content:space-between;align-items:center;padding:0 32px;gap:16px}
+    .crumb{display:flex;gap:10px;align-items:center}
+    .crumb>span{color:var(--muted)}
+    .nav{display:flex;align-items:center;gap:24px}
+    .nav a{font-size:13px;display:flex;align-items:center;gap:6px}
+    .nav a:first-child{color:var(--text)}
+    main{max-width:1500px;margin:24px auto;padding:0 24px}
+    .profile-surface{background:white;padding:0 24px 24px}
+    .profile-title{padding:22px 0 20px;text-align:center;border-bottom:1px solid var(--line)}
+    .profile-meta{display:flex;flex-wrap:wrap;gap:14px 28px;padding:22px 16px 18px;align-items:center}
+    .meta-item{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+    .meta-item b{font-weight:600}
+    .inline-copy{display:inline-flex;align-items:center;gap:5px}
+    .icon-btn{border:0;background:transparent;color:#89909c;display:inline-flex;justify-content:center;align-items:center;width:30px;height:30px;padding:6px;flex-shrink:0}
+    .icon-btn:hover{background:#eef5fd;color:var(--blue)}
+    .copy-btn{color:var(--blue);width:24px;height:24px;padding:4px}
+    .copy-btn svg{width:14px;height:14px}
+    .muted{color:var(--muted)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;overflow-wrap:anywhere}
+    .link-btn{border:0;background:none;color:var(--blue);padding:0;font:inherit;text-align:left;border-radius:0}
+    .link-btn:hover{color:#0968bc;text-decoration:underline}
+    .btn{min-height:36px;padding:6px 16px;border:1px solid #d9dde5;background:#fff;color:var(--text);display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+    .btn:hover{border-color:var(--blue);color:var(--blue)}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
+    .btn.primary:hover{background:#0875d0}
+    .profile-grid{border:1px solid var(--line)}
+    .profile-row{display:grid;grid-template-columns:170px minmax(0,1fr) 280px;border-bottom:1px solid var(--line);min-height:45px}
+    .profile-row:last-child{border-bottom:0}
+    .profile-label{background:#fafbfc;text-align:right;padding:10px 16px;font-weight:500;display:flex;align-items:center;justify-content:flex-end}
+    .profile-value{padding:10px 16px;border-left:1px solid var(--line);min-width:0}
+    .profile-actions{padding:10px 16px;border-left:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+    .profile-row.device-row{min-height:178px}
+    .device-lines{display:grid;gap:2px}
+    .device-lines .mono{max-width:100%}
+    .status{display:inline-flex;color:#16845b;background:#ebf8f0;padding:1px 7px;border-radius:3px;font-size:12px}
+    .static-action{color:#9299a4}
+    .tag{display:inline-flex;align-items:center;padding:0 6px;border:1px solid #f3d398;border-radius:3px;background:#fff8e6;color:var(--gold);font-size:11px;line-height:18px;font-weight:400;margin-left:5px}
+    .new-head{color:var(--gold)}
+    dialog{border:0;padding:0;color:var(--text);background:white;border-radius:6px;box-shadow:0 18px 70px #18263940;max-width:calc(100vw - 40px);max-height:calc(100dvh - 40px);overflow:hidden}
+    dialog::backdrop{background:#18212e66}
+    dialog[open]{display:flex;flex-direction:column}
+    dialog.relation-dialog{width:calc(100vw - 24px);max-width:calc(100vw - 24px);height:min(900px,calc(100dvh - 24px));max-height:calc(100dvh - 24px)}
+    .relation-dialog .dialog-head{padding:10px 18px}
+    .relation-dialog .query-context{padding:10px 18px 0}
+    .relation-dialog .query-form{padding:10px 18px}
+    .relation-dialog .table-pager,.relation-dialog .dialog-footer{padding:8px 18px}
+    dialog.profile-dialog{width:1100px;height:min(900px,calc(100dvh - 40px))}
+    dialog.expanded{width:calc(100vw - 16px);height:calc(100dvh - 16px);max-width:none;max-height:none}
+    .dialog-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-shrink:0}
+    .dialog-head h2{font-size:18px;min-width:0}
+    .dialog-controls{display:flex;gap:4px}
+    .query-context{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 22px 0;font-size:13px}
+    .type-label{color:#246b9f;background:#edf6ff;padding:2px 8px;border-radius:3px}
+    .context-device{display:flex;align-items:center;gap:6px;min-width:0;overflow-wrap:anywhere}
+    .query-form{display:flex;flex-wrap:wrap;gap:12px 24px;padding:16px 22px;align-items:center;flex-shrink:0}
+    .query-form label{display:flex;align-items:center;gap:10px;min-width:0}
+    .query-form input{width:180px}
+    .query-form select{width:145px}
+    .query-actions{display:flex;gap:10px}
+    .table-area{margin:0 18px;min-height:0;flex:1;overflow-y:auto;overflow-x:hidden;border:1px solid var(--line);position:relative;overscroll-behavior:contain}
+    .relation-table{border-collapse:separate;border-spacing:0;width:100%;min-width:0;table-layout:fixed;font-size:12px;line-height:1.35}
+    .relation-table th,.relation-table td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:3px 4px;text-align:center;vertical-align:middle;white-space:normal;overflow-wrap:anywhere}
+    .relation-table th{height:44px;background:#f8f9fb;font-weight:600;position:sticky;top:0;z-index:2}
+    .relation-table td{height:42px;background:white}
+    .relation-table tr:nth-child(even) td{background:#fcfcfd}
+    .relation-table tbody tr:hover td{background:#f4f9ff}
+    .relation-table .copy-btn{width:20px;height:20px;padding:3px}
+    .relation-table .inline-copy{gap:2px;max-width:100%;flex-wrap:wrap;justify-content:center}
+    .relation-table td.device-cell{padding:3px 4px;text-align:left}
+    .device-cell .device-text{font-size:12px;line-height:1.35}
+    .negative{color:#f04452}
+    .device-cell .matched{background:#edf6ff;color:#146aaa;border-bottom:1px solid #b8ddff}
+    .empty-cell{height:180px!important;color:var(--muted);text-align:left!important;padding-left:42px!important}
+    .table-pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center;padding:14px 22px;font-size:13px}
+    .pager-controls{display:flex;align-items:center;gap:9px}
+    .pager-controls select{height:30px}
+    .pager-index{color:var(--blue);border:1px solid #c1def7;min-width:32px;text-align:center;border-radius:3px;background:#f5faff}
+    .dialog-footer{border-top:1px solid var(--line);padding:12px 22px;display:flex;justify-content:flex-end;flex-shrink:0}
+    .profile-dialog-body{overflow:auto;flex:1;padding:0 22px 22px;overscroll-behavior:contain}
+    .profile-dialog .profile-row{grid-template-columns:146px minmax(0,1fr) 180px}
+    .profile-dialog .profile-meta{padding-left:0;padding-right:0}
+    .profile-dialog .profile-value{font-size:13px}
+    .toast{position:fixed;top:26px;left:50%;transform:translateX(-50%);border:1px solid #c7ead8;background:#f1fbf5;color:#13764d;padding:9px 18px;box-shadow:0 4px 20px #1b3b2c12;border-radius:5px;margin:0;z-index:100;max-width:calc(100% - 32px)}
+    .prd{background:white;margin-top:28px;padding:28px 32px 36px;scroll-margin-top:18px}
+    .prd-head{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--line)}
+    .prd-meta{color:var(--muted);font-size:13px;margin-top:7px}
+    .date-tag{display:inline-block;padding:2px 8px;border:1px solid #c6e1fa;background:#f0f7ff;color:#1678c6;margin-right:12px;border-radius:3px}
+    .prd h3{margin:24px 0 12px}
+    .prd p{margin:8px 0}
+    .prd-table-wrap{overflow:auto}
+    .prd table{border-collapse:collapse;width:100%;min-width:550px}
+    .prd td,.prd th{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:top}
+    .prd th{background:#f7f9fc;font-weight:600}
+    .prd td:first-child{width:190px;font-weight:500}
+    .prd ul,.prd ol{margin:8px 0;padding-left:23px}
+    .prd li{margin:5px 0}
+    .flow{padding:12px 0;color:#4f5966}
+    .footnote{font-size:12px;color:var(--muted)}
+    @media(max-width:1000px){
+      .relation-table colgroup,.relation-table thead{display:none}
+      .relation-table,.relation-table tbody{display:block;width:100%}
+      .relation-table tr{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+      .relation-table th,.relation-table td{display:block;height:auto;min-height:50px;text-align:left;border:0;padding:8px 10px}
+      .relation-table td::before{content:attr(data-label);display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+      .relation-table td.device-cell{grid-column:1 / -1;padding:8px 10px}
+      .relation-table .device-text{font-size:12px}
+      .relation-table .empty-cell{grid-column:1 / -1}
+    }
+    @media(max-width:900px){.topbar{padding:0 18px}
+    .profile-row{grid-template-columns:135px minmax(0,1fr) 180px}
+    .query-form{gap:12px}
+    .query-form input{width:150px}
+    .query-form select{width:120px}
+    .profile-meta{gap:8px 20px}
+    .profile-dialog .profile-row{grid-template-columns:120px minmax(0,1fr) 145px}
+    }
+    @media(max-width:600px){body{font-size:13px}
+    .topbar{height:auto;min-height:52px;padding:10px 14px;flex-wrap:wrap;gap:8px}
+    .nav{gap:15px}
+    .crumb{font-size:12px}
+    .nav a{font-size:12px}
+    main{margin:12px auto;padding:0 10px}
+    .profile-surface{padding:0 12px 14px}
+    .profile-title{padding:14px 0}
+    .profile-title h1{font-size:20px}
+    .profile-meta{padding:14px 0;gap:8px 14px}
+    .profile-row,.profile-dialog .profile-row{grid-template-columns:96px minmax(0,1fr)}
+    .profile-label{padding:9px 10px}
+    .profile-value{padding:9px 10px}
+    .profile-actions{grid-column:2;padding:0 10px 10px}
+    .profile-actions:empty{display:none}
+    .profile-row.device-row{min-height:0}
+    .mono{font-size:11px}
+    .dialog-head{padding:12px 14px}
+    .dialog-head h2{font-size:17px}
+    dialog{max-width:calc(100vw - 16px);max-height:calc(100dvh - 16px)}
+    dialog.relation-dialog,dialog.profile-dialog{height:calc(100dvh - 16px)}
+    .query-context{padding:10px 14px 0;gap:6px 10px;font-size:12px}
+    .query-form{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .query-form label{display:grid;gap:3px;font-size:12px}
+    .query-form input,.query-form select{width:100%;height:32px}
+    .query-actions{grid-column:span 2}
+    .query-actions button{flex:1;min-height:32px}
+    .table-area{margin:0 14px}
+    .table-pager{padding:10px 14px;gap:8px;font-size:12px}
+    .dialog-footer{padding:10px 14px}
+    .profile-dialog-body{padding:0 12px 14px}
+    .prd{padding:20px 16px;margin-top:16px}
+    .prd h2{font-size:18px}
+    .prd-meta{font-size:12px}
+    .date-tag{margin-bottom:6px}
+    .prd td,.prd th{padding:9px 10px}
+    }
+    @media(min-width:901px){.profile-dialog .profile-row{grid-template-columns:176px minmax(0,1fr) 180px}
+    }
+    @media(max-width:600px){.profile-metric{display:block}
+    }
+    @media print{body{background:white}
+    .topbar,.profile-surface,dialog{display:none!important}
+    main{margin:0;padding:0}
+    .prd{padding:0;margin:0}
+    .prd-head a{display:none}
+    .prd-table-wrap{overflow:visible}
+    .prd table{min-width:0}
+    .prd tr{break-inside:avoid}
+    }
+    </style>
+</head>
+<body>
+  <header class="topbar"><div class="crumb"><span>会员管理</span><span>/</span><strong>个人资料</strong></div><nav class="nav"><a href="#profile">个人资料</a><a href="#prd"><i data-icon="FileText"></i>PRD说明</a></nav></header>
+  <main>
+    <section id="profile" class="profile-surface" aria-label="个人资料"><div class="profile-title"><h1>个人资料</h1></div><div id="rootProfile"></div></section>
+    <section class="prd" id="prd">
+      <header class="prd-head"><div><h2>个人详情 · 设备关联迭代 PRD 说明</h2><div class="prd-meta"><span class="date-tag">迭代日期：2026-11-20</span>关联页面：个人资料 / 关系查询</div></div><a href="#profile">返回个人资料</a></header>
+      <h3>1. 需求目标</h3><p>在设备关联查询结果中同时展示注册设备号和登录设备号，准确识别同一设备关联的会员账号，便于核对会员ID与设备信息。</p>
+      <h3>2. 已确认内容</h3>
+      <div class="prd-table-wrap"><table><thead><tr><th>需求项</th><th>规则说明</th></tr></thead><tbody>
+        <tr><td>入口范围</td><td>同时覆盖个人资料中「最后登录」「注册IP」区域的「设备关联」入口，点击后打开「关系查询」弹窗。</td></tr>
+        <tr><td>登录设备关联</td><td>按发起查询会员的当前登录设备号，查询当前登录设备号相同的关联会员。</td></tr>
+        <tr><td>注册设备关联</td><td>按发起查询会员的注册设备号，查询注册设备号相同的关联会员。</td></tr>
+        <tr><td>新增：注册设备号</td><td>展示当前行会员注册时对应的设备号。会员后续更换登录设备时，此字段仍展示注册设备信息。</td></tr>
+        <tr><td>新增：登录设备号</td><td>展示当前行会员最近一次登录使用的设备号，随会员登录设备改变而更新。</td></tr>
+        <tr><td>字段对应关系</td><td>两列均为只读展示，必须与同一行会员ID准确对应。注册关联中各会员的登录设备号可以不同；登录关联中各会员的注册设备号可以不同。</td></tr>
+        <tr><td>统计字段</td><td>保留「有效投注」，补充「游戏输赢」「充值总额」「提现总额」，展示当前行会员对应的数据；游戏输赢为负数时以红色展示。</td></tr>
+        <tr><td>字段顺序与展示</td><td>「注册IP」后依次展示「注册设备号」「登录设备号」「有效投注」「游戏输赢」「充值总额」「提现总额」。关系查询弹窗拉宽，压缩列宽和单元格间距；表头、渠道、IP、设备号等长内容允许换行，完整平铺展示全部字段，无需左右滑动。</td></tr>
+        <tr><td>重复设备关联账号</td><td>同一设备关联多个会员时，分别展示各会员ID及其两个设备号，不得因设备号重复而合并、遗漏或错配不同会员。设备号不能用作会员行的唯一标识。</td></tr>
+        <tr><td>会员资料入口</td><td>关系查询结果中的会员ID保留点击功能，点击后打开该会员的个人资料；弹窗内的会员ID、会员账号、设备号等资料均取目标会员数据。</td></tr>
+        <tr><td>权限地图</td><td>本次不涉及权限地图调整，沿用现有权限规则。</td></tr>
+        <tr><td>子账号操作日志</td><td>本次不涉及子账号操作日志调整，沿用现有日志规则。</td></tr>
+      </tbody></table></div>
+      <h3>3. 交互流程</h3><p class="flow">个人资料 → 设备关联（登录 / 注册）→ 关系查询 → 点击会员ID → 目标会员个人资料</p>
+      <p>关闭目标会员个人资料后，返回原关系查询结果。本原型保留查询条件、当前页及滚动位置，方便连续核对会员。</p>
+      <h3>4. 原型演示约定 / 建议方案</h3><p>以下为可评审的演示处理，不作为新增的已确认业务规则：</p>
+      <div class="prd-table-wrap"><table><thead><tr><th>场景</th><th>原型处理</th></tr></thead><tbody>
+        <tr><td>布局与标识</td><td>设备号字段以「新增」标记，高亮本次查询匹配的设备号；完整展示设备号，空间不足时换行。手机等窄屏下，同一会员的字段按顺序纵向展示，无需左右滑动。</td></tr>
+        <tr><td>查询与分页</td><td>会员ID采用精确匹配，渠道可筛选，点击「查询」后生效；「重置」清空附加条件。地区、商户使用当前演示数据范围，翻页后仍保持设备关联范围。</td></tr>
+        <tr><td>去重与本人</td><td>演示数据按会员ID一人一行，并包含发起查询的会员本人；生产是否排除本人、现有去重方式沿用既有规则，需联调核对。</td></tr>
+        <tr><td>无设备号 / 无结果</td><td>缺失设备号展示「-」，对应入口不可点击；不将多个缺失设备号识别为同一设备。无查询结果展示「暂无数据」。</td></tr>
+        <tr><td>资料弹窗返回</td><td>目标资料在关系查询之上打开，关闭后保留原结果；弹窗可按 Esc 逐层关闭。</td></tr>
+      </tbody></table></div>
+      <h3>5. 验收要点</h3><ol><li>两个设备关联入口均展示注册设备号、登录设备号，列值与会员ID逐行对应。</li><li>同一设备对应多个会员时，完整展示关联会员；不同设备的会员不混入当前查询结果。</li><li>注册关联允许登录设备不同，登录关联允许注册设备不同。</li><li>更换登录设备后，个人资料及关系查询中的登录设备号更新，注册设备号保持注册时的值。</li><li>点击不同会员ID时展示对应个人资料，关闭后可继续查看原查询结果。</li><li>有效投注、游戏输赢、充值总额、提现总额与对应会员一致；负数输赢显示红色。长内容换行后不重叠、不省略，桌面端全部列无需左右滑动。</li></ol>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" popover="manual"></div>
+  <script>
+    /* Icons from Lucide.
+ISC License
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+---
+
+The following Lucide icons are derived from the Feather project:
+
+airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+
+The MIT License (MIT) (for the icons listed above)
+
+Copyright (c) 2013-present Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+    const iconNodes = {"X":[["path",{"d":"M18 6 6 18"}],["path",{"d":"m6 6 12 12"}]],"Copy":[["rect",{"width":"14","height":"14","x":"8","y":"8","rx":"2","ry":"2"}],["path",{"d":"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"}]],"Search":[["path",{"d":"m21 21-4.34-4.34"}],["circle",{"cx":"11","cy":"11","r":"8"}]],"ChevronLeft":[["path",{"d":"m15 18-6-6 6-6"}]],"ChevronRight":[["path",{"d":"m9 18 6-6-6-6"}]],"Maximize":[["path",{"d":"M8 3H5a2 2 0 0 0-2 2v3"}],["path",{"d":"M21 8V5a2 2 0 0 0-2-2h-3"}],["path",{"d":"M3 16v3a2 2 0 0 0 2 2h3"}],["path",{"d":"M16 21h3a2 2 0 0 0 2-2v-3"}]],"Minimize":[["path",{"d":"M8 3v3a2 2 0 0 1-2 2H3"}],["path",{"d":"M21 8h-3a2 2 0 0 1-2-2V3"}],["path",{"d":"M3 16h3a2 2 0 0 1 2 2v3"}],["path",{"d":"M16 21v-3a2 2 0 0 1 2-2h3"}]],"FileText":[["path",{"d":"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"}],["path",{"d":"M14 2v5a1 1 0 0 0 1 1h5"}],["path",{"d":"M10 9H8"}],["path",{"d":"M16 13H8"}],["path",{"d":"M16 17H8"}]],"RotateCcw":[["path",{"d":"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"}],["path",{"d":"M3 3v5h5"}]],"RefreshCw":[["path",{"d":"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"}],["path",{"d":"M21 3v5h-5"}],["path",{"d":"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"}],["path",{"d":"M8 16H3v5"}]]};
+    function renderIcons(scope = document) {
+      scope.querySelectorAll('[data-icon]').forEach(el => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        Object.entries({viewBox:'0 0 24 24',fill:'none',stroke:'currentColor','stroke-width':'1.8','stroke-linecap':'round','stroke-linejoin':'round',class:'icon','aria-hidden':'true'}).forEach(([k,v])=>svg.setAttribute(k,v));
+        (iconNodes[el.dataset.icon] || []).forEach(([tag,attrs])=>{const node=document.createElementNS(svg.namespaceURI,tag);Object.entries(attrs).forEach(([k,v])=>node.setAttribute(k,v));svg.appendChild(node)});
+        el.replaceWith(svg);
+      });
+    }
+    const DEVICES = {D1:'19d7664f8b5bc103885d0114cf9e57af',D2:'8a0e4d62c9314bf7a265e8d0190bc743',D3:'79bc241d6e03442b83f5a107ea906dc2'};
+    const ROOT_ID = '97770854';
+    const seed = [
+      ['97770854','D1','D1','官方渠道'],['77803904','D2','D1','官方渠道'],['97770853','D1','D2','官方渠道'],
+      ['97770852','D1','D1','自然渠道'],['97770851','D1','D3','官方渠道'],['97770754','D1','D1','官方渠道'],
+      ['97770753','D2','D1','自然渠道'],['97770752','D1','D1','官方渠道'],['97770751','D1','D1','官方渠道'],
+      ['97770653','D1','D1','自然渠道'],['97770652','D1','D1','官方渠道'],['97770651','D1','D1','官方渠道'],
+      ['97770603','D1','D1','自然渠道'],['97770602','D2','D1','官方渠道'],['97770601','D1','D1','官方渠道'],
+      ['97770599','D2','D2','官方渠道'],['97770598','','','自然渠道']
+    ];
+    function initialMembers(){return seed.map(([id,reg,login,channel],i)=>({
+      id,account:String(11980000000+i*137),name:i===1?'Junior Oliveira Souza':'-',region:'巴西(BRL)',merchant:'888',
+      channel:i===0?'FB/258-乐多1-43001':channel,
+      registrationDevice:DEVICES[reg]||'',loginDevice:DEVICES[login]||'',
+      registerIp:i===0?'2804:b4:bc93:3400:19f:2d28:5150:68d6':`198.51.100.${93-i}`,
+      loginIp:i===1?'203.0.113.145':`198.51.100.${93-i}`,
+      registerTime:'2026-11-01 09:00:00',loginTime:`2026-11-16 03:${String(24-i).padStart(2,'0')}:24`,loginCount:3+i,
+      bet:i===0?'164.90':i===10?'50.00':i===11?'100.00':'0.00',
+      gameWinLoss:i===0?'-53.54':i===1?'26.50':i===10?'-12.00':'0.00',
+      depositTotal:i===0?'40.00':i===1?'100.00':i===10?'50.00':i===11?'100.00':'0.00',
+      withdrawalTotal:i===1?'20.00':'0.00',
+      remark:i===0?'T106016-TEST':'-',balance:'0.00',vip:'VIP0',tier:'默认层级'
+    }))}
+    let members = initialMembers();
+    const memberById=id=>members.find(m=>m.id===id);
+    const esc=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const ic=name=>`<i data-icon="${name}"></i>`;
+    const copy=value=>`<button type="button" class="icon-btn copy-btn" data-copy="${esc(value)}" aria-label="复制 ${esc(value)}" title="复制">${ic('Copy')}</button>`;
+    const displayDevice=value=>value?`<span class="mono">${esc(value)}</span>`:'-';
+    const deviceMatches=(field,device)=>device?members.filter(m=>m[field]===device):[];
+    function profileHTML(member){
+      const row=(label,value,actions='',extra='')=>`<div class="profile-row ${extra}"><div class="profile-label"><span>${label.startsWith('今日/累计')?'今日/累计<span class="profile-metric">'+label.slice(5)+'</span>':label}</span></div><div class="profile-value">${value}</div><div class="profile-actions">${actions}</div></div>`;
+      const deviceAction=mode=>`<span class="static-action">IP关联</span><button type="button" class="link-btn" data-relation="${mode}" data-member="${member.id}" ${!member[mode==='login'?'loginDevice':'registrationDevice']?'disabled':''}>设备关联</button>`;
+      return `<div class="profile-meta"><span class="meta-item"><b>会员账号：</b>${esc(member.account)}${copy(member.account)}</span><span class="meta-item"><b>会员ID：</b><span data-profile-id>${member.id}</span>${copy(member.id)}</span><span class="meta-item"><b>注册方式：</b>手机号</span><span class="meta-item"><b>所属地区：</b>${esc(member.region)}</span><span class="meta-item"><b>所属商户：</b>${member.merchant}</span></div><div class="profile-grid">`+
+        row('账号状态','正式 / <span class="status">正常</span>')+row('真实姓名',esc(member.name))+row('VIP等级',member.vip)+row('会员层级',member.tier)+
+        row('账户余额',`${member.balance}（可用 ${member.balance} + 余额宝 0.00 + 冻结 0.00）`)+row('今日/累计有效投注',`0.00 / ${member.bet}`)+row('今日/累计输赢',`0.00 / <span class="${Number(member.gameWinLoss)<0?'negative':''}">${member.gameWinLoss}</span>`)+row('今日/累计活动优惠','0.00 / 110.00')+row('今日/累计结算佣金','0.00 / 0.00')+row('提现账号','未绑定')+
+        row('最后登录',`<div class="device-lines"><div>${member.loginIp}</div><div data-login-device>${displayDevice(member.loginDevice)}${member.loginDevice?' (设备号)':''}</div><div>(PC)</div><div>同IP登录人数（${members.filter(m=>m.loginIp===member.loginIp).length}）</div><div>同设备登录人数（${deviceMatches('loginDevice',member.loginDevice).length}）</div><div>最后登录时间（${member.loginTime} UTC-3）</div></div>`,deviceAction('login'),'device-row')+
+        row('注册IP',`<div class="device-lines"><div>${member.registerIp}</div><div data-registration-device>${displayDevice(member.registrationDevice)}${member.registrationDevice?' (设备号)':''}</div><div>(PC)</div><div>同IP注册人数（${members.filter(m=>m.registerIp===member.registerIp).length}）</div><div>同设备注册人数（${deviceMatches('registrationDevice',member.registrationDevice).length}）</div><div>注册时间（${member.registerTime} UTC-3）</div></div>`,deviceAction('registration'),'device-row')+
+        row('注册指纹ID','无')+row('登录类型','-')+row('注册渠道',esc(member.channel))+row('裂变来源','-')+row('验证方式','邮箱：　Telegram：')+row('备注',esc(member.remark))+'</div>';
+    }
+    function renderRoot(){const target=document.getElementById('rootProfile');target.innerHTML=profileHTML(memberById(ROOT_ID));renderIcons(target)}
+    function makeDialog(className,label,html){
+      const origin=document.activeElement;
+      const dialog=document.createElement('dialog');dialog.className=className;dialog.setAttribute('aria-label',label);dialog.innerHTML=html;
+      document.body.appendChild(dialog);renderIcons(dialog);dialog.showModal();document.body.style.overflow='hidden';
+      dialog.addEventListener('close',()=>{dialog.remove();if(!document.querySelector('dialog[open]'))document.body.style.overflow='';if(origin?.isConnected)origin.focus({preventScroll:true})},{once:true});
+      dialog.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>dialog.close()));
+      dialog.querySelector('[data-expand]')?.addEventListener('click',event=>{const expanded=dialog.classList.toggle('expanded');const button=event.currentTarget;button.title=expanded?'还原':'最大化';button.setAttribute('aria-label',button.title);button.innerHTML=ic(expanded?'Minimize':'Maximize');renderIcons(button)});
+      return dialog;
+    }
+    function dialogHead(title){return `<header class="dialog-head"><h2>${title}</h2><div class="dialog-controls"><button type="button" class="icon-btn" data-expand title="最大化" aria-label="最大化">${ic('Maximize')}</button><button type="button" class="icon-btn" data-close title="关闭" aria-label="关闭">${ic('X')}</button></div></header>`}
+    function openProfile(id){const member=memberById(id);if(!member)return;makeDialog('profile-dialog','个人资料',dialogHead('个人资料')+`<div class="profile-dialog-body">${profileHTML(member)}</div>`+`<footer class="dialog-footer"><button class="btn" type="button" data-close>关闭</button></footer>`)}
+    function openRelation(id,mode){
+      const member=memberById(id);if(!member)return;
+      const field=mode==='login'?'loginDevice':'registrationDevice';const device=member[field];if(!device)return;
+      const modeLabel=mode==='login'?'登录设备关联':'注册设备关联';
+      const dialog=makeDialog('relation-dialog','关系查询',dialogHead('关系查询')+
+        `<div class="query-context"><span class="type-label">${modeLabel}</span><span>来源会员：${member.id}</span><span class="context-device">设备号：<span class="mono">${device}</span>${copy(device)}</span></div>`+
+        `<form class="query-form"><label>会员ID<input name="memberId" type="text" inputmode="numeric" placeholder="请输入" autocomplete="off" aria-label="会员ID"></label><label>渠道<select name="channel" aria-label="渠道"><option value="">全部</option>${[...new Set(members.map(m=>m.channel))].map(channel=>`<option>${esc(channel)}</option>`).join('')}</select></label><label>地区<select name="region" aria-label="地区"><option>巴西(BRL)</option></select></label><label>商户<select name="merchant" aria-label="商户"><option>888</option></select></label><div class="query-actions"><button type="submit" class="btn primary">${ic('Search')}查询</button><button type="reset" class="btn">重置</button></div></form>`+
+        `<div class="table-area"><table class="relation-table"><colgroup><col style="width:7%"><col style="width:5%"><col style="width:3%"><col style="width:3%"><col style="width:6%"><col style="width:8%"><col style="width:7%"><col style="width:3.5%"><col style="width:8%"><col style="width:13%"><col style="width:13%"><col style="width:6%"><col style="width:6.5%"><col style="width:5.5%"><col style="width:5.5%"></colgroup><thead><tr><th>会员ID</th><th>真实姓名</th><th>地区</th><th>商户</th><th>渠道</th><th>最后登录时间<br><span class="muted">(UTC-3)</span></th><th>最后登录IP</th><th>登录次数</th><th>注册IP</th><th class="new-head">注册设备号 <span class="tag">新增</span></th><th class="new-head">登录设备号 <span class="tag">新增</span></th><th>有效投注</th><th>游戏输赢</th><th>充值总额</th><th>提现总额</th></tr></thead><tbody></tbody></table></div>`+
+        `<div class="table-pager"><span data-count aria-live="polite"></span><div class="pager-controls"><button type="button" class="icon-btn" data-prev aria-label="上一页" title="上一页">${ic('ChevronLeft')}</button><span class="pager-index" data-page></span><button type="button" class="icon-btn" data-next aria-label="下一页" title="下一页">${ic('ChevronRight')}</button><select aria-label="每页条数" data-page-size><option value="10">10 条/页</option><option value="20">20 条/页</option><option value="50">50 条/页</option></select></div></div>`+
+        `<footer class="dialog-footer"><button type="button" class="btn" data-close>关闭</button></footer>`);
+      let page=1,pageSize=10,applied={id:'',channel:'',region:'巴西(BRL)',merchant:'888'};
+      const form=dialog.querySelector('form'),body=dialog.querySelector('tbody'),area=dialog.querySelector('.table-area');
+      function draw(){
+        const result=deviceMatches(field,device).filter(m=>(!applied.id||m.id===applied.id)&&(!applied.channel||m.channel===applied.channel)&&m.region===applied.region&&m.merchant===applied.merchant);
+        const pages=Math.max(1,Math.ceil(result.length/pageSize));page=Math.min(page,pages);
+        const cell=(m,key)=>`<td class="device-cell" data-device-field="${key}"><span class="mono device-text ${key===field?'matched':''}">${esc(m[key]||'-')}</span></td>`;
+        body.innerHTML=result.length?result.slice((page-1)*pageSize,page*pageSize).map(m=>`<tr data-row-member="${m.id}"><td><span class="inline-copy"><button type="button" class="link-btn" data-profile="${m.id}">${m.id}</button>${copy(m.id)}</span></td><td>${esc(m.name)}</td><td>巴西</td><td>${m.merchant}</td><td>${esc(m.channel)}</td><td>${m.loginTime.replace(' ','<br>')}</td><td>${m.loginIp}</td><td>${m.loginCount}</td><td>${m.registerIp}</td>${cell(m,'registrationDevice')}${cell(m,'loginDevice')}<td>${m.bet}</td><td class="${Number(m.gameWinLoss)<0?'negative':''}">${m.gameWinLoss}</td><td>${m.depositTotal}</td><td>${m.withdrawalTotal}</td></tr>`).join(''):`<tr><td colspan="15" class="empty-cell">暂无数据</td></tr>`;
+        const labels=['会员ID','真实姓名','地区','商户','渠道','最后登录时间 (UTC-3)','最后登录IP','登录次数','注册IP','注册设备号','登录设备号','有效投注','游戏输赢','充值总额','提现总额'];
+        body.querySelectorAll('[data-row-member]').forEach(row=>Array.from(row.children).forEach((td,index)=>td.dataset.label=labels[index]));
+        dialog.querySelector('[data-count]').textContent=`共 ${result.length} 条数据`;
+        dialog.querySelector('[data-page]').textContent=String(page);
+        dialog.querySelector('[data-page]').title=`第 ${page} / ${pages} 页`;
+        dialog.querySelector('[data-prev]').disabled=page===1;
+        dialog.querySelector('[data-next]').disabled=page>=pages;
+        area.scrollTop=0;renderIcons(body);
+      }
+      form.addEventListener('submit',event=>{event.preventDefault();applied={id:form.elements.memberId.value.trim(),channel:form.elements.channel.value,region:form.elements.region.value,merchant:form.elements.merchant.value};page=1;draw()});
+      form.addEventListener('reset',()=>{applied={id:'',channel:'',region:'巴西(BRL)',merchant:'888'};page=1;draw()});
+      dialog.querySelector('[data-prev]').addEventListener('click',()=>{page--;draw()});dialog.querySelector('[data-next]').addEventListener('click',()=>{page++;draw()});
+      dialog.querySelector('[data-page-size]').addEventListener('change',event=>{pageSize=Number(event.target.value);page=1;draw()});
+      draw();
+    }
+    let toastTimer;
+    function toast(message){const el=document.getElementById('toast');el.textContent=message;el.showPopover();clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidePopover(),2000)}
+    async function copyText(value){
+      try{await navigator.clipboard.writeText(value);toast('复制成功')}catch{
+        const input=document.createElement('textarea');input.value=value;input.style.cssText='position:fixed;top:0;left:0;opacity:0;width:1px;height:1px';
+        const dialogs=document.querySelectorAll('dialog[open]');(dialogs[dialogs.length-1]||document.body).appendChild(input);input.select();const ok=document.execCommand('copy');input.remove();toast(ok?'复制成功':'复制失败，请手动选择文本');
+      }
+    }
+    document.addEventListener('click',event=>{
+      const button=event.target.closest('button');if(!button||button.disabled)return;
+      if(button.dataset.copy)copyText(button.dataset.copy);
+      if(button.dataset.relation)openRelation(button.dataset.member,button.dataset.relation);
+      if(button.dataset.profile)openProfile(button.dataset.profile);
+    });
+    renderRoot();renderIcons();
+  </script>
+</body>
+</html>
